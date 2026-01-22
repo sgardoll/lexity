@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "66788777511",
+    "project_id": "rise-and-build-ship-3r4evm",
+    "storage_bucket": "rise-and-build-ship-3r4evm.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:66788777511:android:e2318df8f5766ecaf33802",
+        "android_client_info": {
+          "package_name": "com.connectio.lexity"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0SVsebwJJGsDpRV2XX4BlRXHzVkgZjAs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
