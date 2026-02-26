@@ -50,13 +50,10 @@ class _LikedWidgetState extends State<LikedWidget> {
       },
       child: Scaffold(
         key: scaffoldKey,
-
         backgroundColor: FlutterFlowTheme.of(context).primaryText,
-
         body: Container(
           width: MediaQuery.sizeOf(context).width * 1.0,
           height: MediaQuery.sizeOf(context).height * 1.0,
-
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [Color(0xFF1A1F24), Color(0xFF2B2E3B), Color(0xFF1F1F2B)],
@@ -65,7 +62,6 @@ class _LikedWidgetState extends State<LikedWidget> {
               end: AlignmentDirectional(0, -1.0),
             ),
           ),
-
           child: Padding(
             padding: EdgeInsetsDirectional.fromSTEB(24.0, 24.0, 24.0, 0.0),
             child: Column(
@@ -76,9 +72,7 @@ class _LikedWidgetState extends State<LikedWidget> {
                 Container(
                   width: MediaQuery.sizeOf(context).width * 1.0,
                   height: 100.0,
-
                   decoration: BoxDecoration(),
-
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -86,15 +80,12 @@ class _LikedWidgetState extends State<LikedWidget> {
                     children: [
                       FlutterFlowIconButton(
                         borderRadius: 8.0,
-
                         buttonSize: 75.0,
-
                         icon: Icon(
                           Icons.arrow_back,
                           color: FlutterFlowTheme.of(context).info,
                           size: 35.0,
                         ),
-
                         onPressed: () async {
                           logFirebaseEvent('LIKED_PAGE_arrow_back_ICN_ON_TAP');
                           logFirebaseEvent('IconButton_navigate_back');
@@ -105,23 +96,21 @@ class _LikedWidgetState extends State<LikedWidget> {
                         child: AutoSizeText(
                           'Likes',
                           textAlign: TextAlign.start,
-
-                          style: FlutterFlowTheme.of(context).displaySmall
+                          style: FlutterFlowTheme.of(context)
+                              .displaySmall
                               .override(
                                 font: GoogleFonts.readexPro(
                                   fontWeight: FontWeight.w600,
-                                  fontStyle: FlutterFlowTheme.of(
-                                    context,
-                                  ).displaySmall.fontStyle,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .displaySmall
+                                      .fontStyle,
                                 ),
-
                                 color: Colors.white,
-
                                 letterSpacing: 0.0,
                                 fontWeight: FontWeight.w600,
-                                fontStyle: FlutterFlowTheme.of(
-                                  context,
-                                ).displaySmall.fontStyle,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .displaySmall
+                                    .fontStyle,
                               ),
                         ),
                       ),
@@ -131,57 +120,43 @@ class _LikedWidgetState extends State<LikedWidget> {
                 Text(
                   'Words you\'ve liked will appear here',
                   textAlign: TextAlign.center,
-
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
-                    font: GoogleFonts.inter(
-                      fontWeight: FlutterFlowTheme.of(
-                        context,
-                      ).bodyMedium.fontWeight,
-                      fontStyle: FlutterFlowTheme.of(
-                        context,
-                      ).bodyMedium.fontStyle,
-                    ),
-
-                    color: FlutterFlowTheme.of(context).alternate,
-
-                    letterSpacing: 0.0,
-                    fontWeight: FlutterFlowTheme.of(
-                      context,
-                    ).bodyMedium.fontWeight,
-                    fontStyle: FlutterFlowTheme.of(
-                      context,
-                    ).bodyMedium.fontStyle,
-                  ),
+                        font: GoogleFonts.inter(
+                          fontWeight: FlutterFlowTheme.of(context)
+                              .bodyMedium
+                              .fontWeight,
+                          fontStyle:
+                              FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                        ),
+                        color: FlutterFlowTheme.of(context).alternate,
+                        letterSpacing: 0.0,
+                        fontWeight:
+                            FlutterFlowTheme.of(context).bodyMedium.fontWeight,
+                        fontStyle:
+                            FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                      ),
                 ),
                 Flexible(
                   child: Container(
                     width: MediaQuery.sizeOf(context).width * 1.0,
-
                     decoration: BoxDecoration(
                       color: Color(0x7F57636C),
-
                       borderRadius: BorderRadius.circular(12.0),
                     ),
-
                     child: Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(
-                        16.0,
-                        16.0,
-                        16.0,
-                        16.0,
-                      ),
+                          16.0, 16.0, 16.0, 16.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
-
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           StreamBuilder<List<LexiconRecord>>(
                             stream: queryLexiconRecord(
                               queryBuilder: (lexiconRecord) =>
                                   lexiconRecord.where(
-                                    'likedBy',
-                                    arrayContains: currentUserReference,
-                                  ),
+                                'likedBy',
+                                arrayContains: currentUserReference,
+                              ),
                             ),
                             builder: (context, snapshot) {
                               // Customize what your widget looks like when it's loading.
@@ -203,78 +178,60 @@ class _LikedWidgetState extends State<LikedWidget> {
 
                               return ListView.builder(
                                 padding: EdgeInsets.zero,
-
                                 shrinkWrap: true,
                                 scrollDirection: Axis.vertical,
                                 itemCount: listViewLexiconRecordList.length,
-
                                 itemBuilder: (context, listViewIndex) {
                                   final listViewLexiconRecord =
                                       listViewLexiconRecordList[listViewIndex];
                                   return Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                      8.0,
-                                      8.0,
-                                      8.0,
-                                      8.0,
-                                    ),
+                                        8.0, 8.0, 8.0, 8.0),
                                     child: Container(
                                       width: double.infinity,
-
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                          8.0,
-                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
                                       ),
-
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
-
                                         children: [
                                           Flexible(
                                             child: Column(
                                               mainAxisSize: MainAxisSize.max,
-
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
                                                   listViewLexiconRecord.term,
-
-                                                  style:
-                                                      FlutterFlowTheme.of(
-                                                        context,
-                                                      ).titleMedium.override(
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .titleMedium
+                                                      .override(
                                                         font: GoogleFonts.inter(
                                                           fontWeight:
                                                               FlutterFlowTheme.of(
-                                                                    context,
-                                                                  )
+                                                                      context)
                                                                   .titleMedium
                                                                   .fontWeight,
                                                           fontStyle:
                                                               FlutterFlowTheme.of(
-                                                                    context,
-                                                                  )
+                                                                      context)
                                                                   .titleMedium
                                                                   .fontStyle,
                                                         ),
-
                                                         color: Colors.white,
-
                                                         letterSpacing: 0.0,
                                                         fontWeight:
                                                             FlutterFlowTheme.of(
-                                                                  context,
-                                                                )
+                                                                    context)
                                                                 .titleMedium
                                                                 .fontWeight,
                                                         fontStyle:
                                                             FlutterFlowTheme.of(
-                                                                  context,
-                                                                )
+                                                                    context)
                                                                 .titleMedium
                                                                 .fontStyle,
                                                       ),
@@ -282,44 +239,36 @@ class _LikedWidgetState extends State<LikedWidget> {
                                                 Text(
                                                   listViewLexiconRecord
                                                       .definition,
-
                                                   maxLines: 5,
-
-                                                  style:
-                                                      FlutterFlowTheme.of(
-                                                        context,
-                                                      ).bodySmall.override(
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodySmall
+                                                      .override(
                                                         font: GoogleFonts.inter(
                                                           fontWeight:
                                                               FlutterFlowTheme.of(
-                                                                    context,
-                                                                  )
+                                                                      context)
                                                                   .bodySmall
                                                                   .fontWeight,
                                                           fontStyle:
                                                               FlutterFlowTheme.of(
-                                                                    context,
-                                                                  )
+                                                                      context)
                                                                   .bodySmall
                                                                   .fontStyle,
                                                         ),
-
                                                         color:
                                                             FlutterFlowTheme.of(
-                                                              context,
-                                                            ).info,
-
+                                                                    context)
+                                                                .info,
                                                         letterSpacing: 0.0,
                                                         fontWeight:
                                                             FlutterFlowTheme.of(
-                                                                  context,
-                                                                )
+                                                                    context)
                                                                 .bodySmall
                                                                 .fontWeight,
                                                         fontStyle:
                                                             FlutterFlowTheme.of(
-                                                                  context,
-                                                                )
+                                                                    context)
                                                                 .bodySmall
                                                                 .fontStyle,
                                                       ),
@@ -329,33 +278,31 @@ class _LikedWidgetState extends State<LikedWidget> {
                                           ),
                                           FlutterFlowIconButton(
                                             buttonSize: 60.0,
-
                                             icon: Icon(
                                               Icons.bookmark_remove_sharp,
-                                              color: FlutterFlowTheme.of(
-                                                context,
-                                              ).error,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .error,
                                               size: 24.0,
                                             ),
-
                                             onPressed: () async {
                                               logFirebaseEvent(
-                                                'LIKED_bookmark_remove_sharp_ICN_ON_TAP',
-                                              );
+                                                  'LIKED_bookmark_remove_sharp_ICN_ON_TAP');
                                               logFirebaseEvent(
-                                                'IconButton_backend_call',
-                                              );
+                                                  'IconButton_backend_call');
 
                                               await listViewLexiconRecord
                                                   .reference
                                                   .update({
-                                                    ...mapToFirestore({
-                                                      'likedBy':
-                                                          FieldValue.arrayRemove([
-                                                            currentUserReference,
-                                                          ]),
-                                                    }),
-                                                  });
+                                                ...mapToFirestore(
+                                                  {
+                                                    'likedBy':
+                                                        FieldValue.arrayRemove([
+                                                      currentUserReference
+                                                    ]),
+                                                  },
+                                                ),
+                                              });
                                             },
                                           ),
                                         ],

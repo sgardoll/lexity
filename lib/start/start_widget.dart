@@ -7,10 +7,8 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_swipeable_stack.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/permissions_util.dart';
 import '/index.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -41,17 +39,9 @@ class _StartWidgetState extends State<StartWidget>
     _model = createModel(context, () => StartModel());
 
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'start'});
-    // On page load action.
-    SchedulerBinding.instance.addPostFrameCallback((_) async {
-      logFirebaseEvent('START_PAGE_start_ON_INIT_STATE');
-      logFirebaseEvent('start_request_permissions');
-      await requestPermission(notificationsPermission);
-    });
-
     animationsMap.addAll({
       'containerOnPageLoadAnimation1': AnimationInfo(
         trigger: AnimationTrigger.onPageLoad,
-
         effectsBuilder: () => [
           FadeEffect(
             curve: Curves.easeInOut,
@@ -64,7 +54,6 @@ class _StartWidgetState extends State<StartWidget>
       ),
       'containerOnPageLoadAnimation2': AnimationInfo(
         trigger: AnimationTrigger.onPageLoad,
-
         effectsBuilder: () => [
           FadeEffect(
             curve: Curves.easeInOut,
@@ -77,7 +66,6 @@ class _StartWidgetState extends State<StartWidget>
       ),
       'swipeableStackOnPageLoadAnimation': AnimationInfo(
         trigger: AnimationTrigger.onPageLoad,
-
         effectsBuilder: () => [
           VisibilityEffect(duration: 1.ms),
           SaturateEffect(
@@ -133,11 +121,9 @@ class _StartWidgetState extends State<StartWidget>
       ),
     });
     setupAnimations(
-      animationsMap.values.where(
-        (anim) =>
-            anim.trigger == AnimationTrigger.onActionTrigger ||
-            !anim.applyInitialState,
-      ),
+      animationsMap.values.where((anim) =>
+          anim.trigger == AnimationTrigger.onActionTrigger ||
+          !anim.applyInitialState),
       this,
     );
 
@@ -184,7 +170,6 @@ class _StartWidgetState extends State<StartWidget>
           },
           child: Scaffold(
             key: scaffoldKey,
-
             endDrawer: Container(
               width: MediaQuery.sizeOf(context).width * 0.3,
               child: Drawer(
@@ -192,98 +177,85 @@ class _StartWidgetState extends State<StartWidget>
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.end,
-
                   children: [
                     Flexible(
                       child: Container(
                         width: MediaQuery.sizeOf(context).width * 0.3,
                         height: MediaQuery.sizeOf(context).height * 1.0,
-
-                        decoration: BoxDecoration(color: Color(0x80000000)),
-
+                        decoration: BoxDecoration(
+                          color: Color(0x80000000),
+                        ),
                         child: Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
-                            0.0,
-                            75.0,
-                            0.0,
-                            75.0,
-                          ),
+                              0.0, 75.0, 0.0, 75.0),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                             children: [
                               Flexible(
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.center,
-
                                   children: [
                                     Flexible(
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
-
                                         children: [
                                           FlutterFlowIconButton(
                                             borderRadius: 100.0,
-
                                             buttonSize: 75.0,
-                                            fillColor: FlutterFlowTheme.of(
-                                              context,
-                                            ).primaryText,
-
+                                            fillColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .primaryText,
                                             icon: Icon(
                                               Icons.favorite_sharp,
-                                              color: FlutterFlowTheme.of(
-                                                context,
-                                              ).info,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .info,
                                               size: 35.0,
                                             ),
-
                                             onPressed: () async {
                                               logFirebaseEvent(
-                                                'START_PAGE_favorite_sharp_ICN_ON_TAP',
-                                              );
+                                                  'START_PAGE_favorite_sharp_ICN_ON_TAP');
                                               logFirebaseEvent(
-                                                'IconButton_navigate_to',
-                                              );
+                                                  'IconButton_navigate_to');
 
                                               context.pushNamed(
-                                                LikedWidget.routeName,
-                                              );
+                                                  LikedWidget.routeName);
                                             },
                                           ),
                                           Text(
                                             'Your Liked Words',
                                             textAlign: TextAlign.center,
-
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
                                                   font: GoogleFonts.inter(
                                                     fontWeight:
                                                         FlutterFlowTheme.of(
-                                                          context,
-                                                        ).bodyMedium.fontWeight,
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontWeight,
                                                     fontStyle:
                                                         FlutterFlowTheme.of(
-                                                          context,
-                                                        ).bodyMedium.fontStyle,
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
                                                   ),
-
                                                   color: FlutterFlowTheme.of(
-                                                    context,
-                                                  ).secondaryBackground,
-
+                                                          context)
+                                                      .secondaryBackground,
                                                   letterSpacing: 0.0,
                                                   fontWeight:
                                                       FlutterFlowTheme.of(
-                                                        context,
-                                                      ).bodyMedium.fontWeight,
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontWeight,
                                                   fontStyle:
                                                       FlutterFlowTheme.of(
-                                                        context,
-                                                      ).bodyMedium.fontStyle,
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
                                                 ),
                                           ),
                                         ].divide(SizedBox(height: 4.0)),
@@ -292,68 +264,62 @@ class _StartWidgetState extends State<StartWidget>
                                     Flexible(
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
-
                                         children: [
                                           FlutterFlowIconButton(
                                             borderColor: Colors.transparent,
                                             borderRadius: 100.0,
-
                                             buttonSize: 75.0,
-                                            fillColor: FlutterFlowTheme.of(
-                                              context,
-                                            ).primaryText,
-
+                                            fillColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .primaryText,
                                             icon: Icon(
                                               Icons.settings,
-                                              color: FlutterFlowTheme.of(
-                                                context,
-                                              ).info,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .info,
                                               size: 35.0,
                                             ),
-
                                             onPressed: () async {
                                               logFirebaseEvent(
-                                                'START_PAGE_settings_ICN_ON_TAP',
-                                              );
+                                                  'START_PAGE_settings_ICN_ON_TAP');
                                               logFirebaseEvent(
-                                                'IconButton_navigate_to',
-                                              );
+                                                  'IconButton_navigate_to');
 
                                               context.pushNamed(
-                                                SettingsWidget.routeName,
-                                              );
+                                                  SettingsWidget.routeName);
                                             },
                                           ),
                                           Text(
                                             'Settings',
-
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
                                                   font: GoogleFonts.inter(
                                                     fontWeight:
                                                         FlutterFlowTheme.of(
-                                                          context,
-                                                        ).bodyMedium.fontWeight,
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontWeight,
                                                     fontStyle:
                                                         FlutterFlowTheme.of(
-                                                          context,
-                                                        ).bodyMedium.fontStyle,
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
                                                   ),
-
                                                   color: FlutterFlowTheme.of(
-                                                    context,
-                                                  ).secondaryBackground,
-
+                                                          context)
+                                                      .secondaryBackground,
                                                   letterSpacing: 0.0,
                                                   fontWeight:
                                                       FlutterFlowTheme.of(
-                                                        context,
-                                                      ).bodyMedium.fontWeight,
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontWeight,
                                                   fontStyle:
                                                       FlutterFlowTheme.of(
-                                                        context,
-                                                      ).bodyMedium.fontStyle,
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
                                                 ),
                                           ),
                                         ].divide(SizedBox(height: 4.0)),
@@ -364,73 +330,66 @@ class _StartWidgetState extends State<StartWidget>
                               ),
                               Column(
                                 mainAxisSize: MainAxisSize.max,
-
                                 children: [
                                   FlutterFlowIconButton(
                                     borderColor: Colors.transparent,
                                     borderRadius: 100.0,
-
                                     buttonSize: 75.0,
-                                    fillColor: FlutterFlowTheme.of(
-                                      context,
-                                    ).primaryText,
-
+                                    fillColor: FlutterFlowTheme.of(context)
+                                        .primaryText,
                                     icon: Icon(
                                       Icons.close_outlined,
                                       color: FlutterFlowTheme.of(context).info,
                                       size: 35.0,
                                     ),
-
                                     onPressed: () async {
                                       logFirebaseEvent(
-                                        'START_PAGE_close_outlined_ICN_ON_TAP',
-                                      );
+                                          'START_PAGE_close_outlined_ICN_ON_TAP');
                                       logFirebaseEvent(
-                                        'IconButton_widget_animation',
-                                      );
-                                      if (animationsMap['stackOnActionTriggerAnimation'] !=
+                                          'IconButton_widget_animation');
+                                      if (animationsMap[
+                                              'stackOnActionTriggerAnimation'] !=
                                           null) {
-                                        await animationsMap['stackOnActionTriggerAnimation']!
+                                        await animationsMap[
+                                                'stackOnActionTriggerAnimation']!
                                             .controller
                                             .reverse();
                                       }
                                       logFirebaseEvent('IconButton_drawer');
                                       if (scaffoldKey
-                                              .currentState!
-                                              .isDrawerOpen ||
+                                              .currentState!.isDrawerOpen ||
                                           scaffoldKey
-                                              .currentState!
-                                              .isEndDrawerOpen) {
+                                              .currentState!.isEndDrawerOpen) {
                                         Navigator.pop(context);
                                       }
                                     },
                                   ),
                                   Text(
                                     'Close',
-
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
                                           font: GoogleFonts.inter(
-                                            fontWeight: FlutterFlowTheme.of(
-                                              context,
-                                            ).bodyMedium.fontWeight,
-                                            fontStyle: FlutterFlowTheme.of(
-                                              context,
-                                            ).bodyMedium.fontStyle,
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
                                           ),
-
-                                          color: FlutterFlowTheme.of(
-                                            context,
-                                          ).secondaryBackground,
-
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
                                           letterSpacing: 0.0,
-                                          fontWeight: FlutterFlowTheme.of(
-                                            context,
-                                          ).bodyMedium.fontWeight,
-                                          fontStyle: FlutterFlowTheme.of(
-                                            context,
-                                          ).bodyMedium.fontStyle,
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
                                         ),
                                   ),
                                 ].divide(SizedBox(height: 4.0)),
@@ -451,24 +410,23 @@ class _StartWidgetState extends State<StartWidget>
                   curve: Curves.easeInOutQuint,
                   width: MediaQuery.sizeOf(context).width * 1.0,
                   height: MediaQuery.sizeOf(context).height * 1.0,
-
                   decoration: BoxDecoration(
                     color: valueOrDefault<Color>(
                       _model.previousBgColor,
                       FlutterFlowTheme.of(context).primaryText,
                     ),
-
-                    border: Border.all(color: Colors.transparent, width: 0.0),
+                    border: Border.all(
+                      color: Colors.transparent,
+                      width: 0.0,
+                    ),
                   ),
                 ).animateOnPageLoad(
-                  animationsMap['containerOnPageLoadAnimation1']!,
-                ),
+                    animationsMap['containerOnPageLoadAnimation1']!),
                 AnimatedContainer(
                   duration: Duration(milliseconds: 600),
                   curve: Curves.easeInOutQuint,
                   width: MediaQuery.sizeOf(context).width * 1.0,
                   height: MediaQuery.sizeOf(context).height * 1.0,
-
                   decoration: BoxDecoration(
                     color: valueOrDefault<Color>(
                       _model.bgColor,
@@ -476,20 +434,20 @@ class _StartWidgetState extends State<StartWidget>
                     ),
                   ),
                 ).animateOnPageLoad(
-                  animationsMap['containerOnPageLoadAnimation2']!,
-                ),
+                    animationsMap['containerOnPageLoadAnimation2']!),
                 Builder(
                   builder: (context) {
                     final lexicon = startLexiconRecordList.toList();
                     if (lexicon.isEmpty) {
-                      return Center(child: BlankWidget());
+                      return Center(
+                        child: BlankWidget(),
+                      );
                     }
 
                     return FlutterFlowSwipeableStack(
                       onSwipeFn: (lexiconIndex) async {
                         logFirebaseEvent(
-                          'START_SwipeableStack_btxgacya_ON_WIDGET_',
-                        );
+                            'START_SwipeableStack_btxgacya_ON_WIDGET_');
                         final lexiconItem = lexicon[lexiconIndex];
                         logFirebaseEvent('SwipeableStack_haptic_feedback');
                         HapticFeedback.lightImpact();
@@ -524,9 +482,8 @@ class _StartWidgetState extends State<StartWidget>
 
                           context.goNamed(
                             StartWidget.routeName,
-
                             extra: <String, dynamic>{
-                              kTransitionInfoKey: TransitionInfo(
+                              '__transition_info__': TransitionInfo(
                                 hasTransition: true,
                                 transitionType: PageTransitionType.fade,
                               ),
@@ -545,15 +502,14 @@ class _StartWidgetState extends State<StartWidget>
                           focusColor: Colors.transparent,
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
-
                           onLongPress: () async {
                             logFirebaseEvent(
-                              'START_PAGE_StackTilt_ON_LONG_PRESS',
-                            );
+                                'START_PAGE_StackTilt_ON_LONG_PRESS');
                             logFirebaseEvent('StackTilt_haptic_feedback');
                             HapticFeedback.heavyImpact();
                             logFirebaseEvent('StackTilt_widget_animation');
-                            if (animationsMap['stackOnActionTriggerAnimation'] !=
+                            if (animationsMap[
+                                    'stackOnActionTriggerAnimation'] !=
                                 null) {
                               animationsMap['stackOnActionTriggerAnimation']!
                                   .controller
@@ -571,27 +527,22 @@ class _StartWidgetState extends State<StartWidget>
                               ))
                                 CardBackWidget(
                                   key: Key(
-                                    'Keyqdu_${lexiconIndex}_of_${lexicon.length}',
-                                  ),
+                                      'Keyqdu_${lexiconIndex}_of_${lexicon.length}'),
                                   doc: lexiconItem,
                                   turn: () async {
                                     logFirebaseEvent(
-                                      'START_PAGE_Container_qduthaoz_CALLBACK',
-                                    );
+                                        'START_PAGE_Container_qduthaoz_CALLBACK');
                                     logFirebaseEvent(
-                                      'CardBack_update_page_state',
-                                    );
+                                        'CardBack_update_page_state');
                                     _model.frontOfCardShowing =
                                         !_model.frontOfCardShowing;
                                     safeSetState(() {});
                                   },
                                   backToTop: () async {
                                     logFirebaseEvent(
-                                      'START_PAGE_Container_qduthaoz_CALLBACK',
-                                    );
+                                        'START_PAGE_Container_qduthaoz_CALLBACK');
                                     logFirebaseEvent(
-                                      'CardBack_update_page_state',
-                                    );
+                                        'CardBack_update_page_state');
                                     _model.frontOfCardShowing =
                                         !_model.frontOfCardShowing;
                                     safeSetState(() {});
@@ -599,9 +550,8 @@ class _StartWidgetState extends State<StartWidget>
 
                                     context.goNamed(
                                       StartWidget.routeName,
-
                                       extra: <String, dynamic>{
-                                        kTransitionInfoKey: TransitionInfo(
+                                        '__transition_info__': TransitionInfo(
                                           hasTransition: true,
                                           transitionType:
                                               PageTransitionType.fade,
@@ -652,11 +602,9 @@ class _StartWidgetState extends State<StartWidget>
                                     doc: lexiconItem,
                                     updateState: () async {
                                       logFirebaseEvent(
-                                        'START_PAGE_Container_v5hiw0e0_CALLBACK',
-                                      );
+                                          'START_PAGE_Container_v5hiw0e0_CALLBACK');
                                       logFirebaseEvent(
-                                        'Front_update_page_state',
-                                      );
+                                          'Front_update_page_state');
                                       _model.frontOfCardShowing =
                                           !_model.frontOfCardShowing;
                                       safeSetState(() {});
@@ -674,16 +622,10 @@ class _StartWidgetState extends State<StartWidget>
                       loop: true,
                       cardDisplayCount: 1,
                       scale: 0.9,
-
-                      cardPadding: EdgeInsetsDirectional.fromSTEB(
-                        0.0,
-                        0.0,
-                        0.0,
-                        0.0,
-                      ),
+                      cardPadding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                     ).animateOnPageLoad(
-                      animationsMap['swipeableStackOnPageLoadAnimation']!,
-                    );
+                        animationsMap['swipeableStackOnPageLoadAnimation']!);
                   },
                 ),
               ],

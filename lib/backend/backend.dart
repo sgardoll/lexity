@@ -22,69 +22,75 @@ export 'schema/users_record.dart';
 Future<int> queryLexiconRecordCount({
   Query Function(Query)? queryBuilder,
   int limit = -1,
-}) => queryCollectionCount(
-  LexiconRecord.collection,
-  queryBuilder: queryBuilder,
-  limit: limit,
-);
+}) =>
+    queryCollectionCount(
+      LexiconRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
 
 Stream<List<LexiconRecord>> queryLexiconRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
   bool singleRecord = false,
-}) => queryCollection(
-  LexiconRecord.collection,
-  LexiconRecord.fromSnapshot,
-  queryBuilder: queryBuilder,
-  limit: limit,
-  singleRecord: singleRecord,
-);
+}) =>
+    queryCollection(
+      LexiconRecord.collection,
+      LexiconRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
 
 Future<List<LexiconRecord>> queryLexiconRecordOnce({
   Query Function(Query)? queryBuilder,
   int limit = -1,
   bool singleRecord = false,
-}) => queryCollectionOnce(
-  LexiconRecord.collection,
-  LexiconRecord.fromSnapshot,
-  queryBuilder: queryBuilder,
-  limit: limit,
-  singleRecord: singleRecord,
-);
+}) =>
+    queryCollectionOnce(
+      LexiconRecord.collection,
+      LexiconRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
 
 /// Functions to query UsersRecords (as a Stream and as a Future).
 Future<int> queryUsersRecordCount({
   Query Function(Query)? queryBuilder,
   int limit = -1,
-}) => queryCollectionCount(
-  UsersRecord.collection,
-  queryBuilder: queryBuilder,
-  limit: limit,
-);
+}) =>
+    queryCollectionCount(
+      UsersRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
 
 Stream<List<UsersRecord>> queryUsersRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
   bool singleRecord = false,
-}) => queryCollection(
-  UsersRecord.collection,
-  UsersRecord.fromSnapshot,
-  queryBuilder: queryBuilder,
-  limit: limit,
-  singleRecord: singleRecord,
-);
+}) =>
+    queryCollection(
+      UsersRecord.collection,
+      UsersRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
 
 Future<List<UsersRecord>> queryUsersRecordOnce({
   Query Function(Query)? queryBuilder,
   int limit = -1,
   bool singleRecord = false,
-}) => queryCollectionOnce(
-  UsersRecord.collection,
-  UsersRecord.fromSnapshot,
-  queryBuilder: queryBuilder,
-  limit: limit,
-  singleRecord: singleRecord,
-);
+}) =>
+    queryCollectionOnce(
+      UsersRecord.collection,
+      UsersRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
 
 Future<int> queryCollectionCount(
   Query collection, {
@@ -97,13 +103,9 @@ Future<int> queryCollectionCount(
     query = query.limit(limit);
   }
 
-  return query
-      .count()
-      .get()
-      .catchError((err) {
-        print('Error querying $collection: $err');
-      })
-      .then((value) => value.count!);
+  return query.count().get().catchError((err) {
+    print('Error querying $collection: $err');
+  }).then((value) => value.count!);
 }
 
 Stream<List<T>> queryCollection<T>(
@@ -118,23 +120,18 @@ Stream<List<T>> queryCollection<T>(
   if (limit > 0 || singleRecord) {
     query = query.limit(singleRecord ? 1 : limit);
   }
-  return query
-      .snapshots()
-      .handleError((err) {
-        print('Error querying $collection: $err');
-      })
+  return query.snapshots().handleError((err) {
+    print('Error querying $collection: $err');
+  }).map((s) => s.docs
       .map(
-        (s) => s.docs
-            .map(
-              (d) => safeGet(
-                () => recordBuilder(d),
-                (e) => print('Error serializing doc ${d.reference.path}:\n$e'),
-              ),
-            )
-            .where((d) => d != null)
-            .map((d) => d!)
-            .toList(),
-      );
+        (d) => safeGet(
+          () => recordBuilder(d),
+          (e) => print('Error serializing doc ${d.reference.path}:\n$e'),
+        ),
+      )
+      .where((d) => d != null)
+      .map((d) => d!)
+      .toList());
 }
 
 Future<List<T>> queryCollectionOnce<T>(
@@ -149,18 +146,16 @@ Future<List<T>> queryCollectionOnce<T>(
   if (limit > 0 || singleRecord) {
     query = query.limit(singleRecord ? 1 : limit);
   }
-  return query.get().then(
-    (s) => s.docs
-        .map(
-          (d) => safeGet(
-            () => recordBuilder(d),
-            (e) => print('Error serializing doc ${d.reference.path}:\n$e'),
-          ),
-        )
-        .where((d) => d != null)
-        .map((d) => d!)
-        .toList(),
-  );
+  return query.get().then((s) => s.docs
+      .map(
+        (d) => safeGet(
+          () => recordBuilder(d),
+          (e) => print('Error serializing doc ${d.reference.path}:\n$e'),
+        ),
+      )
+      .where((d) => d != null)
+      .map((d) => d!)
+      .toList());
 }
 
 Filter filterIn(String field, List? list) => (list?.isEmpty ?? true)
@@ -169,8 +164,8 @@ Filter filterIn(String field, List? list) => (list?.isEmpty ?? true)
 
 Filter filterArrayContainsAny(String field, List? list) =>
     (list?.isEmpty ?? true)
-    ? Filter(field, arrayContainsAny: null)
-    : Filter(field, arrayContainsAny: list);
+        ? Filter(field, arrayContainsAny: null)
+        : Filter(field, arrayContainsAny: list);
 
 extension QueryExtension on Query {
   Query whereIn(String field, List? list) => (list?.isEmpty ?? true)
@@ -183,8 +178,8 @@ extension QueryExtension on Query {
 
   Query whereArrayContainsAny(String field, List? list) =>
       (list?.isEmpty ?? true)
-      ? where(field, arrayContainsAny: null)
-      : where(field, arrayContainsAny: list);
+          ? where(field, arrayContainsAny: null)
+          : where(field, arrayContainsAny: list);
 }
 
 class FFFirestorePage<T> {
@@ -242,8 +237,7 @@ Future maybeCreateUser(User user) async {
   }
 
   final userData = createUsersRecordData(
-    email:
-        user.email ??
+    email: user.email ??
         FirebaseAuth.instance.currentUser?.email ??
         user.providerData.firstOrNull?.email,
     displayName:
@@ -259,7 +253,6 @@ Future maybeCreateUser(User user) async {
 }
 
 Future updateUserDocument({String? email}) async {
-  await currentUserDocument?.reference.update(
-    createUsersRecordData(email: email),
-  );
+  await currentUserDocument?.reference
+      .update(createUsersRecordData(email: email));
 }

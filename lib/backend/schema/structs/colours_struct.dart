@@ -15,13 +15,13 @@ class ColoursStruct extends FFFirebaseStruct {
     String? lightMuted,
     String? darkMuted,
     FirestoreUtilData firestoreUtilData = const FirestoreUtilData(),
-  }) : _vibrant = vibrant,
-       _lightVibrant = lightVibrant,
-       _darkVibrant = darkVibrant,
-       _muted = muted,
-       _lightMuted = lightMuted,
-       _darkMuted = darkMuted,
-       super(firestoreUtilData);
+  })  : _vibrant = vibrant,
+        _lightVibrant = lightVibrant,
+        _darkVibrant = darkVibrant,
+        _muted = muted,
+        _lightMuted = lightMuted,
+        _darkMuted = darkMuted,
+        super(firestoreUtilData);
 
   // "Vibrant" field.
   String? _vibrant;
@@ -66,50 +66,87 @@ class ColoursStruct extends FFFirebaseStruct {
   bool hasDarkMuted() => _darkMuted != null;
 
   static ColoursStruct fromMap(Map<String, dynamic> data) => ColoursStruct(
-    vibrant: data['Vibrant'] as String?,
-    lightVibrant: data['LightVibrant'] as String?,
-    darkVibrant: data['DarkVibrant'] as String?,
-    muted: data['Muted'] as String?,
-    lightMuted: data['LightMuted'] as String?,
-    darkMuted: data['DarkMuted'] as String?,
-  );
+        vibrant: data['Vibrant'] as String?,
+        lightVibrant: data['LightVibrant'] as String?,
+        darkVibrant: data['DarkVibrant'] as String?,
+        muted: data['Muted'] as String?,
+        lightMuted: data['LightMuted'] as String?,
+        darkMuted: data['DarkMuted'] as String?,
+      );
 
   static ColoursStruct? maybeFromMap(dynamic data) =>
       data is Map ? ColoursStruct.fromMap(data.cast<String, dynamic>()) : null;
 
   Map<String, dynamic> toMap() => {
-    'Vibrant': _vibrant,
-    'LightVibrant': _lightVibrant,
-    'DarkVibrant': _darkVibrant,
-    'Muted': _muted,
-    'LightMuted': _lightMuted,
-    'DarkMuted': _darkMuted,
-  }.withoutNulls;
+        'Vibrant': _vibrant,
+        'LightVibrant': _lightVibrant,
+        'DarkVibrant': _darkVibrant,
+        'Muted': _muted,
+        'LightMuted': _lightMuted,
+        'DarkMuted': _darkMuted,
+      }.withoutNulls;
 
   @override
   Map<String, dynamic> toSerializableMap() => {
-    'Vibrant': serializeParam(_vibrant, ParamType.String),
-    'LightVibrant': serializeParam(_lightVibrant, ParamType.String),
-    'DarkVibrant': serializeParam(_darkVibrant, ParamType.String),
-    'Muted': serializeParam(_muted, ParamType.String),
-    'LightMuted': serializeParam(_lightMuted, ParamType.String),
-    'DarkMuted': serializeParam(_darkMuted, ParamType.String),
-  }.withoutNulls;
+        'Vibrant': serializeParam(
+          _vibrant,
+          ParamType.String,
+        ),
+        'LightVibrant': serializeParam(
+          _lightVibrant,
+          ParamType.String,
+        ),
+        'DarkVibrant': serializeParam(
+          _darkVibrant,
+          ParamType.String,
+        ),
+        'Muted': serializeParam(
+          _muted,
+          ParamType.String,
+        ),
+        'LightMuted': serializeParam(
+          _lightMuted,
+          ParamType.String,
+        ),
+        'DarkMuted': serializeParam(
+          _darkMuted,
+          ParamType.String,
+        ),
+      }.withoutNulls;
 
-  static ColoursStruct fromSerializableMap(
-    Map<String, dynamic> data,
-  ) => ColoursStruct(
-    vibrant: deserializeParam(data['Vibrant'], ParamType.String, false),
-    lightVibrant: deserializeParam(
-      data['LightVibrant'],
-      ParamType.String,
-      false,
-    ),
-    darkVibrant: deserializeParam(data['DarkVibrant'], ParamType.String, false),
-    muted: deserializeParam(data['Muted'], ParamType.String, false),
-    lightMuted: deserializeParam(data['LightMuted'], ParamType.String, false),
-    darkMuted: deserializeParam(data['DarkMuted'], ParamType.String, false),
-  );
+  static ColoursStruct fromSerializableMap(Map<String, dynamic> data) =>
+      ColoursStruct(
+        vibrant: deserializeParam(
+          data['Vibrant'],
+          ParamType.String,
+          false,
+        ),
+        lightVibrant: deserializeParam(
+          data['LightVibrant'],
+          ParamType.String,
+          false,
+        ),
+        darkVibrant: deserializeParam(
+          data['DarkVibrant'],
+          ParamType.String,
+          false,
+        ),
+        muted: deserializeParam(
+          data['Muted'],
+          ParamType.String,
+          false,
+        ),
+        lightMuted: deserializeParam(
+          data['LightMuted'],
+          ParamType.String,
+          false,
+        ),
+        darkMuted: deserializeParam(
+          data['DarkMuted'],
+          ParamType.String,
+          false,
+        ),
+      );
 
   @override
   String toString() => 'ColoursStruct(${toMap()})';
@@ -126,14 +163,8 @@ class ColoursStruct extends FFFirebaseStruct {
   }
 
   @override
-  int get hashCode => const ListEquality().hash([
-    vibrant,
-    lightVibrant,
-    darkVibrant,
-    muted,
-    lightMuted,
-    darkMuted,
-  ]);
+  int get hashCode => const ListEquality()
+      .hash([vibrant, lightVibrant, darkVibrant, muted, lightMuted, darkMuted]);
 }
 
 ColoursStruct createColoursStruct({
@@ -147,30 +178,32 @@ ColoursStruct createColoursStruct({
   bool clearUnsetFields = true,
   bool create = false,
   bool delete = false,
-}) => ColoursStruct(
-  vibrant: vibrant,
-  lightVibrant: lightVibrant,
-  darkVibrant: darkVibrant,
-  muted: muted,
-  lightMuted: lightMuted,
-  darkMuted: darkMuted,
-  firestoreUtilData: FirestoreUtilData(
-    clearUnsetFields: clearUnsetFields,
-    create: create,
-    delete: delete,
-    fieldValues: fieldValues,
-  ),
-);
+}) =>
+    ColoursStruct(
+      vibrant: vibrant,
+      lightVibrant: lightVibrant,
+      darkVibrant: darkVibrant,
+      muted: muted,
+      lightMuted: lightMuted,
+      darkMuted: darkMuted,
+      firestoreUtilData: FirestoreUtilData(
+        clearUnsetFields: clearUnsetFields,
+        create: create,
+        delete: delete,
+        fieldValues: fieldValues,
+      ),
+    );
 
 ColoursStruct? updateColoursStruct(
   ColoursStruct? colours, {
   bool clearUnsetFields = true,
   bool create = false,
-}) => colours
-  ?..firestoreUtilData = FirestoreUtilData(
-    clearUnsetFields: clearUnsetFields,
-    create: create,
-  );
+}) =>
+    colours
+      ?..firestoreUtilData = FirestoreUtilData(
+        clearUnsetFields: clearUnsetFields,
+        create: create,
+      );
 
 void addColoursStructData(
   Map<String, dynamic> firestoreData,
@@ -195,9 +228,8 @@ void addColoursStructData(
   final nestedData = coloursData.map((k, v) => MapEntry('$fieldName.$k', v));
 
   final mergeFields = colours.firestoreUtilData.create || clearFields;
-  firestoreData.addAll(
-    mergeFields ? mergeNestedFields(nestedData) : nestedData,
-  );
+  firestoreData
+      .addAll(mergeFields ? mergeNestedFields(nestedData) : nestedData);
 }
 
 Map<String, dynamic> getColoursFirestoreData(
@@ -217,4 +249,5 @@ Map<String, dynamic> getColoursFirestoreData(
 
 List<Map<String, dynamic>> getColoursListFirestoreData(
   List<ColoursStruct>? colourss,
-) => colourss?.map((e) => getColoursFirestoreData(e, true)).toList() ?? [];
+) =>
+    colourss?.map((e) => getColoursFirestoreData(e, true)).toList() ?? [];

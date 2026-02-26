@@ -208,105 +208,107 @@ class ThemeTypography extends Typography {
   String get displayLargeFamily => 'Readex Pro';
   bool get displayLargeIsCustom => false;
   TextStyle get displayLarge => GoogleFonts.readexPro(
-    color: theme.primaryText,
-    fontWeight: FontWeight.w300,
-    fontSize: 52.0,
-  );
+        color: theme.primaryText,
+        fontWeight: FontWeight.w300,
+        fontSize: 52.0,
+      );
   String get displayMediumFamily => 'Readex Pro';
   bool get displayMediumIsCustom => false;
   TextStyle get displayMedium => GoogleFonts.readexPro(
-    color: theme.primaryText,
-    fontWeight: FontWeight.w500,
-    fontSize: 44.0,
-  );
+        color: theme.primaryText,
+        fontWeight: FontWeight.w500,
+        fontSize: 44.0,
+      );
   String get displaySmallFamily => 'Readex Pro';
   bool get displaySmallIsCustom => false;
   TextStyle get displaySmall => GoogleFonts.readexPro(
-    color: theme.primaryText,
-    fontWeight: FontWeight.w500,
-    fontSize: 36.0,
-  );
+        color: theme.primaryText,
+        fontWeight: FontWeight.w500,
+        fontSize: 36.0,
+      );
   String get headlineLargeFamily => 'Readex Pro';
   bool get headlineLargeIsCustom => false;
   TextStyle get headlineLarge => GoogleFonts.readexPro(
-    color: theme.primaryText,
-    fontWeight: FontWeight.normal,
-    fontSize: 32.0,
-  );
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 32.0,
+      );
   String get headlineMediumFamily => 'Readex Pro';
   bool get headlineMediumIsCustom => false;
   TextStyle get headlineMedium => GoogleFonts.readexPro(
-    color: theme.primaryText,
-    fontWeight: FontWeight.normal,
-    fontSize: 28.0,
-  );
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 28.0,
+      );
   String get headlineSmallFamily => 'Readex Pro';
   bool get headlineSmallIsCustom => false;
   TextStyle get headlineSmall => GoogleFonts.readexPro(
-    color: theme.primaryText,
-    fontWeight: FontWeight.normal,
-    fontSize: 24.0,
-  );
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 24.0,
+      );
   String get titleLargeFamily => 'Inter';
   bool get titleLargeIsCustom => false;
   TextStyle get titleLarge => GoogleFonts.inter(
-    color: theme.primaryText,
-    fontWeight: FontWeight.w500,
-    fontSize: 22.0,
-  );
+        color: theme.primaryText,
+        fontWeight: FontWeight.w500,
+        fontSize: 22.0,
+      );
   String get titleMediumFamily => 'Inter';
   bool get titleMediumIsCustom => false;
   TextStyle get titleMedium => GoogleFonts.inter(
-    color: theme.info,
-    fontWeight: FontWeight.w500,
-    fontSize: 18.0,
-  );
+        color: theme.info,
+        fontWeight: FontWeight.w500,
+        fontSize: 18.0,
+      );
   String get titleSmallFamily => 'Inter';
   bool get titleSmallIsCustom => false;
   TextStyle get titleSmall => GoogleFonts.inter(
-    color: theme.info,
-    fontWeight: FontWeight.w500,
-    fontSize: 16.0,
-  );
+        color: theme.info,
+        fontWeight: FontWeight.w500,
+        fontSize: 16.0,
+      );
   String get labelLargeFamily => 'Inter';
   bool get labelLargeIsCustom => false;
   TextStyle get labelLarge => GoogleFonts.inter(
-    color: theme.secondaryText,
-    fontWeight: FontWeight.w500,
-    fontSize: 16.0,
-  );
+        color: theme.secondaryText,
+        fontWeight: FontWeight.w500,
+        fontSize: 16.0,
+      );
   String get labelMediumFamily => 'Inter';
   bool get labelMediumIsCustom => false;
   TextStyle get labelMedium => GoogleFonts.inter(
-    color: theme.secondaryText,
-    fontWeight: FontWeight.w500,
-    fontSize: 14.0,
-  );
+        color: theme.secondaryText,
+        fontWeight: FontWeight.w500,
+        fontSize: 14.0,
+      );
   String get labelSmallFamily => 'Inter';
   bool get labelSmallIsCustom => false;
   TextStyle get labelSmall => GoogleFonts.inter(
-    color: theme.secondaryText,
-    fontWeight: FontWeight.w500,
-    fontSize: 12.0,
-  );
+        color: theme.secondaryText,
+        fontWeight: FontWeight.w500,
+        fontSize: 12.0,
+      );
   String get bodyLargeFamily => 'Inter';
   bool get bodyLargeIsCustom => false;
-  TextStyle get bodyLarge =>
-      GoogleFonts.inter(color: theme.primaryText, fontSize: 16.0);
+  TextStyle get bodyLarge => GoogleFonts.inter(
+        color: theme.primaryText,
+        fontSize: 16.0,
+      );
   String get bodyMediumFamily => 'Inter';
   bool get bodyMediumIsCustom => false;
   TextStyle get bodyMedium => GoogleFonts.inter(
-    color: theme.primaryText,
-    fontWeight: FontWeight.normal,
-    fontSize: 14.0,
-  );
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 14.0,
+      );
   String get bodySmallFamily => 'Inter';
   bool get bodySmallIsCustom => false;
   TextStyle get bodySmall => GoogleFonts.inter(
-    color: theme.primaryText,
-    fontWeight: FontWeight.normal,
-    fontSize: 12.0,
-  );
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 12.0,
+      );
 }
 
 extension TextStyleHelper on TextStyle {
@@ -325,11 +327,9 @@ extension TextStyleHelper on TextStyle {
     String? package,
   }) {
     if (useGoogleFonts && fontFamily != null) {
-      font = GoogleFonts.getFont(
-        fontFamily,
-        fontWeight: fontWeight ?? this.fontWeight,
-        fontStyle: fontStyle ?? this.fontStyle,
-      );
+      font = GoogleFonts.getFont(fontFamily,
+          fontWeight: fontWeight ?? this.fontWeight,
+          fontStyle: fontStyle ?? this.fontStyle);
     }
 
     return font != null

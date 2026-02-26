@@ -1,7 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/foundation.dart';
 
 import '../base_auth_user_provider.dart';
 
@@ -14,12 +12,12 @@ class LexityFirebaseUser extends BaseAuthUser {
 
   @override
   AuthUserInfo get authUserInfo => AuthUserInfo(
-    uid: user?.uid,
-    email: user?.email,
-    displayName: user?.displayName,
-    photoUrl: user?.photoURL,
-    phoneNumber: user?.phoneNumber,
-  );
+        uid: user?.uid,
+        email: user?.email,
+        displayName: user?.displayName,
+        photoUrl: user?.photoURL,
+        phoneNumber: user?.phoneNumber,
+      );
 
   @override
   Future? delete() => user?.delete();
@@ -53,9 +51,9 @@ class LexityFirebaseUser extends BaseAuthUser {
 
   @override
   Future refreshUser() async {
-    await FirebaseAuth.instance.currentUser?.reload().then(
-      (_) => user = FirebaseAuth.instance.currentUser,
-    );
+    await FirebaseAuth.instance.currentUser
+        ?.reload()
+        .then((_) => user = FirebaseAuth.instance.currentUser);
   }
 
   static BaseAuthUser fromUserCredential(UserCredential userCredential) =>
@@ -64,16 +62,13 @@ class LexityFirebaseUser extends BaseAuthUser {
 }
 
 Stream<BaseAuthUser> lexityFirebaseUserStream() => FirebaseAuth.instance
-    .authStateChanges()
-    .debounce(
-      (user) => user == null && !loggedIn
-          ? TimerStream(true, const Duration(seconds: 1))
-          : Stream.value(user),
-    )
-    .map<BaseAuthUser>((user) {
-      currentUser = LexityFirebaseUser(user);
-      if (!kIsWeb) {
-        FirebaseCrashlytics.instance.setUserIdentifier(user?.uid ?? '');
-      }
-      return currentUser!;
-    });
+        .authStateChanges()
+        .debounce((user) => user == null && !loggedIn
+            ? TimerStream(true, const Duration(seconds: 1))
+            : Stream.value(user))
+        .map<BaseAuthUser>(
+      (user) {
+        currentUser = LexityFirebaseUser(user);
+        return currentUser!;
+      },
+    );

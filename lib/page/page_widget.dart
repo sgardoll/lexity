@@ -45,19 +45,15 @@ class _PageWidgetState extends State<PageWidget> {
       },
       child: Scaffold(
         key: scaffoldKey,
-
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-
         body: SafeArea(
           top: true,
           child: Column(
             mainAxisSize: MainAxisSize.max,
-
             children: [
               wrapWithModel(
                 model: _model.howToNavigateModel,
                 updateCallback: () => safeSetState(() {}),
-
                 child: HowToNavigateWidget(),
               ),
             ],

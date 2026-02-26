@@ -8,8 +8,10 @@ import 'index.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
 class UsersRecord extends FirestoreRecord {
-  UsersRecord._(DocumentReference reference, Map<String, dynamic> data)
-    : super(reference, data) {
+  UsersRecord._(
+    DocumentReference reference,
+    Map<String, dynamic> data,
+  ) : super(reference, data) {
     _initializeFields();
   }
 
@@ -62,14 +64,15 @@ class UsersRecord extends FirestoreRecord {
       ref.get().then((s) => UsersRecord.fromSnapshot(s));
 
   static UsersRecord fromSnapshot(DocumentSnapshot snapshot) => UsersRecord._(
-    snapshot.reference,
-    mapFromFirestore(snapshot.data() as Map<String, dynamic>),
-  );
+        snapshot.reference,
+        mapFromFirestore(snapshot.data() as Map<String, dynamic>),
+      );
 
   static UsersRecord getDocumentFromData(
     Map<String, dynamic> data,
     DocumentReference reference,
-  ) => UsersRecord._(reference, mapFromFirestore(data));
+  ) =>
+      UsersRecord._(reference, mapFromFirestore(data));
 
   @override
   String toString() =>
@@ -121,13 +124,13 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
 
   @override
   int hash(UsersRecord? e) => const ListEquality().hash([
-    e?.email,
-    e?.displayName,
-    e?.photoUrl,
-    e?.uid,
-    e?.createdTime,
-    e?.phoneNumber,
-  ]);
+        e?.email,
+        e?.displayName,
+        e?.photoUrl,
+        e?.uid,
+        e?.createdTime,
+        e?.phoneNumber
+      ]);
 
   @override
   bool isValidKey(Object? o) => o is UsersRecord;

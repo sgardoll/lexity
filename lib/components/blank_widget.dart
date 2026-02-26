@@ -39,20 +39,20 @@ class _BlankWidgetState extends State<BlankWidget> {
     return Container(
       width: 300.0,
       height: 300.0,
-
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
             blurRadius: 8.0,
             color: Color(0x33000000),
-            offset: Offset(2.0, 2.0),
+            offset: Offset(
+              2.0,
+              2.0,
+            ),
             spreadRadius: 4.0,
-          ),
+          )
         ],
-
         borderRadius: BorderRadius.circular(24.0),
       ),
-
       child: ClipRRect(
         borderRadius: BorderRadius.circular(24.0),
         child: Image.asset(

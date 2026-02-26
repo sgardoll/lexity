@@ -26,7 +26,7 @@ class CreateAccountModel extends FlutterFlowModel<CreateAccountWidget> {
   TextEditingController? confirmPasswordTextController;
   late bool passwordVisibility2;
   String? Function(BuildContext, String?)?
-  confirmPasswordTextControllerValidator;
+      confirmPasswordTextControllerValidator;
 
   @override
   void initState(BuildContext context) {

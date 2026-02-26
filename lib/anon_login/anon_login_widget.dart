@@ -36,11 +36,6 @@ class _AnonLoginWidgetState extends State<AnonLoginWidget>
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       logFirebaseEvent('ANON_LOGIN_PAGE_anonLogin_ON_INIT_STATE');
-      logFirebaseEvent('anonLogin_widget_animation');
-      if (animationsMap['imageOnActionTriggerAnimation'] != null) {
-        await animationsMap['imageOnActionTriggerAnimation']!.controller
-            .forward(from: 0.0);
-      }
       logFirebaseEvent('anonLogin_auth');
       GoRouter.of(context).prepareAuthEvent();
       final user = await authManager.signInAnonymously(context);
@@ -52,13 +47,13 @@ class _AnonLoginWidgetState extends State<AnonLoginWidget>
     });
 
     animationsMap.addAll({
-      'imageOnActionTriggerAnimation': AnimationInfo(
-        trigger: AnimationTrigger.onActionTrigger,
-        applyInitialState: true,
+      'imageOnPageLoadAnimation': AnimationInfo(
+        loop: true,
+        trigger: AnimationTrigger.onPageLoad,
         effectsBuilder: () => [
           ShimmerEffect(
             curve: Curves.linear,
-            delay: 0.0.ms,
+            delay: 1000.0.ms,
             duration: 600.0.ms,
             color: Color(0x80FFFFFF),
             angle: 0.524,
@@ -66,14 +61,6 @@ class _AnonLoginWidgetState extends State<AnonLoginWidget>
         ],
       ),
     });
-    setupAnimations(
-      animationsMap.values.where(
-        (anim) =>
-            anim.trigger == AnimationTrigger.onActionTrigger ||
-            !anim.applyInitialState,
-      ),
-      this,
-    );
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
@@ -94,34 +81,25 @@ class _AnonLoginWidgetState extends State<AnonLoginWidget>
       },
       child: Scaffold(
         key: scaffoldKey,
-
         backgroundColor: FlutterFlowTheme.of(context).primaryText,
-
-        body: SafeArea(
-          top: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-
-            children: [
-              Flexible(
-                child: Align(
-                  alignment: AlignmentDirectional(0.0, 0.0),
-                  child:
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: Image.asset(
-                          'assets/images/2nobg.png',
-                          width: MediaQuery.sizeOf(context).width * 0.2,
-                          height: MediaQuery.sizeOf(context).height * 0.2,
-                          fit: BoxFit.contain,
-                        ),
-                      ).animateOnActionTrigger(
-                        animationsMap['imageOnActionTriggerAnimation']!,
-                      ),
-                ),
+        body: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Flexible(
+              child: Align(
+                alignment: AlignmentDirectional(0.0, 0.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Image.asset(
+                    'assets/images/2nobg.png',
+                    width: MediaQuery.sizeOf(context).width * 0.2,
+                    height: MediaQuery.sizeOf(context).height * 0.2,
+                    fit: BoxFit.contain,
+                  ),
+                ).animateOnPageLoad(animationsMap['imageOnPageLoadAnimation']!),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

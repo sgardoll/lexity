@@ -10,8 +10,6 @@ import 'auth/firebase_auth/auth_util.dart';
 import 'backend/push_notifications/push_notifications_util.dart';
 import 'backend/firebase/firebase_config.dart';
 import 'flutter_flow/flutter_flow_util.dart';
-import 'package:flutter/foundation.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,11 +21,10 @@ void main() async {
   final appState = FFAppState(); // Initialize FFAppState
   await appState.initializePersistedState();
 
-  if (!kIsWeb) {
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-  }
-
-  runApp(ChangeNotifierProvider(create: (context) => appState, child: MyApp()));
+  runApp(ChangeNotifierProvider(
+    create: (context) => appState,
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -42,9 +39,9 @@ class MyApp extends StatefulWidget {
 class MyAppScrollBehavior extends MaterialScrollBehavior {
   @override
   Set<PointerDeviceKind> get dragDevices => {
-    PointerDeviceKind.touch,
-    PointerDeviceKind.mouse,
-  };
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+      };
 }
 
 class _MyAppState extends State<MyApp> {
@@ -61,12 +58,10 @@ class _MyAppState extends State<MyApp> {
     return matchList.uri.toString();
   }
 
-  List<String> getRouteStack() => _router
-      .routerDelegate
-      .currentConfiguration
-      .matches
-      .map((e) => getRoute(e))
-      .toList();
+  List<String> getRouteStack() =>
+      _router.routerDelegate.currentConfiguration.matches
+          .map((e) => getRoute(e))
+          .toList();
   late Stream<BaseAuthUser> userStream;
 
   final authUserSub = authenticatedUserStream.listen((_) {});
@@ -97,8 +92,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   void setThemeMode(ThemeMode mode) => safeSetState(() {
-    _themeMode = mode;
-  });
+        _themeMode = mode;
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -111,10 +106,10 @@ class _MyAppState extends State<MyApp> {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-
       supportedLocales: const [Locale('en', '')],
-      theme: ThemeData(brightness: Brightness.light),
-
+      theme: ThemeData(
+        brightness: Brightness.light,
+      ),
       themeMode: _themeMode,
       routerConfig: _router,
     );

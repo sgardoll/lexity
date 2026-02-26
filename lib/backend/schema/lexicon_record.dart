@@ -8,8 +8,10 @@ import 'index.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
 class LexiconRecord extends FirestoreRecord {
-  LexiconRecord._(DocumentReference reference, Map<String, dynamic> data)
-    : super(reference, data) {
+  LexiconRecord._(
+    DocumentReference reference,
+    Map<String, dynamic> data,
+  ) : super(reference, data) {
     _initializeFields();
   }
 
@@ -144,7 +146,8 @@ class LexiconRecord extends FirestoreRecord {
   static LexiconRecord getDocumentFromData(
     Map<String, dynamic> data,
     DocumentReference reference,
-  ) => LexiconRecord._(reference, mapFromFirestore(data));
+  ) =>
+      LexiconRecord._(reference, mapFromFirestore(data));
 
   @override
   String toString() =>
@@ -226,25 +229,25 @@ class LexiconRecordDocumentEquality implements Equality<LexiconRecord> {
 
   @override
   int hash(LexiconRecord? e) => const ListEquality().hash([
-    e?.definition,
-    e?.etymology,
-    e?.language,
-    e?.partOfSpeech,
-    e?.pronunciation,
-    e?.term,
-    e?.usage,
-    e?.imageUrl,
-    e?.colours,
-    e?.antonyms,
-    e?.relatedWords,
-    e?.synonyms,
-    e?.likedBy,
-    e?.sharedBy,
-    e?.creationDate,
-    e?.usageSpoken,
-    e?.blurhash,
-    e?.rarityScore,
-  ]);
+        e?.definition,
+        e?.etymology,
+        e?.language,
+        e?.partOfSpeech,
+        e?.pronunciation,
+        e?.term,
+        e?.usage,
+        e?.imageUrl,
+        e?.colours,
+        e?.antonyms,
+        e?.relatedWords,
+        e?.synonyms,
+        e?.likedBy,
+        e?.sharedBy,
+        e?.creationDate,
+        e?.usageSpoken,
+        e?.blurhash,
+        e?.rarityScore
+      ]);
 
   @override
   bool isValidKey(Object? o) => o is LexiconRecord;

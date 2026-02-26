@@ -16,14 +16,14 @@ String dateTimeRangeToString(DateTimeRange dateTimeRange) {
 }
 
 String placeToString(FFPlace place) => jsonEncode({
-  'latLng': place.latLng.serialize(),
-  'name': place.name,
-  'address': place.address,
-  'city': place.city,
-  'state': place.state,
-  'country': place.country,
-  'zipCode': place.zipCode,
-});
+      'latLng': place.latLng.serialize(),
+      'name': place.name,
+      'address': place.address,
+      'city': place.city,
+      'state': place.state,
+      'country': place.country,
+      'zipCode': place.zipCode,
+    });
 
 String uploadedFileToString(FFUploadedFile uploadedFile) =>
     uploadedFile.serialize();
@@ -203,15 +203,13 @@ dynamic deserializeParam<T>(
       return paramValues
           .where((p) => p is String)
           .map((p) => p as String)
-          .map(
-            (p) => deserializeParam<T>(
-              p,
-              paramType,
-              false,
-              collectionNamePath: collectionNamePath,
-              structBuilder: structBuilder,
-            ),
-          )
+          .map((p) => deserializeParam<T>(
+                p,
+                paramType,
+                false,
+                collectionNamePath: collectionNamePath,
+                structBuilder: structBuilder,
+              ))
           .where((p) => p != null)
           .map((p) => p! as T)
           .toList();
@@ -262,10 +260,9 @@ Future<dynamic> Function(String) getDoc(
   List<String> collectionNamePath,
   RecordBuilder recordBuilder,
 ) {
-  return (String ids) => _deserializeDocumentReference(
-    ids,
-    collectionNamePath,
-  ).get().then((s) => recordBuilder(s));
+  return (String ids) => _deserializeDocumentReference(ids, collectionNamePath)
+      .get()
+      .then((s) => recordBuilder(s));
 }
 
 Future<List<T>> Function(String) getDocList<T>(
@@ -280,10 +277,9 @@ Future<List<T>> Function(String) getDocList<T>(
     } catch (_) {}
     return Future.wait(
       docIds.map(
-        (ids) => _deserializeDocumentReference(
-          ids,
-          collectionNamePath,
-        ).get().then((s) => recordBuilder(s)),
+        (ids) => _deserializeDocumentReference(ids, collectionNamePath)
+            .get()
+            .then((s) => recordBuilder(s)),
       ),
     ).then((docs) => docs.where((d) => d != null).map((d) => d!).toList());
   };
