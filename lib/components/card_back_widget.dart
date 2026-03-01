@@ -133,7 +133,7 @@ class _CardBackWidgetState extends State<CardBackWidget>
             delay: 0.0.ms,
             duration: 900.0.ms,
             begin: Offset(0, 2.094),
-            end: Offset(-0.105, 6.283),
+            end: Offset(-0.035, 6.283),
           ),
         ],
       ),
@@ -1537,47 +1537,43 @@ class _CardBackWidgetState extends State<CardBackWidget>
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              FlutterFlowIconButton(
-                                borderColor: Colors.transparent,
-                                borderRadius: 20.0,
-                                borderWidth: 1.0,
-                                buttonSize: 46.0,
-                                icon: Icon(
-                                  Icons.swipe_down,
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 12.0, 0.0, 0.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.vertical_align_top,
                                   color:
                                       FlutterFlowTheme.of(context).primaryText,
                                   size: 24.0,
                                 ),
-                                onPressed: () {
-                                  print('IconButton pressed ...');
-                                },
-                              ),
-                              Text(
-                                'Back to Top',
-                                textAlign: TextAlign.center,
-                                style: FlutterFlowTheme.of(context)
-                                    .labelSmall
-                                    .override(
-                                      font: GoogleFonts.inter(
+                                Text(
+                                  'Back to Top',
+                                  textAlign: TextAlign.center,
+                                  style: FlutterFlowTheme.of(context)
+                                      .labelSmall
+                                      .override(
+                                        font: GoogleFonts.inter(
+                                          fontWeight: FontWeight.w600,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .labelSmall
+                                                  .fontStyle,
+                                        ),
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                        letterSpacing: 0.0,
                                         fontWeight: FontWeight.w600,
                                         fontStyle: FlutterFlowTheme.of(context)
                                             .labelSmall
                                             .fontStyle,
                                       ),
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.w600,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .labelSmall
-                                          .fontStyle,
-                                    ),
-                              ),
-                            ],
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),

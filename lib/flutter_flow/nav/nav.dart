@@ -91,7 +91,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             FFRoute(
               name: StartWidget.routeName,
               path: StartWidget.routePath,
-              builder: (context, params) => StartWidget(),
+              builder: (context, params) => StartWidget(
+                id: params.getParam(
+                  'id',
+                  ParamType.String,
+                ),
+              ),
             ),
             FFRoute(
               name: AnonLoginWidget.routeName,

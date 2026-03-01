@@ -10,6 +10,8 @@ import 'auth/firebase_auth/auth_util.dart';
 import 'backend/push_notifications/push_notifications_util.dart';
 import 'backend/firebase/firebase_config.dart';
 import 'flutter_flow/flutter_flow_util.dart';
+import 'package:flutter/foundation.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +22,10 @@ void main() async {
 
   final appState = FFAppState(); // Initialize FFAppState
   await appState.initializePersistedState();
+
+  if (!kIsWeb) {
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  }
 
   runApp(ChangeNotifierProvider(
     create: (context) => appState,

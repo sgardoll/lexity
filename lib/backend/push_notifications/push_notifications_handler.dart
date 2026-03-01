@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'serialization_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '../../flutter_flow/flutter_flow_util.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -114,7 +115,11 @@ class ParameterData {
 
 final parametersBuilderMap =
     <String, Future<ParameterData> Function(Map<String, dynamic>)>{
-  'start': ParameterData.none(),
+  'start': (data) async => ParameterData(
+        allParams: {
+          'id': getParameter<String>(data, 'id'),
+        },
+      ),
   'anonLogin': ParameterData.none(),
   'Settings': ParameterData.none(),
   'CreateAccount': ParameterData.none(),

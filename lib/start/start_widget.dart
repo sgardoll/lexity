@@ -16,7 +16,12 @@ import 'start_model.dart';
 export 'start_model.dart';
 
 class StartWidget extends StatefulWidget {
-  const StartWidget({super.key});
+  const StartWidget({
+    super.key,
+    this.id,
+  });
+
+  final String? id;
 
   static String routeName = 'start';
   static String routePath = 'start';
@@ -139,8 +144,8 @@ class _StartWidgetState extends State<StartWidget>
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<LexiconRecord>>(
-      stream: queryLexiconRecord(
+    return FutureBuilder<List<LexiconRecord>>(
+      future: queryLexiconRecordOnce(
         queryBuilder: (lexiconRecord) =>
             lexiconRecord.orderBy('creationDate', descending: true),
       ),
@@ -437,7 +442,9 @@ class _StartWidgetState extends State<StartWidget>
                     animationsMap['containerOnPageLoadAnimation2']!),
                 Builder(
                   builder: (context) {
-                    final lexicon = startLexiconRecordList.toList();
+                    final lexicon = startLexiconRecordList
+                        .sortedList(keyOf: (e) => e.reference.id, desc: true)
+                        .toList();
                     if (lexicon.isEmpty) {
                       return Center(
                         child: BlankWidget(),
@@ -600,6 +607,7 @@ class _StartWidgetState extends State<StartWidget>
                                       'ENGLISH',
                                     ),
                                     doc: lexiconItem,
+                                    blurhash: lexiconItem.blurhash,
                                     updateState: () async {
                                       logFirebaseEvent(
                                           'START_PAGE_Container_v5hiw0e0_CALLBACK');
