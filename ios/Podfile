@@ -47,12 +47,6 @@ post_install do |installer|
 
         # dart: PermissionGroup.notification
         'PERMISSION_NOTIFICATIONS=1',
-
-        # dart: PermissionGroup.microphone
-        'PERMISSION_MICROPHONE=1',
-
-        # dart: PermissionGroup.bluetooth
-        'PERMISSION_BLUETOOTH=1',
       ]
     end
   end

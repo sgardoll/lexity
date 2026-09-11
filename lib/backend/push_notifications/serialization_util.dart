@@ -1,29 +1,35 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:from_css_color/from_css_color.dart';
 
 import '/backend/backend.dart';
+import '/backend/schema/structs/index.dart';
 
+import '../../flutter_flow/lat_lng.dart';
 import '../../flutter_flow/place.dart';
 import '../../flutter_flow/uploaded_file.dart';
 
 /// SERIALIZATION HELPERS
 
 String dateTimeRangeToString(DateTimeRange dateTimeRange) {
-  final startStr = dateTimeRange.start.millisecondsSinceEpoch.toString();
-  final endStr = dateTimeRange.end.millisecondsSinceEpoch.toString();
+  final start = dateTimeRange.start;
+  final end = dateTimeRange.end;
+  final startStr = '${start.isUtc ? 'u' : 'l'}${start.millisecondsSinceEpoch}';
+  final endStr = '${end.isUtc ? 'u' : 'l'}${end.millisecondsSinceEpoch}';
   return '$startStr|$endStr';
 }
 
 String placeToString(FFPlace place) => jsonEncode({
-  'latLng': place.latLng.serialize(),
-  'name': place.name,
-  'address': place.address,
-  'city': place.city,
-  'state': place.state,
-  'country': place.country,
-  'zipCode': place.zipCode,
-});
+      'latLng': place.latLng.serialize(),
+      'name': place.name,
+      'address': place.address,
+      'city': place.city,
+      'state': place.state,
+      'country': place.country,
+      'zipCode': place.zipCode,
+    });
 
 String uploadedFileToString(FFUploadedFile uploadedFile) =>
     uploadedFile.serialize();
@@ -57,9 +63,13 @@ dynamic serializeParameter(dynamic value) {
 }
 
 String serializeParameterData(Map<String, dynamic> parameterData) => jsonEncode(
-  parameterData.map((key, value) => MapEntry(key, serializeParameter(value)))
-    ..removeWhere((k, v) => v == null),
-);
+      parameterData.map(
+        (key, value) => MapEntry(
+          key,
+          serializeParameter(value),
+        ),
+      )..removeWhere((k, v) => k == null || v == null),
+    );
 
 /// END SERIALIZATION HELPERS
 
@@ -70,9 +80,25 @@ DateTimeRange? dateTimeRangeFromString(String dateTimeRangeStr) {
   if (pieces.length != 2) {
     return null;
   }
+  DateTime? parseDateTime(String value) {
+    final hasPrefix = value.startsWith('u') || value.startsWith('l');
+    final milliseconds = int.tryParse(hasPrefix ? value.substring(1) : value);
+    return milliseconds != null
+        ? DateTime.fromMillisecondsSinceEpoch(
+            milliseconds,
+            isUtc: hasPrefix ? value.startsWith('u') : false,
+          )
+        : null;
+  }
+
+  final start = parseDateTime(pieces.first);
+  final end = parseDateTime(pieces.last);
+  if (start == null || end == null) {
+    return null;
+  }
   return DateTimeRange(
-    start: DateTime.fromMillisecondsSinceEpoch(int.parse(pieces.first)),
-    end: DateTime.fromMillisecondsSinceEpoch(int.parse(pieces.last)),
+    start: start,
+    end: end,
   );
 }
 

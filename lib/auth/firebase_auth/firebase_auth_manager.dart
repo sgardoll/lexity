@@ -4,9 +4,12 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../auth_manager.dart';
+import '../base_auth_user_provider.dart';
 import '../../flutter_flow/flutter_flow_util.dart';
 
 import '/backend/backend.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:stream_transform/stream_transform.dart';
 import 'anonymous_auth.dart';
 import 'apple_auth.dart';
 import 'email_auth.dart';
@@ -75,10 +78,8 @@ class FirebaseAuthManager extends AuthManager
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              'Too long since most recent sign in. Sign in again before deleting your account.',
-            ),
-          ),
+              content: Text(
+                  'Too long since most recent sign in. Sign in again before deleting your account.')),
         );
       }
     }
@@ -101,10 +102,8 @@ class FirebaseAuthManager extends AuthManager
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              'Too long since most recent sign in. Sign in again before updating your email.',
-            ),
-          ),
+              content: Text(
+                  'Too long since most recent sign in. Sign in again before updating your email.')),
         );
       }
     }
@@ -124,9 +123,9 @@ class FirebaseAuthManager extends AuthManager
     } on FirebaseAuthException catch (e) {
       if (e.code == 'requires-recent-login') {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error: ${e.message!}')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.message!}')),
+        );
       }
     }
   }
@@ -140,14 +139,14 @@ class FirebaseAuthManager extends AuthManager
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error: ${e.message!}')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.message!}')),
+      );
       return null;
     }
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text('Password reset email sent')));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Password reset email sent')),
+    );
   }
 
   @override
@@ -155,25 +154,29 @@ class FirebaseAuthManager extends AuthManager
     BuildContext context,
     String email,
     String password,
-  ) => _signInOrCreateAccount(
-    context,
-    () => emailSignInFunc(email, password),
-    'EMAIL',
-  );
+  ) =>
+      _signInOrCreateAccount(
+        context,
+        () => emailSignInFunc(email, password),
+        'EMAIL',
+      );
 
   @override
   Future<BaseAuthUser?> createAccountWithEmail(
     BuildContext context,
     String email,
     String password,
-  ) => _signInOrCreateAccount(
-    context,
-    () => emailCreateAccountFunc(email, password),
-    'EMAIL',
-  );
+  ) =>
+      _signInOrCreateAccount(
+        context,
+        () => emailCreateAccountFunc(email, password),
+        'EMAIL',
+      );
 
   @override
-  Future<BaseAuthUser?> signInAnonymously(BuildContext context) =>
+  Future<BaseAuthUser?> signInAnonymously(
+    BuildContext context,
+  ) =>
       _signInOrCreateAccount(context, anonymousSignInFunc, 'ANONYMOUS');
 
   @override
@@ -192,7 +195,8 @@ class FirebaseAuthManager extends AuthManager
   Future<BaseAuthUser?> signInWithJwtToken(
     BuildContext context,
     String jwtToken,
-  ) => _signInOrCreateAccount(context, () => jwtTokenSignIn(jwtToken), 'JWT');
+  ) =>
+      _signInOrCreateAccount(context, () => jwtTokenSignIn(jwtToken), 'JWT');
 
   void handlePhoneAuthStateChanges(BuildContext context) {
     phoneAuthManager.addListener(() {
@@ -202,14 +206,13 @@ class FirebaseAuthManager extends AuthManager
 
       if (phoneAuthManager.triggerOnCodeSent) {
         phoneAuthManager.onCodeSent(context);
-        phoneAuthManager.update(
-          () => phoneAuthManager.triggerOnCodeSent = false,
-        );
+        phoneAuthManager
+            .update(() => phoneAuthManager.triggerOnCodeSent = false);
       } else if (phoneAuthManager.phoneAuthError != null) {
         final e = phoneAuthManager.phoneAuthError!;
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error: ${e.message!}')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Error: ${e.message!}'),
+        ));
         phoneAuthManager.update(() => phoneAuthManager.phoneAuthError = null);
       }
     });
@@ -223,9 +226,8 @@ class FirebaseAuthManager extends AuthManager
   }) async {
     phoneAuthManager.update(() => phoneAuthManager.onCodeSent = onCodeSent);
     if (kIsWeb) {
-      phoneAuthManager.webPhoneAuthConfirmationResult = await FirebaseAuth
-          .instance
-          .signInWithPhoneNumber(phoneNumber);
+      phoneAuthManager.webPhoneAuthConfirmationResult =
+          await FirebaseAuth.instance.signInWithPhoneNumber(phoneNumber);
       phoneAuthManager.update(() => phoneAuthManager.triggerOnCodeSent = true);
       return;
     }
@@ -237,9 +239,8 @@ class FirebaseAuthManager extends AuthManager
     // * Finally modify verificationCompleted below as instructed.
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phoneNumber,
-      timeout: Duration(
-        seconds: 0,
-      ), // Skips Android's default auto-verification
+      timeout:
+          Duration(seconds: 0), // Skips Android's default auto-verification
       verificationCompleted: (phoneAuthCredential) async {
         await FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
         phoneAuthManager.update(() {
@@ -276,19 +277,28 @@ class FirebaseAuthManager extends AuthManager
   }
 
   @override
-  Future verifySmsCode({
+  Future<BaseAuthUser?> verifySmsCode({
     required BuildContext context,
     required String smsCode,
   }) {
     if (kIsWeb) {
+      final confirmationResult =
+          phoneAuthManager.webPhoneAuthConfirmationResult;
+      if (confirmationResult == null) {
+        return _handleMissingPhoneVerification(context);
+      }
       return _signInOrCreateAccount(
         context,
-        () => phoneAuthManager.webPhoneAuthConfirmationResult!.confirm(smsCode),
+        () => confirmationResult.confirm(smsCode),
         'PHONE',
       );
     } else {
+      final verificationId = phoneAuthManager.phoneAuthVerificationCode;
+      if (verificationId == null) {
+        return _handleMissingPhoneVerification(context);
+      }
       final authCredential = PhoneAuthProvider.credential(
-        verificationId: phoneAuthManager.phoneAuthVerificationCode!,
+        verificationId: verificationId,
         smsCode: smsCode,
       );
       return _signInOrCreateAccount(
@@ -297,6 +307,19 @@ class FirebaseAuthManager extends AuthManager
         'PHONE',
       );
     }
+  }
+
+  // Called when verifySmsCode runs without a verification code having been sent
+  // (e.g. the code request failed). Surfaces a preset message instead of
+  // crashing on a null verification id / confirmation result.
+  Future<BaseAuthUser?> _handleMissingPhoneVerification(BuildContext context) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+          content:
+              Text('Please request a verification code before verifying.')),
+    );
+    return Future.value(null);
   }
 
   /// Tries to sign in or create an account using Firebase Auth.
@@ -324,9 +347,9 @@ class FirebaseAuthManager extends AuthManager
         _ => 'Error: ${e.message!}',
       };
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(errorMsg)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMsg)),
+      );
       return null;
     }
   }

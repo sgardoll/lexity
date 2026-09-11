@@ -1,6 +1,8 @@
-import 'dart:io' show Platform;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:rxdart/subjects.dart';
 
+import 'serialization_util.dart';
 import '../../auth/firebase_auth/auth_util.dart';
 import '../cloud_functions/cloud_functions.dart';
 
@@ -17,22 +19,30 @@ class UserTokenInfo {
   final String fcmToken;
 }
 
+final kNotificationsBehaviorSubject = BehaviorSubject<bool>.seeded(true);
+
 Stream<UserTokenInfo> getFcmTokenStream(String userPath) =>
-    Stream.value(!kIsWeb && (Platform.isIOS || Platform.isAndroid))
-        .where((shouldGetToken) => shouldGetToken)
-        .asyncMap<String?>(
-          (_) => FirebaseMessaging.instance.requestPermission().then(
-            (settings) =>
-                settings.authorizationStatus == AuthorizationStatus.authorized
-                ? FirebaseMessaging.instance.getToken()
-                : null,
-          ),
-        )
-        .switchMap(
-          (fcmToken) => Stream.value(
-            fcmToken,
-          ).merge(FirebaseMessaging.instance.onTokenRefresh),
-        )
+    kNotificationsBehaviorSubject.stream
+        .where((_) =>
+            kIsWeb ||
+            defaultTargetPlatform == TargetPlatform.iOS ||
+            defaultTargetPlatform == TargetPlatform.android)
+        .asyncMap<String?>((_) async {
+          if (kIsWeb && !await FirebaseMessaging.instance.isSupported()) {
+            return null;
+          }
+          final settings =
+              await FirebaseMessaging.instance.getNotificationSettings();
+          if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+            return FirebaseMessaging.instance.getToken(
+                vapidKey: kIsWeb
+                    ? "BGwD3X6zGe6ubqBQSYEqwUdKOEPWXEZVxrOij1qoWSE8t0MJxqsESClWNXP0FJAgUxJm6AIKEQA9bD7um-i-3nE"
+                    : null);
+          }
+          return null;
+        })
+        .switchMap((fcmToken) => Stream.value(fcmToken)
+            .merge(FirebaseMessaging.instance.onTokenRefresh))
         .where((fcmToken) => fcmToken != null && fcmToken.isNotEmpty)
         .map((token) => UserTokenInfo(userPath, token!));
 
@@ -42,9 +52,16 @@ final fcmTokenUserStream = authenticatedUserStream
     .distinct()
     .switchMap(getFcmTokenStream)
     .map(
-      (userTokenInfo) => makeCloudCall('addFcmToken', {
-        'userDocPath': userTokenInfo.userPath,
-        'fcmToken': userTokenInfo.fcmToken,
-        'deviceType': Platform.isIOS ? 'iOS' : 'Android',
-      }),
+      (userTokenInfo) => makeCloudCall(
+        'addFcmToken',
+        {
+          'userDocPath': userTokenInfo.userPath,
+          'fcmToken': userTokenInfo.fcmToken,
+          'deviceType': kIsWeb
+              ? 'Web'
+              : (defaultTargetPlatform == TargetPlatform.iOS
+                  ? 'iOS'
+                  : 'Android'),
+        },
+      ),
     );

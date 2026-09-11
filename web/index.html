@@ -22,7 +22,7 @@
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Lexity: Daily Unique Words">
+  <meta name="apple-mobile-web-app-title" content="Lexity: Word of the Day">
 
   
 
@@ -33,15 +33,21 @@
   
 
   <!-- Open Graph & SEO tags -->
-  <meta property="og:title" content="Lexity: Daily Unique Words" />
+  <meta property="og:title" content="Lexity delivers a rare, forgotten, or just plain wonderful word to your phone each morning. Words you&#39;ve never heard, with meanings you&#39;ll want to tell someone about.
+
+Each word comes with a clear definition, real usage examples, its origin story, and beautiful custom artwork made just for that word. Perfect for word lovers, trivia fans, writers, students, or anyone who wants to say something interesting at dinner tonight." />
   <meta property="og:description" content="Lexity" />
   <meta property="og:image" content="/assets/assets/images/1_copy.png" /> 
-  <meta name="twitter:title" content="Lexity: Daily Unique Words" />
+  <meta name="twitter:title" content="Lexity delivers a rare, forgotten, or just plain wonderful word to your phone each morning. Words you&#39;ve never heard, with meanings you&#39;ll want to tell someone about.
+
+Each word comes with a clear definition, real usage examples, its origin story, and beautiful custom artwork made just for that word. Perfect for word lovers, trivia fans, writers, students, or anyone who wants to say something interesting at dinner tonight." />
   <meta name="twitter:description" content="Lexity" />
   <meta name="twitter:image" content="/assets/assets/images/1_copy.png" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <title> Lexity: Daily Unique Words </title>
+  <title> Lexity delivers a rare, forgotten, or just plain wonderful word to your phone each morning. Words you&#39;ve never heard, with meanings you&#39;ll want to tell someone about.
+
+Each word comes with a clear definition, real usage examples, its origin story, and beautiful custom artwork made just for that word. Perfect for word lovers, trivia fans, writers, students, or anyone who wants to say something interesting at dinner tonight. </title>
   <meta name="description" content="Lexity" />
     
 
@@ -58,6 +64,34 @@
   
   
   
+    <script>
+    if ('serviceWorker' in navigator) {
+      // A notification click can't navigate an already-open tab from the worker:
+      // client.navigate() rejects unless the calling worker controls the client,
+      // and a worker on the Firebase Messaging scope never controls a page. The
+      // worker posts the payload here instead, and we apply it as a URL
+      // parameter so the Dart side picks it up the same way it does a cold open.
+      navigator.serviceWorker.addEventListener('message', function (event) {
+        var encodedMessage = event.data && event.data.ffPushNotification;
+        if (!encodedMessage) {
+          return;
+        }
+        var target = new URL(window.location.href);
+        target.searchParams.set('ffPushNotification', encodedMessage);
+        window.location.replace(target.href);
+      });
+      navigator.serviceWorker.startMessages();
+
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register(
+          '/firebase-messaging-sw.js',
+          { scope: '/firebase-cloud-messaging-push-scope' },
+        ).catch(function (error) {
+          console.error('Firebase messaging service worker registration failed:', error);
+        });
+      });
+    }
+  </script>
   <script>
     {{flutter_bootstrap_js}}
   </script>

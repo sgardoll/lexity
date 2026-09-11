@@ -1,17 +1,25 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'serialization_util.dart';
+import 'web_push_url_util_stub.dart'
+    if (dart.library.js_interop) 'web_push_url_util_web.dart';
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '../../flutter_flow/flutter_flow_util.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
+import '../../index.dart';
+import '../../main.dart';
 
 final _handledMessageIds = <String?>{};
 
 class PushNotificationsHandler extends StatefulWidget {
   const PushNotificationsHandler({Key? key, required this.child})
-    : super(key: key);
+      : super(key: key);
 
   final Widget child;
 
@@ -25,6 +33,29 @@ class _PushNotificationsHandlerState extends State<PushNotificationsHandler> {
 
   Future handleOpenedPushNotification() async {
     if (isWeb) {
+      final encodedMessage = Uri.base.queryParameters['ffPushNotification'];
+      if (encodedMessage != null) {
+        // Remove the handoff payload from browser history as soon as it has been
+        // read, so refreshing, bookmarking, or sharing this URL cannot replay it.
+        clearWebPushNotificationParameter();
+      }
+      if (encodedMessage != null && encodedMessage.isNotEmpty) {
+        // Keep the in-memory guard as well, covering duplicate handoffs before
+        // the browser URL update is observed by the app.
+        if (_handledMessageIds.contains(encodedMessage)) {
+          return;
+        }
+        _handledMessageIds.add(encodedMessage);
+        try {
+          final normalizedMessage = base64Url.normalize(encodedMessage);
+          final messageData = jsonDecode(
+            utf8.decode(base64Url.decode(normalizedMessage)),
+          ) as Map<String, dynamic>;
+          await _handlePushNotificationData(messageData);
+        } catch (e) {
+          print('Error parsing web push notification: $e');
+        }
+      }
       return;
     }
 
@@ -41,10 +72,14 @@ class _PushNotificationsHandlerState extends State<PushNotificationsHandler> {
     }
     _handledMessageIds.add(message.messageId);
 
+    await _handlePushNotificationData(message.data);
+  }
+
+  Future _handlePushNotificationData(Map<String, dynamic> messageData) async {
     safeSetState(() => _loading = true);
     try {
-      final initialPageName = message.data['initialPageName'] as String;
-      final initialParameterData = getInitialParameterData(message.data);
+      final initialPageName = messageData['initialPageName'] as String;
+      final initialParameterData = getInitialParameterData(messageData);
       final parametersBuilder = parametersBuilderMap[initialPageName];
       if (parametersBuilder != null) {
         final parameterData = await parametersBuilder(initialParameterData);
@@ -94,20 +129,19 @@ class _PushNotificationsHandlerState extends State<PushNotificationsHandler> {
 }
 
 class ParameterData {
-  const ParameterData({
-    this.requiredParams = const {},
-    this.allParams = const {},
-  });
+  const ParameterData(
+      {this.requiredParams = const {}, this.allParams = const {}});
   final Map<String, String?> requiredParams;
   final Map<String, dynamic> allParams;
 
   Map<String, String> get pathParameters => Map.fromEntries(
-    requiredParams.entries
-        .where((e) => e.value != null)
-        .map((e) => MapEntry(e.key, e.value!)),
-  );
-  Map<String, dynamic> get extra =>
-      Map.fromEntries(allParams.entries.where((e) => e.value != null));
+        requiredParams.entries
+            .where((e) => e.value != null)
+            .map((e) => MapEntry(e.key, e.value!)),
+      );
+  Map<String, dynamic> get extra => Map.fromEntries(
+        allParams.entries.where((e) => e.value != null),
+      );
 
   static Future<ParameterData> Function(Map<String, dynamic>) none() =>
       (data) async => ParameterData();
@@ -115,13 +149,16 @@ class ParameterData {
 
 final parametersBuilderMap =
     <String, Future<ParameterData> Function(Map<String, dynamic>)>{
-      'start': ParameterData.none(),
-      'anonLogin': ParameterData.none(),
-      'Settings': ParameterData.none(),
-      'CreateAccount': ParameterData.none(),
-      'Liked': ParameterData.none(),
-      'page': ParameterData.none(),
-    };
+  'start': (data) async => ParameterData(
+        allParams: {
+          'id': getParameter<String>(data, 'id'),
+        },
+      ),
+  'anonLogin': ParameterData.none(),
+  'settings': ParameterData.none(),
+  'CreateAccount': ParameterData.none(),
+  'liked': ParameterData.none(),
+};
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {
   try {

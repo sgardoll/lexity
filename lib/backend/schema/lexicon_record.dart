@@ -3,13 +3,16 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 
 import '/backend/schema/util/firestore_util.dart';
+import '/backend/schema/util/schema_util.dart';
 
 import 'index.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
 class LexiconRecord extends FirestoreRecord {
-  LexiconRecord._(DocumentReference reference, Map<String, dynamic> data)
-    : super(reference, data) {
+  LexiconRecord._(
+    DocumentReference reference,
+    Map<String, dynamic> data,
+  ) : super(reference, data) {
     _initializeFields();
   }
 
@@ -103,6 +106,11 @@ class LexiconRecord extends FirestoreRecord {
   double get rarityScore => _rarityScore ?? 0.0;
   bool hasRarityScore() => _rarityScore != null;
 
+  // "termSpoken" field.
+  String? _termSpoken;
+  String get termSpoken => _termSpoken ?? '';
+  bool hasTermSpoken() => _termSpoken != null;
+
   void _initializeFields() {
     _definition = snapshotData['definition'] as String?;
     _etymology = snapshotData['etymology'] as String?;
@@ -124,6 +132,7 @@ class LexiconRecord extends FirestoreRecord {
     _usageSpoken = snapshotData['usageSpoken'] as String?;
     _blurhash = snapshotData['blurhash'] as String?;
     _rarityScore = castToType<double>(snapshotData['rarityScore']);
+    _termSpoken = snapshotData['termSpoken'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -144,7 +153,8 @@ class LexiconRecord extends FirestoreRecord {
   static LexiconRecord getDocumentFromData(
     Map<String, dynamic> data,
     DocumentReference reference,
-  ) => LexiconRecord._(reference, mapFromFirestore(data));
+  ) =>
+      LexiconRecord._(reference, mapFromFirestore(data));
 
   @override
   String toString() =>
@@ -173,6 +183,7 @@ Map<String, dynamic> createLexiconRecordData({
   String? usageSpoken,
   String? blurhash,
   double? rarityScore,
+  String? termSpoken,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -189,6 +200,7 @@ Map<String, dynamic> createLexiconRecordData({
       'usageSpoken': usageSpoken,
       'blurhash': blurhash,
       'rarityScore': rarityScore,
+      'termSpoken': termSpoken,
     }.withoutNulls,
   );
 
@@ -221,30 +233,32 @@ class LexiconRecordDocumentEquality implements Equality<LexiconRecord> {
         e1?.creationDate == e2?.creationDate &&
         e1?.usageSpoken == e2?.usageSpoken &&
         e1?.blurhash == e2?.blurhash &&
-        e1?.rarityScore == e2?.rarityScore;
+        e1?.rarityScore == e2?.rarityScore &&
+        e1?.termSpoken == e2?.termSpoken;
   }
 
   @override
   int hash(LexiconRecord? e) => const ListEquality().hash([
-    e?.definition,
-    e?.etymology,
-    e?.language,
-    e?.partOfSpeech,
-    e?.pronunciation,
-    e?.term,
-    e?.usage,
-    e?.imageUrl,
-    e?.colours,
-    e?.antonyms,
-    e?.relatedWords,
-    e?.synonyms,
-    e?.likedBy,
-    e?.sharedBy,
-    e?.creationDate,
-    e?.usageSpoken,
-    e?.blurhash,
-    e?.rarityScore,
-  ]);
+        e?.definition,
+        e?.etymology,
+        e?.language,
+        e?.partOfSpeech,
+        e?.pronunciation,
+        e?.term,
+        e?.usage,
+        e?.imageUrl,
+        e?.colours,
+        e?.antonyms,
+        e?.relatedWords,
+        e?.synonyms,
+        e?.likedBy,
+        e?.sharedBy,
+        e?.creationDate,
+        e?.usageSpoken,
+        e?.blurhash,
+        e?.rarityScore,
+        e?.termSpoken
+      ]);
 
   @override
   bool isValidKey(Object? o) => o is LexiconRecord;
