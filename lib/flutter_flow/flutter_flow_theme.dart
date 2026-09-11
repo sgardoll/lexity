@@ -40,6 +40,8 @@ abstract class FlutterFlowTheme {
   late Color customColor6;
   late Color customColor7;
 
+  FFDesignTokens get designToken => FFDesignTokens(this);
+
   @Deprecated('Use displaySmallFamily instead')
   String get title1Family => displaySmallFamily;
   @Deprecated('Use displaySmall instead')
@@ -134,7 +136,7 @@ class LightModeTheme extends FlutterFlowTheme {
   late Color secondaryText = const Color(0xFF57636C);
   late Color primaryBackground = const Color(0xFFFBF9F5);
   late Color secondaryBackground = const Color(0xFFFFFFFF);
-  late Color accent1 = const Color(0x4F507583);
+  late Color accent1 = const Color(0x7F17191B);
   late Color accent2 = const Color(0x4D18AA99);
   late Color accent3 = const Color(0x4D928163);
   late Color accent4 = const Color(0xB2FFFFFF);
@@ -205,108 +207,176 @@ class ThemeTypography extends Typography {
 
   final FlutterFlowTheme theme;
 
-  String get displayLargeFamily => 'Readex Pro';
-  bool get displayLargeIsCustom => false;
-  TextStyle get displayLarge => GoogleFonts.readexPro(
-    color: theme.primaryText,
-    fontWeight: FontWeight.w300,
-    fontSize: 52.0,
-  );
-  String get displayMediumFamily => 'Readex Pro';
-  bool get displayMediumIsCustom => false;
-  TextStyle get displayMedium => GoogleFonts.readexPro(
-    color: theme.primaryText,
-    fontWeight: FontWeight.w500,
-    fontSize: 44.0,
-  );
-  String get displaySmallFamily => 'Readex Pro';
-  bool get displaySmallIsCustom => false;
-  TextStyle get displaySmall => GoogleFonts.readexPro(
-    color: theme.primaryText,
-    fontWeight: FontWeight.w500,
-    fontSize: 36.0,
-  );
-  String get headlineLargeFamily => 'Readex Pro';
-  bool get headlineLargeIsCustom => false;
-  TextStyle get headlineLarge => GoogleFonts.readexPro(
-    color: theme.primaryText,
-    fontWeight: FontWeight.normal,
-    fontSize: 32.0,
-  );
-  String get headlineMediumFamily => 'Readex Pro';
-  bool get headlineMediumIsCustom => false;
-  TextStyle get headlineMedium => GoogleFonts.readexPro(
-    color: theme.primaryText,
-    fontWeight: FontWeight.normal,
-    fontSize: 28.0,
-  );
-  String get headlineSmallFamily => 'Readex Pro';
-  bool get headlineSmallIsCustom => false;
-  TextStyle get headlineSmall => GoogleFonts.readexPro(
-    color: theme.primaryText,
-    fontWeight: FontWeight.normal,
-    fontSize: 24.0,
-  );
-  String get titleLargeFamily => 'Inter';
-  bool get titleLargeIsCustom => false;
-  TextStyle get titleLarge => GoogleFonts.inter(
-    color: theme.primaryText,
-    fontWeight: FontWeight.w500,
-    fontSize: 22.0,
-  );
-  String get titleMediumFamily => 'Inter';
-  bool get titleMediumIsCustom => false;
-  TextStyle get titleMedium => GoogleFonts.inter(
-    color: theme.info,
-    fontWeight: FontWeight.w500,
-    fontSize: 18.0,
-  );
-  String get titleSmallFamily => 'Inter';
-  bool get titleSmallIsCustom => false;
-  TextStyle get titleSmall => GoogleFonts.inter(
-    color: theme.info,
-    fontWeight: FontWeight.w500,
-    fontSize: 16.0,
-  );
-  String get labelLargeFamily => 'Inter';
-  bool get labelLargeIsCustom => false;
-  TextStyle get labelLarge => GoogleFonts.inter(
-    color: theme.secondaryText,
-    fontWeight: FontWeight.w500,
-    fontSize: 16.0,
-  );
-  String get labelMediumFamily => 'Inter';
-  bool get labelMediumIsCustom => false;
-  TextStyle get labelMedium => GoogleFonts.inter(
-    color: theme.secondaryText,
-    fontWeight: FontWeight.w500,
-    fontSize: 14.0,
-  );
-  String get labelSmallFamily => 'Inter';
-  bool get labelSmallIsCustom => false;
-  TextStyle get labelSmall => GoogleFonts.inter(
-    color: theme.secondaryText,
-    fontWeight: FontWeight.w500,
-    fontSize: 12.0,
-  );
-  String get bodyLargeFamily => 'Inter';
-  bool get bodyLargeIsCustom => false;
-  TextStyle get bodyLarge =>
-      GoogleFonts.inter(color: theme.primaryText, fontSize: 16.0);
-  String get bodyMediumFamily => 'Inter';
-  bool get bodyMediumIsCustom => false;
-  TextStyle get bodyMedium => GoogleFonts.inter(
-    color: theme.primaryText,
-    fontWeight: FontWeight.normal,
-    fontSize: 14.0,
-  );
-  String get bodySmallFamily => 'Inter';
-  bool get bodySmallIsCustom => false;
-  TextStyle get bodySmall => GoogleFonts.inter(
-    color: theme.primaryText,
-    fontWeight: FontWeight.normal,
-    fontSize: 12.0,
-  );
+  String get displayLargeFamily => 'Gendy';
+  bool get displayLargeIsCustom => true;
+  TextStyle get displayLarge => TextStyle(
+        fontFamily: 'Gendy',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 52.0,
+      );
+  String get displayMediumFamily => 'Gendy';
+  bool get displayMediumIsCustom => true;
+  TextStyle get displayMedium => TextStyle(
+        fontFamily: 'Gendy',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 44.0,
+      );
+  String get displaySmallFamily => 'Gendy';
+  bool get displaySmallIsCustom => true;
+  TextStyle get displaySmall => TextStyle(
+        fontFamily: 'Gendy',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 36.0,
+      );
+  String get headlineLargeFamily => 'Gendy';
+  bool get headlineLargeIsCustom => true;
+  TextStyle get headlineLarge => TextStyle(
+        fontFamily: 'Gendy',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 32.0,
+      );
+  String get headlineMediumFamily => 'Gendy';
+  bool get headlineMediumIsCustom => true;
+  TextStyle get headlineMedium => TextStyle(
+        fontFamily: 'Gendy',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 28.0,
+      );
+  String get headlineSmallFamily => 'Gendy';
+  bool get headlineSmallIsCustom => true;
+  TextStyle get headlineSmall => TextStyle(
+        fontFamily: 'Gendy',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 24.0,
+      );
+  String get titleLargeFamily => 'BlauerNue';
+  bool get titleLargeIsCustom => true;
+  TextStyle get titleLarge => TextStyle(
+        fontFamily: 'BlauerNue',
+        color: theme.primaryText,
+        fontWeight: FontWeight.w600,
+        fontSize: 22.0,
+      );
+  String get titleMediumFamily => 'BlauerNue';
+  bool get titleMediumIsCustom => true;
+  TextStyle get titleMedium => TextStyle(
+        fontFamily: 'BlauerNue',
+        color: theme.info,
+        fontWeight: FontWeight.w500,
+        fontSize: 18.0,
+      );
+  String get titleSmallFamily => 'BlauerNue';
+  bool get titleSmallIsCustom => true;
+  TextStyle get titleSmall => TextStyle(
+        fontFamily: 'BlauerNue',
+        color: theme.info,
+        fontWeight: FontWeight.w500,
+        fontSize: 16.0,
+      );
+  String get labelLargeFamily => 'BlauerNue';
+  bool get labelLargeIsCustom => true;
+  TextStyle get labelLarge => TextStyle(
+        fontFamily: 'BlauerNue',
+        color: theme.secondaryText,
+        fontWeight: FontWeight.w500,
+        fontSize: 16.0,
+      );
+  String get labelMediumFamily => 'BlauerNue';
+  bool get labelMediumIsCustom => true;
+  TextStyle get labelMedium => TextStyle(
+        fontFamily: 'BlauerNue',
+        color: theme.secondaryText,
+        fontWeight: FontWeight.w500,
+        fontSize: 14.0,
+      );
+  String get labelSmallFamily => 'BlauerNue';
+  bool get labelSmallIsCustom => true;
+  TextStyle get labelSmall => TextStyle(
+        fontFamily: 'BlauerNue',
+        color: theme.secondaryText,
+        fontWeight: FontWeight.w500,
+        fontSize: 12.0,
+      );
+  String get bodyLargeFamily => 'BlauerNue';
+  bool get bodyLargeIsCustom => true;
+  TextStyle get bodyLarge => TextStyle(
+        fontFamily: 'BlauerNue',
+        color: theme.primaryText,
+        fontWeight: FontWeight.w300,
+        fontSize: 16.0,
+      );
+  String get bodyMediumFamily => 'BlauerNue';
+  bool get bodyMediumIsCustom => true;
+  TextStyle get bodyMedium => TextStyle(
+        fontFamily: 'BlauerNue',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 14.0,
+      );
+  String get bodySmallFamily => 'BlauerNue';
+  bool get bodySmallIsCustom => true;
+  TextStyle get bodySmall => TextStyle(
+        fontFamily: 'BlauerNue',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 12.0,
+      );
+}
+
+class FFDesignTokens {
+  const FFDesignTokens(this.theme);
+  final FlutterFlowTheme theme;
+  FFSpacing get spacing => const FFSpacing();
+  FFRadius get radius => const FFRadius();
+  FFShadows get shadow => FFShadows(theme);
+}
+
+class FFSpacing {
+  const FFSpacing();
+  double get xs => 4.0;
+  double get sm => 8.0;
+  double get md => 16.0;
+  double get lg => 24.0;
+  double get xl => 32.0;
+}
+
+class FFRadius {
+  const FFRadius();
+  double get sm => 8.0;
+  double get md => 16.0;
+  double get lg => 24.0;
+  double get full => 9999.0;
+}
+
+class FFShadows {
+  const FFShadows(this.theme);
+  final FlutterFlowTheme theme;
+  BoxShadow get sm => const BoxShadow(
+      blurRadius: 3.0,
+      color: const Color(0x1A000000),
+      offset: const Offset(0.0, 1.0),
+      spreadRadius: 0.0);
+  BoxShadow get md => const BoxShadow(
+      blurRadius: 6.0,
+      color: const Color(0x1A000000),
+      offset: const Offset(0.0, 3.0),
+      spreadRadius: 0.0);
+  BoxShadow get lg => const BoxShadow(
+      blurRadius: 15.0,
+      color: const Color(0x1A000000),
+      offset: const Offset(0.0, 8.0),
+      spreadRadius: 0.0);
+  BoxShadow get xl => const BoxShadow(
+      blurRadius: 25.0,
+      color: const Color(0x1A000000),
+      offset: const Offset(0.0, 16.0),
+      spreadRadius: 0.0);
 }
 
 extension TextStyleHelper on TextStyle {
@@ -324,12 +394,10 @@ extension TextStyleHelper on TextStyle {
     List<Shadow>? shadows,
     String? package,
   }) {
-    if (useGoogleFonts && fontFamily != null) {
-      font = GoogleFonts.getFont(
-        fontFamily,
-        fontWeight: fontWeight ?? this.fontWeight,
-        fontStyle: fontStyle ?? this.fontStyle,
-      );
+    if (useGoogleFonts && fontFamily != null && fontFamily.isNotEmpty) {
+      font = GoogleFonts.getFont(fontFamily,
+          fontWeight: fontWeight ?? this.fontWeight,
+          fontStyle: fontStyle ?? this.fontStyle);
     }
 
     return font != null

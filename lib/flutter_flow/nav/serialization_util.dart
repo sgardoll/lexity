@@ -1,29 +1,37 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:from_css_color/from_css_color.dart';
 
 import '/backend/backend.dart';
+import '/backend/schema/structs/index.dart';
 
+import '../../flutter_flow/lat_lng.dart';
 import '../../flutter_flow/place.dart';
 import '../../flutter_flow/uploaded_file.dart';
 
 /// SERIALIZATION HELPERS
 
+String dateTimeToString(DateTime dateTime) =>
+    '${dateTime.isUtc ? 'u' : 'l'}${dateTime.millisecondsSinceEpoch}';
+
 String dateTimeRangeToString(DateTimeRange dateTimeRange) {
-  final startStr = dateTimeRange.start.millisecondsSinceEpoch.toString();
-  final endStr = dateTimeRange.end.millisecondsSinceEpoch.toString();
+  final start = dateTimeRange.start;
+  final end = dateTimeRange.end;
+  final startStr = '${start.isUtc ? 'u' : 'l'}${start.millisecondsSinceEpoch}';
+  final endStr = '${end.isUtc ? 'u' : 'l'}${end.millisecondsSinceEpoch}';
   return '$startStr|$endStr';
 }
 
 String placeToString(FFPlace place) => jsonEncode({
-  'latLng': place.latLng.serialize(),
-  'name': place.name,
-  'address': place.address,
-  'city': place.city,
-  'state': place.state,
-  'country': place.country,
-  'zipCode': place.zipCode,
-});
+      'latLng': place.latLng.serialize(),
+      'name': place.name,
+      'address': place.address,
+      'city': place.city,
+      'state': place.state,
+      'country': place.country,
+      'zipCode': place.zipCode,
+    });
 
 String uploadedFileToString(FFUploadedFile uploadedFile) =>
     uploadedFile.serialize();
@@ -69,7 +77,7 @@ String? serializeParam(
       case ParamType.bool:
         data = param ? 'true' : 'false';
       case ParamType.DateTime:
-        data = (param as DateTime).millisecondsSinceEpoch.toString();
+        data = dateTimeToString(param as DateTime);
       case ParamType.DateTimeRange:
         data = dateTimeRangeToString(param as DateTimeRange);
       case ParamType.LatLng:
@@ -105,14 +113,46 @@ String? serializeParam(
 
 /// DESERIALIZATION HELPERS
 
+DateTime? dateTimeFromString(String? dateTimeStr) {
+  if (dateTimeStr == null || dateTimeStr.isEmpty) {
+    return null;
+  }
+  final hasPrefix = dateTimeStr.startsWith('u') || dateTimeStr.startsWith('l');
+  final milliseconds = int.tryParse(
+    hasPrefix ? dateTimeStr.substring(1) : dateTimeStr,
+  );
+  return milliseconds != null
+      ? DateTime.fromMillisecondsSinceEpoch(
+          milliseconds,
+          isUtc: hasPrefix ? dateTimeStr.startsWith('u') : false,
+        )
+      : null;
+}
+
 DateTimeRange? dateTimeRangeFromString(String dateTimeRangeStr) {
   final pieces = dateTimeRangeStr.split('|');
   if (pieces.length != 2) {
     return null;
   }
+  DateTime? parseDateTime(String value) {
+    final hasPrefix = value.startsWith('u') || value.startsWith('l');
+    final milliseconds = int.tryParse(hasPrefix ? value.substring(1) : value);
+    return milliseconds != null
+        ? DateTime.fromMillisecondsSinceEpoch(
+            milliseconds,
+            isUtc: hasPrefix ? value.startsWith('u') : false,
+          )
+        : null;
+  }
+
+  final start = parseDateTime(pieces.first);
+  final end = parseDateTime(pieces.last);
+  if (start == null || end == null) {
+    return null;
+  }
   return DateTimeRange(
-    start: DateTime.fromMillisecondsSinceEpoch(int.parse(pieces.first)),
-    end: DateTime.fromMillisecondsSinceEpoch(int.parse(pieces.last)),
+    start: start,
+    end: end,
   );
 }
 
@@ -203,15 +243,13 @@ dynamic deserializeParam<T>(
       return paramValues
           .where((p) => p is String)
           .map((p) => p as String)
-          .map(
-            (p) => deserializeParam<T>(
-              p,
-              paramType,
-              false,
-              collectionNamePath: collectionNamePath,
-              structBuilder: structBuilder,
-            ),
-          )
+          .map((p) => deserializeParam<T>(
+                p,
+                paramType,
+                false,
+                collectionNamePath: collectionNamePath,
+                structBuilder: structBuilder,
+              ))
           .where((p) => p != null)
           .map((p) => p! as T)
           .toList();
@@ -226,10 +264,7 @@ dynamic deserializeParam<T>(
       case ParamType.bool:
         return param == 'true';
       case ParamType.DateTime:
-        final milliseconds = int.tryParse(param);
-        return milliseconds != null
-            ? DateTime.fromMillisecondsSinceEpoch(milliseconds)
-            : null;
+        return dateTimeFromString(param);
       case ParamType.DateTimeRange:
         return dateTimeRangeFromString(param);
       case ParamType.LatLng:
@@ -262,10 +297,9 @@ Future<dynamic> Function(String) getDoc(
   List<String> collectionNamePath,
   RecordBuilder recordBuilder,
 ) {
-  return (String ids) => _deserializeDocumentReference(
-    ids,
-    collectionNamePath,
-  ).get().then((s) => recordBuilder(s));
+  return (String ids) => _deserializeDocumentReference(ids, collectionNamePath)
+      .get()
+      .then((s) => recordBuilder(s));
 }
 
 Future<List<T>> Function(String) getDocList<T>(
@@ -280,10 +314,9 @@ Future<List<T>> Function(String) getDocList<T>(
     } catch (_) {}
     return Future.wait(
       docIds.map(
-        (ids) => _deserializeDocumentReference(
-          ids,
-          collectionNamePath,
-        ).get().then((s) => recordBuilder(s)),
+        (ids) => _deserializeDocumentReference(ids, collectionNamePath)
+            .get()
+            .then((s) => recordBuilder(s)),
       ),
     ).then((docs) => docs.where((d) => d != null).map((d) => d!).toList());
   };

@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:from_css_color/from_css_color.dart';
 
 import '/backend/schema/util/schema_util.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -33,10 +35,9 @@ class FirestoreUtilData {
 }
 
 Map<String, dynamic> mapFromFirestore(Map<String, dynamic> data) =>
-    mergeNestedFields(data).where((k, _) => k != FirestoreUtilData.name).map((
-      key,
-      value,
-    ) {
+    mergeNestedFields(data)
+        .where((k, _) => k != FirestoreUtilData.name)
+        .map((key, value) {
       // Handle Timestamp
       if (value is Timestamp) {
         value = value.toDate();

@@ -5,7 +5,7 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleDisplayName</key>
-    <string>Lexity: Daily Unique Words</string>
+    <string>Lexity: Word of the Day</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>
@@ -34,10 +34,10 @@
         <key>CFBundleTypeRole</key>
         <string>Editor</string>
         <key>CFBundleURLName</key>
-        <string>lexity.page.link</string>
+        <string>lexity.connectio.com.au</string>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>lexity</string>
+          <string>http</string>
         </array>
       </dict>
     </array>
@@ -48,13 +48,9 @@
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>PermissionGroupNotification</key>
-    <string>Allow Lexity to send you push notifications when a new word is added</string>
+    <string>Allow Lexity to send you the word of the day</string>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>Your location is used to improve app analytics and enhance your experience by providing relevant content and features.</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>Allow Lexity to use the microphone to record suggested words from you</string>
-    <key>NSBluetoothAlwaysUsageDescription</key>
-    <string>Allow Lexity to use your Bluetooth microphone to record suggested words from you</string>
     <key>UIBackgroundModes</key>
     <array>
       <string>fetch</string>
