@@ -68,3 +68,17 @@ test("the node check is actually looking at the BuildShip checkout", () => {
     );
   }
 });
+
+test("every declared input carries the buildship wrapper BuildShip requires", () => {
+  // BuildShip expects each input property to be {"buildship": {index, sensitive}, ...}.
+  // An unwrapped property is silently not rendered as an input, which is how a
+  // brand-new input can appear correct in the repo and be absent on deploy.
+  for (const id of NODES) {
+    const dir = path.dirname(nodePath(id));
+    const props = JSON.parse(readFileSync(path.join(dir, "inputs.json"), "utf8")).properties;
+    const unwrapped = Object.entries(props)
+      .filter(([, v]) => !(v.buildship && typeof v.buildship.index === "number" && "sensitive" in v.buildship))
+      .map(([k]) => k);
+    assert.deepEqual(unwrapped, [], `${id} has inputs without the buildship wrapper: ${JSON.stringify(unwrapped)}`);
+  }
+});
