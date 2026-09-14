@@ -4,6 +4,6 @@
   "type": "module",
   "description": "Node test suites for the Lexity daily-word video BuildShip nodes",
   "scripts": {
-    "test": "node --experimental-strip-types --test lexity-video-manifest.test.mjs lexity-video-job.test.mjs lexity-video-enqueue.test.mjs"
+    "test": "node --experimental-strip-types --test lexity-node-inputs.test.mjs lexity-video-manifest.test.mjs lexity-video-job.test.mjs lexity-video-enqueue.test.mjs"
   }
 }

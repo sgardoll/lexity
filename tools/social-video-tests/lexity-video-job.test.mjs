@@ -24,6 +24,7 @@ const {
   isLeaseExpired,
   jobControlRules,
   DEFAULT_LEASE_MS,
+  editionKeyFor,
 } = await import(nodePath("lexity-video-job"));
 const { normaliseTerm: manifestNormaliseTerm } = await import(nodePath("lexity-video-manifest"));
 
@@ -230,4 +231,31 @@ test("the duplicated normaliseTerm has not diverged from the manifest node's", (
       `normalisation diverged for ${JSON.stringify(s)}`,
     );
   }
+});
+
+test("REGRESSION: the job key is derived from the manifest when editionKey is not supplied", () => {
+  // The wiring that passed editionKey in was silently dropped on deploy because
+  // editionKey was never declared in the node's inputs.json — the job came back
+  // as `job::undefined`. Deriving it makes that impossible.
+  const m = {
+    edition: { sydneyDate: "2026-09-14", docPath: "lexicon/abc123", docId: "abc123" },
+    text: { term: "Acomiast" },
+    template: { version: "1.0.0" },
+  };
+  const job = createJob(m, undefined, T0);
+  assert.equal(job.key, "job::2026-09-14::acomiast::1.0.0");
+  assert.equal(job.editionKey, "2026-09-14::acomiast::1.0.0");
+  assert.ok(!job.key.includes("undefined"), "a job key must never contain 'undefined'");
+
+  // and an explicitly supplied key still wins
+  assert.equal(createJob(m, "explicit::key", T0).key, "job::explicit::key");
+});
+
+test("editionKeyFor matches the manifest node's editionKey format exactly", () => {
+  const m = {
+    edition: { sydneyDate: "2026-09-14", docPath: "lexicon/abc", docId: "abc" },
+    text: { term: "Flâneur" },
+    template: { version: "2.0.0" },
+  };
+  assert.equal(editionKeyFor(m), `2026-09-14::${manifestNormaliseTerm("Flâneur")}::2.0.0`);
 });
