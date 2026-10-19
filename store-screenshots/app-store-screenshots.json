@@ -1,0 +1,1175 @@
+{
+  "schemaVersion": 2,
+  "appName": "Lexity",
+  "themeId": "lexity-editorial",
+  "connectedCanvas": true,
+  "locales": [
+    "en"
+  ],
+  "locale": "en",
+  "device": "ipad",
+  "orientation": "portrait",
+  "appIcon": "/app-icon.png",
+  "slidesByDevice": {
+    "iphone": [
+      {
+        "id": "lexity-ios-01",
+        "layout": "hero",
+        "surface": "navy",
+        "inverted": true,
+        "label": {
+          "en": "DAILY WORD"
+        },
+        "headline": {
+          "en": "One word.\nEvery day."
+        },
+        "screenshot": "/screenshots/apple/iphone/{locale}/01.png",
+        "transforms": {
+          "caption": {
+            "x": 82.22494432071272,
+            "y": 309.00668151447667,
+            "width": 1120,
+            "height": 610,
+            "rotation": 0,
+            "zIndex": 4
+          },
+          "device": {
+            "x": 245,
+            "y": 1010,
+            "width": 1080,
+            "height": 2200,
+            "rotation": -12,
+            "zIndex": 3
+          }
+        },
+        "textElements": [
+          {
+            "id": "accent",
+            "text": {
+              "en": "one to remember"
+            },
+            "transform": {
+              "x": 80.00001362011855,
+              "y": 760.0000073208137,
+              "width": 1120,
+              "height": 200,
+              "rotation": -4,
+              "zIndex": 6
+            },
+            "fontSize": 99,
+            "fontWeight": 700,
+            "align": "center",
+            "fontFamily": "script",
+            "underlineDoodle": true
+          }
+        ]
+      },
+      {
+        "id": "lexity-ios-02",
+        "layout": "device-top",
+        "surface": "purple",
+        "inverted": true,
+        "label": {
+          "en": "ORIGINAL ART"
+        },
+        "headline": {
+          "en": "Every word gets\nits own world."
+        },
+        "screenshot": "/screenshots/apple/iphone/{locale}/02.png",
+        "transforms": {
+          "device": {
+            "x": 175,
+            "y": -120,
+            "width": 1080,
+            "height": 2200,
+            "rotation": 15,
+            "zIndex": 3
+          },
+          "caption": {
+            "x": 98.61247216035645,
+            "y": 2223.4565701559013,
+            "width": 1110,
+            "height": 440,
+            "rotation": 0,
+            "zIndex": 4
+          }
+        },
+        "textElements": [
+          {
+            "id": "accent",
+            "text": {
+              "en": "beautifully illustrated"
+            },
+            "transform": {
+              "x": 80,
+              "y": 2520,
+              "width": 1120,
+              "height": 270,
+              "rotation": -2,
+              "zIndex": 6
+            },
+            "fontSize": 99,
+            "fontWeight": 700,
+            "align": "center",
+            "fontFamily": "script",
+            "underlineDoodle": true
+          }
+        ]
+      },
+      {
+        "id": "lexity-ios-03",
+        "layout": "device-bottom",
+        "surface": "coral",
+        "inverted": true,
+        "label": {
+          "en": "RARITY SCORE"
+        },
+        "headline": {
+          "en": "Know when you've found a gem."
+        },
+        "screenshot": "/screenshots/apple/iphone/{locale}/05.png",
+        "transforms": {
+          "caption": {
+            "x": 96.38752783964355,
+            "y": 374.40089086859706,
+            "width": 1130,
+            "height": 610,
+            "rotation": 0,
+            "zIndex": 4
+          },
+          "device": {
+            "x": 215,
+            "y": 1020,
+            "width": 1080,
+            "height": 2200,
+            "rotation": 18,
+            "zIndex": 3
+          }
+        },
+        "textElements": [
+          {
+            "id": "accent",
+            "text": {
+              "en": "some are rarer than you think!"
+            },
+            "transform": {
+              "x": 80,
+              "y": 690,
+              "width": 1120,
+              "height": 270,
+              "rotation": -3,
+              "zIndex": 6
+            },
+            "fontSize": 99,
+            "fontWeight": 700,
+            "align": "center",
+            "fontFamily": "script",
+            "underlineDoodle": true
+          }
+        ]
+      },
+      {
+        "id": "lexity-ios-04",
+        "layout": "two-devices",
+        "surface": "cream",
+        "label": {
+          "en": "ORIGIN STORIES"
+        },
+        "headline": {
+          "en": "Follow words back\nto where they began."
+        },
+        "screenshot": "/screenshots/apple/iphone/{locale}/03.png",
+        "screenshotSecondary": "/screenshots/apple/iphone/{locale}/04.png",
+        "transforms": {
+          "caption": {
+            "x": 93.19376391982178,
+            "y": 327.4632516703788,
+            "width": 1120,
+            "height": 600,
+            "rotation": 0,
+            "zIndex": 5
+          },
+          "device": {
+            "x": -165,
+            "y": 1030,
+            "width": 1030,
+            "height": 2100,
+            "rotation": -10,
+            "zIndex": 4
+          },
+          "deviceSecondary": {
+            "x": 600,
+            "y": 1110,
+            "width": 900,
+            "height": 1835,
+            "rotation": 14,
+            "zIndex": 3
+          }
+        },
+        "textElements": [
+          {
+            "id": "accent",
+            "text": {
+              "en": "fascinating stories"
+            },
+            "transform": {
+              "x": 79.99995539411157,
+              "y": 721.000000681006,
+              "width": 1120,
+              "height": 219,
+              "rotation": 2,
+              "zIndex": 6
+            },
+            "fontSize": 99,
+            "fontWeight": 700,
+            "align": "center",
+            "fontFamily": "script",
+            "underlineDoodle": true
+          }
+        ]
+      },
+      {
+        "id": "lexity-ios-05",
+        "layout": "device-top",
+        "surface": "navy",
+        "inverted": true,
+        "label": {
+          "en": "SPOKEN ALOUD"
+        },
+        "headline": {
+          "en": "Say the strange ones with confidence."
+        },
+        "screenshot": "/screenshots/apple/iphone/{locale}/06.png",
+        "transforms": {
+          "device": {
+            "x": 165,
+            "y": -110,
+            "width": 1080,
+            "height": 2200,
+            "rotation": -11,
+            "zIndex": 3
+          },
+          "caption": {
+            "x": 104.99994024172975,
+            "y": 2226.9999519039566,
+            "width": 1110,
+            "height": 363,
+            "rotation": 0,
+            "zIndex": 4
+          }
+        },
+        "textElements": [
+          {
+            "id": "accent",
+            "text": {
+              "en": "no more guessing"
+            },
+            "transform": {
+              "x": 79.99993598544279,
+              "y": 2586.9999521593336,
+              "width": 1120,
+              "height": 203,
+              "rotation": 4,
+              "zIndex": 6
+            },
+            "fontSize": 99,
+            "fontWeight": 700,
+            "align": "center",
+            "fontFamily": "script",
+            "underlineDoodle": true
+          }
+        ]
+      },
+      {
+        "id": "lexity-ios-06",
+        "layout": "two-devices",
+        "surface": "purple",
+        "inverted": true,
+        "label": {
+          "en": "FAVOURITES & RELATED"
+        },
+        "headline": {
+          "en": "One curious word\nleads to another."
+        },
+        "screenshot": "/screenshots/apple/iphone/{locale}/09.png",
+        "screenshotSecondary": "/screenshots/apple/iphone/{locale}/10.png",
+        "transforms": {
+          "caption": {
+            "x": 83.61239043964451,
+            "y": 364.1069101478649,
+            "width": 1120,
+            "height": 536,
+            "rotation": 0,
+            "zIndex": 5
+          },
+          "device": {
+            "x": -140,
+            "y": 1020,
+            "width": 1030,
+            "height": 2100,
+            "rotation": -13,
+            "zIndex": 4
+          },
+          "deviceSecondary": {
+            "x": 640,
+            "y": 1110,
+            "width": 880,
+            "height": 1794,
+            "rotation": 12,
+            "zIndex": 3
+          }
+        },
+        "textElements": [
+          {
+            "id": "accent",
+            "text": {
+              "en": "keep wandering"
+            },
+            "transform": {
+              "x": 79.99991657677401,
+              "y": 719.000000340503,
+              "width": 1120,
+              "height": 216,
+              "rotation": 2,
+              "zIndex": 6
+            },
+            "fontSize": 99,
+            "fontWeight": 700,
+            "align": "center",
+            "fontFamily": "script",
+            "underlineDoodle": true
+          }
+        ]
+      },
+      {
+        "id": "lexity-ios-07",
+        "layout": "no-device",
+        "surface": "cream",
+        "label": {
+          "en": ""
+        },
+        "headline": {
+          "en": "Rare words.\nBeautifully told."
+        },
+        "screenshot": "",
+        "logo": "/app-icon.png",
+        "logoTransform": {
+          "x": 480,
+          "y": 1970,
+          "width": 360,
+          "height": 360,
+          "rotation": 0,
+          "zIndex": 6
+        },
+        "transforms": {
+          "caption": {
+            "x": 140,
+            "y": 520,
+            "width": 1040,
+            "height": 520,
+            "rotation": 0,
+            "zIndex": 4
+          }
+        },
+        "textElements": [
+          {
+            "id": "accent",
+            "text": {
+              "en": "every day"
+            },
+            "transform": {
+              "x": 122.51216363646381,
+              "y": 720.7795175984629,
+              "width": 960,
+              "height": 273,
+              "rotation": -6,
+              "zIndex": 6
+            },
+            "fontSize": 170,
+            "fontWeight": 700,
+            "align": "center",
+            "fontFamily": "script",
+            "underlineDoodle": true
+          }
+        ]
+      }
+    ],
+    "android": [
+      {
+        "id": "lexity-android-01",
+        "layout": "hero",
+        "surface": "navy",
+        "inverted": true,
+        "label": {
+          "en": "DAILY WORD"
+        },
+        "headline": {
+          "en": "One word.\nEvery day."
+        },
+        "screenshot": "/screenshots/android/phone/{locale}/01.png",
+        "transforms": {
+          "caption": {
+            "x": 70,
+            "y": 190,
+            "width": 940,
+            "height": 400,
+            "rotation": 0,
+            "zIndex": 4
+          },
+          "device": {
+            "x": 169.40979955456584,
+            "y": 615.7906458797331,
+            "width": 735,
+            "height": 1580,
+            "rotation": -12,
+            "zIndex": 3
+          }
+        },
+        "textElements": [
+          {
+            "id": "accent",
+            "text": {
+              "en": "one to remember"
+            },
+            "transform": {
+              "x": 85.72383073496655,
+              "y": 383.91982182628095,
+              "width": 900,
+              "height": 180,
+              "rotation": -4,
+              "zIndex": 6
+            },
+            "fontSize": 66,
+            "fontWeight": 700,
+            "align": "center",
+            "fontFamily": "script",
+            "underlineDoodle": true
+          }
+        ]
+      },
+      {
+        "id": "lexity-android-02",
+        "layout": "device-bottom",
+        "surface": "purple",
+        "inverted": true,
+        "label": {
+          "en": "ORIGINAL ART"
+        },
+        "headline": {
+          "en": "Every word gets\nits own world."
+        },
+        "screenshot": "/screenshots/android/phone/{locale}/02.png",
+        "transforms": {
+          "device": {
+            "x": 202.8458656123437,
+            "y": 492.5809336148863,
+            "width": 678.5844380403457,
+            "height": 1470.266282420749,
+            "rotation": 0,
+            "zIndex": 3
+          },
+          "caption": {
+            "x": 82.12383073496676,
+            "y": 192.08552338530066,
+            "width": 907.1999999999999,
+            "height": 537.6,
+            "rotation": 0,
+            "zIndex": 4
+          }
+        },
+        "textElements": [
+          {
+            "id": "accent",
+            "text": {
+              "en": "beautifully illustrated"
+            },
+            "transform": {
+              "x": -70.35634743875289,
+              "y": 360.1113585746104,
+              "width": 900,
+              "height": 180,
+              "rotation": -2,
+              "zIndex": 6
+            },
+            "fontSize": 66,
+            "fontWeight": 700,
+            "align": "center",
+            "fontFamily": "script",
+            "underlineDoodle": true
+          }
+        ]
+      },
+      {
+        "id": "lexity-android-03",
+        "layout": "device-bottom",
+        "surface": "coral",
+        "inverted": true,
+        "label": {
+          "en": "RARITY SCORE"
+        },
+        "headline": {
+          "en": "Know when you've found a gem."
+        },
+        "screenshot": "/screenshots/android/phone/{locale}/03.png",
+        "transforms": {
+          "caption": {
+            "x": 70,
+            "y": 200.69042316258347,
+            "width": 940,
+            "height": 400,
+            "rotation": 0,
+            "zIndex": 2
+          },
+          "device": {
+            "x": -255.43658257861648,
+            "y": 470.1514507132286,
+            "width": 899,
+            "height": 1948,
+            "rotation": 20,
+            "zIndex": 1
+          }
+        },
+        "textElements": [
+          {
+            "id": "accent",
+            "text": {
+              "en": "some are \nrarer than \nyou think!"
+            },
+            "transform": {
+              "x": 342.29386456666,
+              "y": 1546.6035634743866,
+              "width": 900,
+              "height": 375,
+              "rotation": -3,
+              "zIndex": 3
+            },
+            "fontSize": 66,
+            "fontWeight": 700,
+            "align": "center",
+            "fontFamily": "script",
+            "underlineDoodle": true
+          }
+        ]
+      },
+      {
+        "id": "lexity-android-04",
+        "layout": "two-devices",
+        "surface": "cream",
+        "label": {
+          "en": "ORIGIN STORIES"
+        },
+        "headline": {
+          "en": "Follow words back\nto where they began."
+        },
+        "screenshot": "/screenshots/android/phone/{locale}/04.png",
+        "screenshotSecondary": "/screenshots/android/phone/{locale}/05.png",
+        "transforms": {
+          "caption": {
+            "x": 70,
+            "y": 190,
+            "width": 940,
+            "height": 400,
+            "rotation": 0,
+            "zIndex": 5
+          },
+          "device": {
+            "x": -110,
+            "y": 650,
+            "width": 700,
+            "height": 1505,
+            "rotation": -10,
+            "zIndex": 4
+          },
+          "deviceSecondary": {
+            "x": 500,
+            "y": 700,
+            "width": 610,
+            "height": 1312,
+            "rotation": 14,
+            "zIndex": 3
+          }
+        },
+        "textElements": [
+          {
+            "id": "accent",
+            "text": {
+              "en": "fascinating stories"
+            },
+            "transform": {
+              "x": 216.14699331848715,
+              "y": 477.99554565701555,
+              "width": 900,
+              "height": 180,
+              "rotation": 2,
+              "zIndex": 6
+            },
+            "fontSize": 66,
+            "fontWeight": 700,
+            "align": "center",
+            "fontFamily": "script",
+            "underlineDoodle": true
+          }
+        ]
+      },
+      {
+        "id": "lexity-android-05",
+        "layout": "device-top",
+        "surface": "navy",
+        "inverted": true,
+        "label": {
+          "en": "SPOKEN ALOUD"
+        },
+        "headline": {
+          "en": "Say the strange ones with confidence."
+        },
+        "screenshot": "/screenshots/android/phone/{locale}/06.png",
+        "transforms": {
+          "device": {
+            "x": 109.51002227171739,
+            "y": -26.08017817371934,
+            "width": 735,
+            "height": 1580,
+            "rotation": -11,
+            "zIndex": 3
+          },
+          "caption": {
+            "x": 70,
+            "y": 1420,
+            "width": 940,
+            "height": 320,
+            "rotation": 0,
+            "zIndex": 4
+          }
+        },
+        "textElements": [
+          {
+            "id": "accent",
+            "text": {
+              "en": "no more guessing"
+            },
+            "transform": {
+              "x": 90,
+              "y": 1690,
+              "width": 900,
+              "height": 180,
+              "rotation": 4,
+              "zIndex": 6
+            },
+            "fontSize": 66,
+            "fontWeight": 700,
+            "align": "center",
+            "fontFamily": "script",
+            "underlineDoodle": true
+          }
+        ]
+      },
+      {
+        "id": "lexity-android-06",
+        "layout": "two-devices",
+        "surface": "purple",
+        "inverted": true,
+        "label": {
+          "en": "FAVOURITES & RELATED"
+        },
+        "headline": {
+          "en": "One curious word\nleads to another."
+        },
+        "screenshot": "/screenshots/android/phone/{locale}/07.png",
+        "screenshotSecondary": "/screenshots/android/phone/{locale}/08.png",
+        "transforms": {
+          "caption": {
+            "x": 67.86191536748356,
+            "y": 192.1380846325167,
+            "width": 940,
+            "height": 400,
+            "rotation": 0,
+            "zIndex": 5
+          },
+          "device": {
+            "x": -110,
+            "y": 650,
+            "width": 700,
+            "height": 1505,
+            "rotation": -13,
+            "zIndex": 4
+          },
+          "deviceSecondary": {
+            "x": 500,
+            "y": 700,
+            "width": 610,
+            "height": 1312,
+            "rotation": 12,
+            "zIndex": 3
+          }
+        },
+        "textElements": [
+          {
+            "id": "accent",
+            "text": {
+              "en": "keep wandering"
+            },
+            "transform": {
+              "x": 258.90868596881774,
+              "y": 386.05790645879665,
+              "width": 900,
+              "height": 180,
+              "rotation": 2,
+              "zIndex": 6
+            },
+            "fontSize": 66,
+            "fontWeight": 700,
+            "align": "center",
+            "fontFamily": "script",
+            "underlineDoodle": true
+          }
+        ]
+      },
+      {
+        "id": "lexity-android-07",
+        "layout": "no-device",
+        "surface": "cream",
+        "label": {
+          "en": ""
+        },
+        "headline": {
+          "en": "Rare words.\nBeautifully told."
+        },
+        "screenshot": "",
+        "logo": "/app-icon.png",
+        "logoTransform": {
+          "x": 390,
+          "y": 1290,
+          "width": 300,
+          "height": 300,
+          "rotation": 0,
+          "zIndex": 6
+        },
+        "transforms": {
+          "caption": {
+            "x": 120,
+            "y": 260,
+            "width": 840,
+            "height": 380,
+            "rotation": 0,
+            "zIndex": 4
+          }
+        },
+        "textElements": [
+          {
+            "id": "accent",
+            "text": {
+              "en": "every day"
+            },
+            "transform": {
+              "x": 115.72383073496712,
+              "y": 444.94432071269523,
+              "width": 840,
+              "height": 190,
+              "rotation": -6,
+              "zIndex": 6
+            },
+            "fontSize": 114,
+            "fontWeight": 700,
+            "align": "center",
+            "fontFamily": "script",
+            "underlineDoodle": true
+          }
+        ]
+      }
+    ],
+    "ipad": [
+      {
+        "id": "lexity-ipad-01",
+        "layout": "hero",
+        "surface": "navy",
+        "inverted": true,
+        "label": {
+          "en": "DAILY WORD"
+        },
+        "headline": {
+          "en": "One word.\nEvery day."
+        },
+        "screenshot": "/screenshots/apple/ipad/{locale}/01.png",
+        "transforms": {
+          "caption": {
+            "x": 180,
+            "y": 300,
+            "width": 1704,
+            "height": 520,
+            "rotation": 0,
+            "zIndex": 4
+          },
+          "device": {
+            "x": 252.41425389755003,
+            "y": 1136.775055679288,
+            "width": 1500,
+            "height": 1948,
+            "rotation": -1,
+            "zIndex": 3
+          }
+        },
+        "textElements": [
+          {
+            "id": "accent",
+            "text": {
+              "en": "one to remember"
+            },
+            "transform": {
+              "x": 240,
+              "y": 800,
+              "width": 1584,
+              "height": 280,
+              "rotation": -4,
+              "zIndex": 6
+            },
+            "fontSize": 119,
+            "fontWeight": 700,
+            "align": "center",
+            "fontFamily": "script",
+            "underlineDoodle": true
+          }
+        ]
+      },
+      {
+        "id": "lexity-ipad-02",
+        "layout": "device-bottom",
+        "surface": "purple",
+        "inverted": true,
+        "label": {
+          "en": "ORIGINAL ART"
+        },
+        "headline": {
+          "en": "Every word gets\nits own world."
+        },
+        "screenshot": "/screenshots/apple/ipad/{locale}/02.png",
+        "transforms": {
+          "device": {
+            "x": 256.88724810690746,
+            "y": 914.7182182628062,
+            "width": 1525.7087999999999,
+            "height": 1981.4399999999998,
+            "rotation": 0,
+            "zIndex": 3
+          },
+          "caption": {
+            "x": 165.1199999999999,
+            "y": 259.99964365256125,
+            "width": 1733.76,
+            "height": 770.5600000000001,
+            "rotation": 0,
+            "zIndex": 4
+          }
+        },
+        "textElements": [
+          {
+            "id": "accent",
+            "text": {
+              "en": "beautifully illustrated"
+            },
+            "transform": {
+              "x": -84.84632516703596,
+              "y": 633.5055679287309,
+              "width": 1584,
+              "height": 260,
+              "rotation": -2,
+              "zIndex": 6
+            },
+            "fontSize": 119,
+            "fontWeight": 700,
+            "align": "center",
+            "fontFamily": "script",
+            "underlineDoodle": true
+          }
+        ]
+      },
+      {
+        "id": "lexity-ipad-03",
+        "layout": "device-bottom",
+        "surface": "coral",
+        "inverted": true,
+        "label": {
+          "en": "RARITY SCORE"
+        },
+        "headline": {
+          "en": "Know when you've found a gem."
+        },
+        "screenshot": "/screenshots/apple/ipad/{locale}/03.png",
+        "transforms": {
+          "caption": {
+            "x": 180,
+            "y": 300,
+            "width": 1704,
+            "height": 520,
+            "rotation": 0,
+            "zIndex": 4
+          },
+          "device": {
+            "x": 295.3184855233876,
+            "y": 1164.3563474387524,
+            "width": 1500,
+            "height": 1948,
+            "rotation": 18,
+            "zIndex": 3
+          }
+        },
+        "textElements": [
+          {
+            "id": "accent",
+            "text": {
+              "en": "some are rarer than you think!"
+            },
+            "transform": {
+              "x": 13.22049376310133,
+              "y": 671.3206939487794,
+              "width": 1584,
+              "height": 329,
+              "rotation": -3,
+              "zIndex": 6
+            },
+            "fontSize": 119,
+            "fontWeight": 700,
+            "align": "center",
+            "fontFamily": "script",
+            "underlineDoodle": true
+          }
+        ]
+      },
+      {
+        "id": "lexity-ipad-04",
+        "layout": "two-devices",
+        "surface": "cream",
+        "label": {
+          "en": "ORIGIN STORIES"
+        },
+        "headline": {
+          "en": "Follow words back\nto where they began."
+        },
+        "screenshot": "/screenshots/apple/ipad/{locale}/04.png",
+        "screenshotSecondary": "/screenshots/apple/ipad/{locale}/05.png",
+        "transforms": {
+          "caption": {
+            "x": 180,
+            "y": 300,
+            "width": 1704,
+            "height": 520,
+            "rotation": 0,
+            "zIndex": 5
+          },
+          "device": {
+            "x": -158.22717149220352,
+            "y": 1132.7438752783964,
+            "width": 1500,
+            "height": 1948,
+            "rotation": -10,
+            "zIndex": 4
+          },
+          "deviceSecondary": {
+            "x": 969.8351893095787,
+            "y": 1179.679287305123,
+            "width": 1300,
+            "height": 1688,
+            "rotation": 14,
+            "zIndex": 3
+          }
+        },
+        "textElements": [
+          {
+            "id": "accent",
+            "text": {
+              "en": "fascinating\nstories"
+            },
+            "transform": {
+              "x": -60.022533230116096,
+              "y": 852.0979831869577,
+              "width": 934,
+              "height": 280,
+              "rotation": 2,
+              "zIndex": 6
+            },
+            "fontSize": 119,
+            "fontWeight": 700,
+            "align": "center",
+            "fontFamily": "script",
+            "underlineDoodle": true
+          }
+        ]
+      },
+      {
+        "id": "lexity-ipad-05",
+        "layout": "device-top",
+        "surface": "navy",
+        "inverted": true,
+        "label": {
+          "en": "SPOKEN ALOUD"
+        },
+        "headline": {
+          "en": "Say the strange ones with confidence."
+        },
+        "screenshot": "/screenshots/apple/ipad/{locale}/06.png",
+        "transforms": {
+          "device": {
+            "x": 62.24944320711802,
+            "y": 31.126948775055695,
+            "width": 1500,
+            "height": 1948,
+            "rotation": -11,
+            "zIndex": 3
+          },
+          "caption": {
+            "x": 180,
+            "y": 2070,
+            "width": 1704,
+            "height": 460,
+            "rotation": 0,
+            "zIndex": 4
+          }
+        },
+        "textElements": [
+          {
+            "id": "accent",
+            "text": {
+              "en": "no more\nguessing"
+            },
+            "transform": {
+              "x": 1180.8282873971439,
+              "y": 330.5322989544313,
+              "width": 950,
+              "height": 327,
+              "rotation": 4,
+              "zIndex": 6
+            },
+            "fontSize": 119,
+            "fontWeight": 700,
+            "align": "center",
+            "fontFamily": "script",
+            "underlineDoodle": true
+          }
+        ]
+      },
+      {
+        "id": "lexity-ipad-06",
+        "layout": "two-devices",
+        "surface": "purple",
+        "inverted": true,
+        "label": {
+          "en": "FAVOURITES & RELATED"
+        },
+        "headline": {
+          "en": "One curious word\nleads to another."
+        },
+        "screenshot": "/screenshots/apple/ipad/{locale}/07.png",
+        "screenshotSecondary": "/screenshots/apple/ipad/{locale}/08.png",
+        "transforms": {
+          "caption": {
+            "x": 180,
+            "y": 300,
+            "width": 1704,
+            "height": 520,
+            "rotation": 0,
+            "zIndex": 5
+          },
+          "device": {
+            "x": -149.03340757237856,
+            "y": 1148.0668151447667,
+            "width": 1500,
+            "height": 1948,
+            "rotation": -13,
+            "zIndex": 4
+          },
+          "deviceSecondary": {
+            "x": 1120,
+            "y": 1100,
+            "width": 1300,
+            "height": 1688,
+            "rotation": 12,
+            "zIndex": 3
+          }
+        },
+        "textElements": [
+          {
+            "id": "accent",
+            "text": {
+              "en": "keep wandering"
+            },
+            "transform": {
+              "x": 206.2895322939985,
+              "y": 695.8040089086866,
+              "width": 1584,
+              "height": 280,
+              "rotation": 2,
+              "zIndex": 6
+            },
+            "fontSize": 119,
+            "fontWeight": 700,
+            "align": "center",
+            "fontFamily": "script",
+            "underlineDoodle": true
+          }
+        ]
+      },
+      {
+        "id": "lexity-ipad-07",
+        "layout": "no-device",
+        "surface": "cream",
+        "label": {
+          "en": ""
+        },
+        "headline": {
+          "en": "Rare words.\nBeautifully told."
+        },
+        "screenshot": "",
+        "logo": "/app-icon.png",
+        "logoTransform": {
+          "x": 807,
+          "y": 1840,
+          "width": 450,
+          "height": 450,
+          "rotation": 0,
+          "zIndex": 6
+        },
+        "transforms": {
+          "caption": {
+            "x": 250,
+            "y": 420,
+            "width": 1564,
+            "height": 500,
+            "rotation": 0,
+            "zIndex": 4
+          }
+        },
+        "textElements": [
+          {
+            "id": "accent",
+            "text": {
+              "en": "every day"
+            },
+            "transform": {
+              "x": 293.87082405344336,
+              "y": 784.026726057908,
+              "width": 1464,
+              "height": 300,
+              "rotation": -6,
+              "zIndex": 6
+            },
+            "fontSize": 204,
+            "fontWeight": 700,
+            "align": "center",
+            "fontFamily": "script",
+            "underlineDoodle": true
+          }
+        ]
+      }
+    ],
+    "android-7": [],
+    "android-10": [],
+    "feature-graphic": []
+  },
+  "crossScreenMockupsByDevice": {
+    "iphone": [],
+    "android": [],
+    "ipad": [],
+    "android-7": [],
+    "android-10": [],
+    "feature-graphic": []
+  }
+}
