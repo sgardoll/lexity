@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 
 import '/backend/schema/util/firestore_util.dart';
-import '/backend/schema/util/schema_util.dart';
 
 import 'index.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -165,8 +164,7 @@ class LexiconRecord extends FirestoreRecord {
 
   @override
   bool operator ==(other) =>
-      other is LexiconRecord &&
-      reference.path.hashCode == other.reference.path.hashCode;
+      other is LexiconRecord && reference.path == other.reference.path;
 }
 
 Map<String, dynamic> createLexiconRecordData({
@@ -248,11 +246,11 @@ class LexiconRecordDocumentEquality implements Equality<LexiconRecord> {
         e?.usage,
         e?.imageUrl,
         e?.colours,
-        e?.antonyms,
-        e?.relatedWords,
-        e?.synonyms,
-        e?.likedBy,
-        e?.sharedBy,
+        const ListEquality().hash(e?.antonyms),
+        const ListEquality().hash(e?.relatedWords),
+        const ListEquality().hash(e?.synonyms),
+        const ListEquality().hash(e?.likedBy),
+        const ListEquality().hash(e?.sharedBy),
         e?.creationDate,
         e?.usageSpoken,
         e?.blurhash,

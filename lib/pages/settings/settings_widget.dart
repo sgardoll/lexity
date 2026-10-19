@@ -1,17 +1,15 @@
-import '/auth/base_auth_user_provider.dart';
 import '/auth/firebase_auth/auth_util.dart';
-import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/backend/backend.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import 'dart:ui';
 import '/flutter_flow/permissions_util.dart';
 import '/index.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'settings_model.dart';
 export 'settings_model.dart';
 
@@ -38,8 +36,33 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     _model = createModel(context, () => SettingsModel());
 
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'settings'});
-    _model.switchValue1 = true;
-    _model.switchValue2 = true;
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      logFirebaseEvent('SETTINGS_PAGE_settings_ON_INIT_STATE');
+      if (!(currentUserDocument?.settings != null)) {
+        logFirebaseEvent('settings_backend_call');
+
+        var settingsRecordReference = SettingsRecord.collection.doc();
+        await settingsRecordReference.set(createSettingsRecordData(
+          uid: currentUserReference?.id,
+          soundOn: _model.switchValue1,
+          notificationsOn: _model.switchValue2,
+        ));
+        _model.newSettings = SettingsRecord.getDocumentFromData(
+            createSettingsRecordData(
+              uid: currentUserReference?.id,
+              soundOn: _model.switchValue1,
+              notificationsOn: _model.switchValue2,
+            ),
+            settingsRecordReference);
+        logFirebaseEvent('settings_backend_call');
+
+        await currentUserReference!.update(createUsersRecordData(
+          settings: _model.newSettings?.reference,
+        ));
+      }
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
@@ -60,23 +83,28 @@ class _SettingsWidgetState extends State<SettingsWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryText,
-        body: Container(
-          width: MediaQuery.sizeOf(context).width * 1.0,
-          height: MediaQuery.sizeOf(context).height * 1.0,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF1A1F24), Color(0xFF2B2E3B), Color(0xFF1F1F2B)],
-              stops: [0.0, 0.5, 1.0],
-              begin: AlignmentDirectional(0.0, 1.0),
-              end: AlignmentDirectional(0, -1.0),
+        body: SafeArea(
+          top: true,
+          child: Container(
+            width: MediaQuery.sizeOf(context).width * 1.0,
+            height: MediaQuery.sizeOf(context).height * 1.0,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFF1A1F24),
+                  Color(0xFF2B2E3B),
+                  Color(0xFF1F1F2B)
+                ],
+                stops: [0.0, 0.5, 1.0],
+                begin: AlignmentDirectional(0.0, 1.0),
+                end: AlignmentDirectional(0, -1.0),
+              ),
             ),
-          ),
-          child: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(24.0, 24.0, 24.0, 0.0),
-            child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(24.0, 24.0, 24.0, 0.0),
               child: Column(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: (FFMainAxisAlignment.start).flutterValue,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
@@ -88,25 +116,10 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        FlutterFlowIconButton(
-                          borderRadius: 8.0,
-                          buttonSize: 75.0,
-                          icon: Icon(
-                            Icons.arrow_back,
-                            color: FlutterFlowTheme.of(context).info,
-                            size: 35.0,
-                          ),
-                          onPressed: () async {
-                            logFirebaseEvent(
-                                'SETTINGS_PAGE_arrow_back_ICN_ON_TAP');
-                            logFirebaseEvent('IconButton_navigate_back');
-                            context.safePop();
-                          },
-                        ),
                         Expanded(
                           child: AutoSizeText(
                             'Settings',
-                            textAlign: TextAlign.start,
+                            textAlign: TextAlign.center,
                             style: FlutterFlowTheme.of(context)
                                 .displaySmall
                                 .override(
@@ -120,97 +133,204 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       ],
                     ),
                   ),
-                  Container(
-                    width: MediaQuery.sizeOf(context).width * 1.0,
-                    decoration: BoxDecoration(
-                      color: Color(0x7F57636C),
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(
-                          20.0, 20.0, 20.0, 20.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Sound',
-                                style: FlutterFlowTheme.of(context)
-                                    .titleLarge
-                                    .override(
-                                      fontFamily: 'BlauerNue',
-                                      color: Colors.white,
-                                      letterSpacing: 0.0,
-                                    ),
-                              ),
-                              Switch(
-                                value: _model.switchValue1!,
-                                onChanged: (newValue) async {
-                                  safeSetState(
-                                      () => _model.switchValue1 = newValue!);
-                                },
-                                activeColor:
-                                    FlutterFlowTheme.of(context).accent4,
-                                activeTrackColor:
-                                    FlutterFlowTheme.of(context).tertiary,
-                                inactiveTrackColor:
-                                    FlutterFlowTheme.of(context).secondaryText,
-                                inactiveThumbColor:
-                                    FlutterFlowTheme.of(context).alternate,
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Notifications',
-                                style: FlutterFlowTheme.of(context)
-                                    .titleLarge
-                                    .override(
-                                      fontFamily: 'BlauerNue',
-                                      color: Colors.white,
-                                      letterSpacing: 0.0,
-                                    ),
-                              ),
-                              Switch(
-                                value: _model.switchValue2!,
-                                onChanged: (newValue) async {
-                                  safeSetState(
-                                      () => _model.switchValue2 = newValue!);
-                                  if (newValue!) {
-                                    logFirebaseEvent(
-                                        'SETTINGS_Switch_mnxwr64k_ON_TOGGLE_ON');
-                                    logFirebaseEvent(
-                                        'Switch_request_permissions');
-                                    await requestPermission(
-                                        notificationsPermission);
-                                  } else {
-                                    logFirebaseEvent(
-                                        'SETTINGS_Switch_mnxwr64k_ON_TOGGLE_OFF');
-                                    logFirebaseEvent(
-                                        'Switch_request_permissions');
-                                    await requestPermission(
-                                        notificationsPermission);
-                                  }
-                                },
-                                activeColor:
-                                    FlutterFlowTheme.of(context).accent4,
-                                activeTrackColor:
-                                    FlutterFlowTheme.of(context).tertiary,
-                                inactiveTrackColor:
-                                    FlutterFlowTheme.of(context).secondaryText,
-                                inactiveThumbColor:
-                                    FlutterFlowTheme.of(context).alternate,
-                              ),
-                            ],
-                          ),
-                        ].divide(SizedBox(height: 24.0)),
+                  Flexible(
+                    child: FutureBuilder<List<SettingsRecord>>(
+                      future: querySettingsRecordOnce(
+                        queryBuilder: (settingsRecord) => settingsRecord.where(
+                          'uid',
+                          isEqualTo: currentUserReference?.id,
+                        ),
+                        singleRecord: true,
                       ),
+                      builder: (context, snapshot) {
+                        // Customize what your widget looks like when it's loading.
+                        if (!snapshot.hasData) {
+                          return Center(
+                            child: SizedBox(
+                              width: 30.0,
+                              height: 30.0,
+                              child: SpinKitPulse(
+                                color: FlutterFlowTheme.of(context).accent4,
+                                size: 30.0,
+                              ),
+                            ),
+                          );
+                        }
+                        List<SettingsRecord> containerSettingsRecordList =
+                            snapshot.data!;
+                        // Return an empty Container when the item does not exist.
+                        if (snapshot.data!.isEmpty) {
+                          return Container();
+                        }
+                        final containerSettingsRecord =
+                            containerSettingsRecordList.isNotEmpty
+                                ? containerSettingsRecordList.first
+                                : null;
+
+                        return AnimatedContainer(
+                          duration: Duration(milliseconds: 900),
+                          curve: Curves.easeInOut,
+                          width: MediaQuery.sizeOf(context).width * 1.0,
+                          decoration: BoxDecoration(
+                            color: Color(0x7F57636C),
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                20.0, 20.0, 20.0, 20.0),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Sound',
+                                        style: FlutterFlowTheme.of(context)
+                                            .titleLarge
+                                            .override(
+                                              fontFamily: 'BlauerNue',
+                                              color: Colors.white,
+                                              letterSpacing: 0.0,
+                                            ),
+                                      ),
+                                      Switch.adaptive(
+                                        value: _model.switchValue1 ??=
+                                            containerSettingsRecord!.soundOn,
+                                        onChanged: (newValue) async {
+                                          safeSetState(() =>
+                                              _model.switchValue1 = newValue);
+                                          if (newValue) {
+                                            logFirebaseEvent(
+                                                'SETTINGS_Switch_w8ooa2c1_ON_TOGGLE_ON');
+                                            logFirebaseEvent(
+                                                'Switch_backend_call');
+
+                                            await currentUserDocument!.settings!
+                                                .update(
+                                                    createSettingsRecordData(
+                                              soundOn: true,
+                                            ));
+                                            logFirebaseEvent(
+                                                'Switch_update_app_state');
+                                            FFAppState().isSoundOn = true;
+                                            FFAppState().update(() {});
+                                          } else {
+                                            logFirebaseEvent(
+                                                'SETTINGS_Switch_w8ooa2c1_ON_TOGGLE_OFF');
+                                            logFirebaseEvent(
+                                                'Switch_backend_call');
+
+                                            await currentUserDocument!.settings!
+                                                .update(
+                                                    createSettingsRecordData(
+                                              soundOn: false,
+                                            ));
+                                            logFirebaseEvent(
+                                                'Switch_update_app_state');
+                                            FFAppState().isSoundOn = false;
+                                            FFAppState().update(() {});
+                                          }
+                                        },
+                                        activeColor:
+                                            FlutterFlowTheme.of(context)
+                                                .accent4,
+                                        activeTrackColor:
+                                            FlutterFlowTheme.of(context)
+                                                .tertiary,
+                                        inactiveTrackColor:
+                                            FlutterFlowTheme.of(context)
+                                                .secondaryText,
+                                        inactiveThumbColor:
+                                            FlutterFlowTheme.of(context)
+                                                .alternate,
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Notifications',
+                                        style: FlutterFlowTheme.of(context)
+                                            .titleLarge
+                                            .override(
+                                              fontFamily: 'BlauerNue',
+                                              color: Colors.white,
+                                              letterSpacing: 0.0,
+                                            ),
+                                      ),
+                                      Switch.adaptive(
+                                        value: _model.switchValue2 ??=
+                                            containerSettingsRecord!
+                                                .notificationsOn,
+                                        onChanged: (newValue) async {
+                                          safeSetState(() =>
+                                              _model.switchValue2 = newValue);
+                                          if (newValue) {
+                                            logFirebaseEvent(
+                                                'SETTINGS_Switch_mnxwr64k_ON_TOGGLE_ON');
+                                            logFirebaseEvent(
+                                                'Switch_request_permissions');
+                                            await requestPermission(
+                                                notificationsPermission);
+                                            logFirebaseEvent(
+                                                'Switch_backend_call');
+
+                                            await currentUserDocument!.settings!
+                                                .update(
+                                                    createSettingsRecordData(
+                                              notificationsOn: true,
+                                            ));
+                                            logFirebaseEvent(
+                                                'Switch_rebuild_page');
+                                            safeSetState(() {});
+                                          } else {
+                                            logFirebaseEvent(
+                                                'SETTINGS_Switch_mnxwr64k_ON_TOGGLE_OFF');
+                                            logFirebaseEvent(
+                                                'Switch_request_permissions');
+                                            await requestPermission(
+                                                notificationsPermission);
+                                            logFirebaseEvent(
+                                                'Switch_backend_call');
+
+                                            await currentUserDocument!.settings!
+                                                .update(
+                                                    createSettingsRecordData(
+                                              notificationsOn: false,
+                                            ));
+                                            logFirebaseEvent(
+                                                'Switch_rebuild_page');
+                                            safeSetState(() {});
+                                          }
+                                        },
+                                        activeColor:
+                                            FlutterFlowTheme.of(context)
+                                                .accent4,
+                                        activeTrackColor:
+                                            FlutterFlowTheme.of(context)
+                                                .tertiary,
+                                        inactiveTrackColor:
+                                            FlutterFlowTheme.of(context)
+                                                .secondaryText,
+                                        inactiveThumbColor:
+                                            FlutterFlowTheme.of(context)
+                                                .alternate,
+                                      ),
+                                    ],
+                                  ),
+                                ].divide(SizedBox(height: 24.0)),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                   FFButtonWidget(

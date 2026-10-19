@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 
 import '/backend/schema/util/firestore_util.dart';
-import '/backend/schema/util/schema_util.dart';
 
 import 'index.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -46,6 +45,11 @@ class UsersRecord extends FirestoreRecord {
   String get phoneNumber => _phoneNumber ?? '';
   bool hasPhoneNumber() => _phoneNumber != null;
 
+  // "settings" field.
+  DocumentReference? _settings;
+  DocumentReference? get settings => _settings;
+  bool hasSettings() => _settings != null;
+
   void _initializeFields() {
     _email = snapshotData['email'] as String?;
     _displayName = snapshotData['display_name'] as String?;
@@ -53,6 +57,7 @@ class UsersRecord extends FirestoreRecord {
     _uid = snapshotData['uid'] as String?;
     _createdTime = snapshotData['created_time'] as DateTime?;
     _phoneNumber = snapshotData['phone_number'] as String?;
+    _settings = snapshotData['settings'] as DocumentReference?;
   }
 
   static CollectionReference get collection =>
@@ -84,8 +89,7 @@ class UsersRecord extends FirestoreRecord {
 
   @override
   bool operator ==(other) =>
-      other is UsersRecord &&
-      reference.path.hashCode == other.reference.path.hashCode;
+      other is UsersRecord && reference.path == other.reference.path;
 }
 
 Map<String, dynamic> createUsersRecordData({
@@ -95,6 +99,7 @@ Map<String, dynamic> createUsersRecordData({
   String? uid,
   DateTime? createdTime,
   String? phoneNumber,
+  DocumentReference? settings,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -104,6 +109,7 @@ Map<String, dynamic> createUsersRecordData({
       'uid': uid,
       'created_time': createdTime,
       'phone_number': phoneNumber,
+      'settings': settings,
     }.withoutNulls,
   );
 
@@ -120,7 +126,8 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e1?.photoUrl == e2?.photoUrl &&
         e1?.uid == e2?.uid &&
         e1?.createdTime == e2?.createdTime &&
-        e1?.phoneNumber == e2?.phoneNumber;
+        e1?.phoneNumber == e2?.phoneNumber &&
+        e1?.settings == e2?.settings;
   }
 
   @override
@@ -130,7 +137,8 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e?.photoUrl,
         e?.uid,
         e?.createdTime,
-        e?.phoneNumber
+        e?.phoneNumber,
+        e?.settings
       ]);
 
   @override

@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' hide Type;
 import 'package:firebase_auth/firebase_auth.dart';
 import '../auth/firebase_auth/auth_util.dart';
 
@@ -7,9 +7,10 @@ import 'schema/util/firestore_util.dart';
 
 import 'schema/lexicon_record.dart';
 import 'schema/users_record.dart';
+import 'schema/settings_record.dart';
 
 export 'dart:async' show StreamSubscription;
-export 'package:cloud_firestore/cloud_firestore.dart' hide Order;
+export 'package:cloud_firestore/cloud_firestore.dart' hide Order, Type;
 export 'package:firebase_core/firebase_core.dart';
 export 'schema/index.dart';
 export 'schema/util/firestore_util.dart';
@@ -17,6 +18,7 @@ export 'schema/util/schema_util.dart';
 
 export 'schema/lexicon_record.dart';
 export 'schema/users_record.dart';
+export 'schema/settings_record.dart';
 
 /// Functions to query LexiconRecords (as a Stream and as a Future).
 Future<int> queryLexiconRecordCount({
@@ -87,6 +89,43 @@ Future<List<UsersRecord>> queryUsersRecordOnce({
     queryCollectionOnce(
       UsersRecord.collection,
       UsersRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query SettingsRecords (as a Stream and as a Future).
+Future<int> querySettingsRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      SettingsRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<SettingsRecord>> querySettingsRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      SettingsRecord.collection,
+      SettingsRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<SettingsRecord>> querySettingsRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      SettingsRecord.collection,
+      SettingsRecord.fromSnapshot,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,
