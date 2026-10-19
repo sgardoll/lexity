@@ -1,9 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:go_router/go_router.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
@@ -14,10 +11,7 @@ import '/backend/push_notifications/push_notifications_handler.dart'
     show PushNotificationsHandler;
 import '/main.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/lat_lng.dart';
-import '/flutter_flow/place.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import 'serialization_util.dart';
 
 import '/index.dart';
 
@@ -87,24 +81,26 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
       errorBuilder: (context, state) =>
-          appStateNotifier.loggedIn ? StartWidget() : AnonLoginWidget(),
+          appStateNotifier.loggedIn ? NavBarPage() : AnonLoginWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) =>
-              appStateNotifier.loggedIn ? StartWidget() : AnonLoginWidget(),
+              appStateNotifier.loggedIn ? NavBarPage() : AnonLoginWidget(),
           routes: [
             FFRoute(
               name: StartWidget.routeName,
               path: StartWidget.routePath,
               requireAuth: true,
-              builder: (context, params) => StartWidget(
-                id: params.getParam(
-                  'id',
-                  ParamType.String,
-                ),
-              ),
+              builder: (context, params) => params.isEmpty
+                  ? NavBarPage(initialPage: 'start')
+                  : StartWidget(
+                      id: params.getParam(
+                        'id',
+                        ParamType.String,
+                      ),
+                    ),
             ),
             FFRoute(
               name: AnonLoginWidget.routeName,
@@ -114,7 +110,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             FFRoute(
               name: SettingsWidget.routeName,
               path: SettingsWidget.routePath,
-              builder: (context, params) => SettingsWidget(),
+              builder: (context, params) => params.isEmpty
+                  ? NavBarPage(initialPage: 'settings')
+                  : SettingsWidget(),
             ),
             FFRoute(
               name: CreateAccountWidget.routeName,
@@ -124,7 +122,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             FFRoute(
               name: LikedWidget.routeName,
               path: LikedWidget.routePath,
-              builder: (context, params) => LikedWidget(),
+              builder: (context, params) => params.isEmpty
+                  ? NavBarPage(initialPage: 'liked')
+                  : LikedWidget(),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ),
@@ -340,6 +340,10 @@ class FFRoute {
                     duration: transitionInfo.duration,
                     reverseDuration: transitionInfo.duration,
                     alignment: transitionInfo.alignment,
+                    curve: transitionInfo.transitionType ==
+                            PageTransitionType.scale
+                        ? const Interval(0.0, 0.5)
+                        : Curves.linear,
                     child: child,
                   ).buildTransitions(
                     context,

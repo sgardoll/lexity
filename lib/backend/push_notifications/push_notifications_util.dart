@@ -1,8 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:rxdart/subjects.dart';
 
-import 'serialization_util.dart';
 import '../../auth/firebase_auth/auth_util.dart';
 import '../cloud_functions/cloud_functions.dart';
 
