@@ -26,7 +26,7 @@ const {
   DEFAULT_LEASE_MS,
   editionKeyFor,
 } = await import(nodePath("lexity-video-job"));
-const { normaliseTerm: manifestNormaliseTerm } = await import(nodePath("lexity-video-manifest"));
+const { termKey: manifestTermKey } = await import(nodePath("lexity-video-manifest"));
 
 const T0 = "2026-09-14T06:00:00.000Z";
 const later = (ms) => new Date(new Date(T0).getTime() + ms).toISOString();
@@ -153,6 +153,29 @@ test("publication key is independent of template version (rerender must not repu
   assert.notEqual(jobKey("e::1.0.0"), jobKey("e::1.1.0"));
 });
 
+test("edition and publication keys keep non-Latin words distinct and case-folded", () => {
+  const manifest = (term) => ({
+    edition: { sydneyDate: "2026-09-14" },
+    text: { term },
+    template: { version: "1.0.0" },
+  });
+  assert.notEqual(
+    editionKeyFor(manifest("猫")),
+    editionKeyFor(manifest("犬")),
+    "two non-Latin words on one date and template must not share a render job",
+  );
+  assert.equal(
+    editionKeyFor(manifest("КОТ")),
+    editionKeyFor(manifest("кот")),
+    "case folds for non-Latin words too, so a retry cannot duplicate the job",
+  );
+  assert.equal(
+    publicationKey({ sydneyDate: "2026-09-14", term: "КОТ" }),
+    publicationKey({ sydneyDate: "2026-09-14", term: "кот" }),
+    "the publication identity folds the same way",
+  );
+});
+
 test("shouldPublish publishes once, then never again", () => {
   let job = createJob(manifest, EK, T0);
   assert.equal(shouldPublish(job).reason, "not_rendered");
@@ -220,15 +243,15 @@ test("isLeaseExpired treats a missing lease as expired", () => {
   assert.ok(DEFAULT_LEASE_MS > 0);
 });
 
-test("the duplicated normaliseTerm has not diverged from the manifest node's", () => {
+test("the duplicated termKey has not diverged from the manifest node's", () => {
   // The job node inlines this helper because BuildShip bundles nodes
   // independently, so nothing but this test keeps the two copies honest.
-  const samples = ["Acomiast", "Flâneur", "  Flâneur! ", "Café", "日本語", "", "Æther", "A-B_C"];
+  const samples = ["Acomiast", "Flâneur", "  Flâneur! ", "Café", "日本語", "", "Æther", "A-B_C", "КОТ", "кот"];
   for (const s of samples) {
     assert.equal(
       publicationKey({ sydneyDate: "2026-09-14", term: s }),
-      `pub::2026-09-14::${manifestNormaliseTerm(s)}`,
-      `normalisation diverged for ${JSON.stringify(s)}`,
+      `pub::2026-09-14::${manifestTermKey(s)}`,
+      `word-key folding diverged for ${JSON.stringify(s)}`,
     );
   }
 });
@@ -257,5 +280,5 @@ test("editionKeyFor matches the manifest node's editionKey format exactly", () =
     text: { term: "Flâneur" },
     template: { version: "2.0.0" },
   };
-  assert.equal(editionKeyFor(m), `2026-09-14::${manifestNormaliseTerm("Flâneur")}::2.0.0`);
+  assert.equal(editionKeyFor(m), `2026-09-14::${manifestTermKey("Flâneur")}::2.0.0`);
 });

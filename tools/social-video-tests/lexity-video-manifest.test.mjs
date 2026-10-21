@@ -237,6 +237,22 @@ test("editionKey is stable and identifies one edition/word/template", () => {
   assert.notEqual(a, other, "a new template version is a different job");
 });
 
+test("editionKey keeps non-Latin words distinct and folds their case", () => {
+  const cat = editionKey(buildManifest(record({ term: "猫" }), opts));
+  const dog = editionKey(buildManifest(record({ term: "犬" }), opts));
+  assert.notEqual(
+    cat,
+    dog,
+    "two non-Latin words on one date and template must not share a render job",
+  );
+  assert.match(cat, /^2026-09-14::u[0-9a-f]{12}::1\.0\.0$/);
+  assert.equal(
+    editionKey(buildManifest(record({ term: "КОТ" }), opts)),
+    editionKey(buildManifest(record({ term: "кот" }), opts)),
+    "case folds for non-Latin words too, so a retry cannot duplicate the job",
+  );
+});
+
 test("URL helpers behave on the shapes the pipeline actually produces", () => {
   assert.ok(isHttpUrl("https://storage.googleapis.com/b/x.png"));
   assert.ok(!isHttpUrl("gs://bucket/x.png"));

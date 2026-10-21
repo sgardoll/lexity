@@ -163,6 +163,18 @@ test("editionKey folds the word, so case does not create a second job", () => {
   assert.notEqual(editionKey("2026-09-14", "Acomiast", "1.0.0"), editionKey("2026-09-14", "Acomiast", "1.1.0"));
 });
 
+test("editionKey keeps non-Latin words distinct and folds their case", () => {
+  const cat = editionKey("2026-09-14", "猫", "1.0.0");
+  const dog = editionKey("2026-09-14", "犬", "1.0.0");
+  assert.notEqual(cat, dog, "two non-Latin words on one date must not share a render job");
+  assert.equal(cat, editionKey("2026-09-14", "猫", "1.0.0"), "the key is stable");
+  assert.equal(
+    editionKey("2026-09-14", "КОТ", "1.0.0"),
+    editionKey("2026-09-14", "кот", "1.0.0"),
+    "case folds for non-Latin words too, so a retry cannot duplicate the job",
+  );
+});
+
 // --- reconciliation -----------------------------------------------------------
 
 test("CRITERION: reconciliation finds a ready edition that was never enqueued", () => {
