@@ -95,10 +95,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               requireAuth: true,
               builder: (context, params) => params.isEmpty
                   ? NavBarPage(initialPage: 'start')
-                  : StartWidget(
-                      id: params.getParam(
-                        'id',
-                        ParamType.String,
+                  : NavBarPage(
+                      key: ValueKey(params.getParam('id', ParamType.String)),
+                      initialPage: 'start',
+                      page: StartWidget(
+                        id: params.getParam(
+                          'id',
+                          ParamType.String,
+                        ),
                       ),
                     ),
             ),

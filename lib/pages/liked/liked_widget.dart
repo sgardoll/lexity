@@ -245,63 +245,62 @@ class _LikedWidgetState extends State<LikedWidget> {
                                               ),
                                             ),
                                             Builder(
-                                              builder: (context) =>
-                                                  FlutterFlowIconButton(
-                                                buttonSize: 60.0,
-                                                icon: Tooltip(
-                                                  message: 'Share',
-                                                  child: Icon(
+                                              builder: (context) => Tooltip(
+                                                message: 'Share',
+                                                child: FlutterFlowIconButton(
+                                                  buttonSize: 60.0,
+                                                  icon: Icon(
                                                     Icons.share,
                                                     color: FlutterFlowTheme.of(
                                                             context)
                                                         .accent4,
                                                     size: 24.0,
                                                   ),
+                                                  onPressed: () async {
+                                                    logFirebaseEvent(
+                                                        'LIKED_share_ICN_ON_TAP');
+                                                    logFirebaseEvent(
+                                                        'IconButton_backend_call');
+                                                    unawaited(
+                                                      () async {
+                                                        await listViewLexiconRecord
+                                                            .reference
+                                                            .update({
+                                                          ...mapToFirestore(
+                                                            {
+                                                              'sharedBy':
+                                                                  FieldValue
+                                                                      .arrayUnion([
+                                                                currentUserReference
+                                                              ]),
+                                                            },
+                                                          ),
+                                                        });
+                                                      }(),
+                                                    );
+                                                    logFirebaseEvent(
+                                                        'IconButton_google_analytics_event');
+                                                    logFirebaseEvent(
+                                                      'shareLinkLikesScreen',
+                                                      parameters: {
+                                                        'docRef':
+                                                            listViewLexiconRecord
+                                                                .reference,
+                                                      },
+                                                    );
+                                                    logFirebaseEvent(
+                                                        'IconButton_share');
+                                                    await Share.share(
+                                                      valueOrDefault<String>(
+                                                        'https://lexity.connectio.com.au/start?id=${listViewLexiconRecord.reference.id}',
+                                                        'https://lexity.connectio.com.au/start',
+                                                      ),
+                                                      sharePositionOrigin:
+                                                          getWidgetBoundingBox(
+                                                              context),
+                                                    );
+                                                  },
                                                 ),
-                                                onPressed: () async {
-                                                  logFirebaseEvent(
-                                                      'LIKED_share_ICN_ON_TAP');
-                                                  logFirebaseEvent(
-                                                      'IconButton_backend_call');
-                                                  unawaited(
-                                                    () async {
-                                                      await listViewLexiconRecord
-                                                          .reference
-                                                          .update({
-                                                        ...mapToFirestore(
-                                                          {
-                                                            'sharedBy':
-                                                                FieldValue
-                                                                    .arrayUnion([
-                                                              currentUserReference
-                                                            ]),
-                                                          },
-                                                        ),
-                                                      });
-                                                    }(),
-                                                  );
-                                                  logFirebaseEvent(
-                                                      'IconButton_google_analytics_event');
-                                                  logFirebaseEvent(
-                                                    'shareLinkLikesScreen',
-                                                    parameters: {
-                                                      'docRef':
-                                                          listViewLexiconRecord
-                                                              .reference,
-                                                    },
-                                                  );
-                                                  logFirebaseEvent(
-                                                      'IconButton_share');
-                                                  await Share.share(
-                                                    valueOrDefault<String>(
-                                                      'https://lexity.connectio.com.au/start?id=${listViewLexiconRecord.reference.id}',
-                                                      'https://lexity.connectio.com.au/start',
-                                                    ),
-                                                    sharePositionOrigin:
-                                                        getWidgetBoundingBox(
-                                                            context),
-                                                  );
-                                                },
                                               ),
                                             ),
                                             FlutterFlowIconButton(

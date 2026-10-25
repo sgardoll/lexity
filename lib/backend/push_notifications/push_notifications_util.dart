@@ -81,10 +81,16 @@ Stream<UserTokenInfo> getFcmTokenStream(String userPath) =>
         .map((token) => UserTokenInfo(userPath, token!));
 
 final fcmTokenUserStream = authenticatedUserStream
-    .where((user) => user != null)
-    .map((user) => user!.reference.path)
+    .map((user) => user?.reference.path)
     .distinct()
-    .switchMap(getFcmTokenStream)
+    .switchMap((userPath) {
+      // Local opt-outs belong to one session; saved preferences still gate
+      // registration in getFcmTokenStream for the next account.
+      kNotificationsBehaviorSubject.add(true);
+      return userPath == null
+          ? const Stream<UserTokenInfo>.empty()
+          : getFcmTokenStream(userPath);
+    })
     .map(
       (userTokenInfo) => makeCloudCall(
         'addFcmToken',
