@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/subjects.dart';
 
 import '../../auth/firebase_auth/auth_util.dart';
@@ -10,6 +11,26 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 export 'push_notifications_handler.dart';
 export 'serialization_util.dart';
+
+/// The account-level opt-out: when the linked settings document says
+/// notifications are off, no token may be registered for the user.
+/// Missing documents/preferences default to enabled so existing accounts
+/// keep receiving pushes until they explicitly switch them off.
+Future<bool> _notificationsEnabled(String userPath) async {
+  try {
+    final userDoc = await FirebaseFirestore.instance.doc(userPath).get();
+    final settingsRef = userDoc.data()?['settings'];
+    if (settingsRef is! DocumentReference) {
+      return true;
+    }
+    final settingsDoc = await settingsRef.get();
+    final data = settingsDoc.data();
+    return data is Map ? data['notificationsOn'] != false : true;
+  } catch (_) {
+    // A rules/network failure must not silently un-register tokens.
+    return true;
+  }
+}
 
 class UserTokenInfo {
   const UserTokenInfo(this.userPath, this.fcmToken);
@@ -42,6 +63,11 @@ Stream<UserTokenInfo> getFcmTokenStream(String userPath) =>
         .switchMap((fcmToken) => Stream.value(fcmToken)
             .merge(FirebaseMessaging.instance.onTokenRefresh))
         .where((fcmToken) => fcmToken != null && fcmToken.isNotEmpty)
+        // The preference check runs after the merge so a token refresh
+        // emitted while notifications are off cannot re-register either.
+        .asyncMap<String?>((token) async =>
+            await _notificationsEnabled(userPath) ? token : null)
+        .where((token) => token != null)
         .map((token) => UserTokenInfo(userPath, token!));
 
 final fcmTokenUserStream = authenticatedUserStream

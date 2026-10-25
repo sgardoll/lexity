@@ -9,6 +9,9 @@ class SettingsModel extends FlutterFlowModel<SettingsWidget> {
 
   // Stores action output result for [Backend Call - Create Document] action in settings widget.
   SettingsRecord? newSettings;
+  // The one settings document for this account — linked on the user record,
+  // or keyed by uid when no link exists yet.
+  DocumentReference? settingsRef;
   // State field(s) for Switch widget.
   bool? switchValue1;
   // State field(s) for Switch widget.

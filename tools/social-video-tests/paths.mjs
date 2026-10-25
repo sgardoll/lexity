@@ -11,7 +11,14 @@
 //     Falling back would let the suites pass against a different checkout than
 //     the one you asked for, which is exactly the surprise tests must not have.
 //   * otherwise, a sibling checkout at ../../../buildship (~/Projects/buildship)
+//
+// Revision pinning: the node sources come from whatever commit the checkout
+// happens to be on, so a suite that passed last week can silently drift. Set
+// $BUILDSHIP_REPO_REVISION to the commit these tests were written against
+// (full or short SHA) and a checkout on any other revision fails loudly
+// instead of passing against the wrong sources.
 
+import { execSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -42,6 +49,31 @@ if (!isCheckout(buildshipRepo)) {
       "Could not locate a BuildShip checkout containing nodes/.",
       `Looked in: ${buildshipRepo}`,
       "Set BUILDSHIP_REPO=/path/to/buildship if it lives elsewhere.",
+    ].join("\n"),
+  );
+}
+
+/** The commit the resolved checkout is on, or null when it is not a git repo. */
+export const buildshipRepoRevision = (() => {
+  try {
+    return execSync("git rev-parse HEAD", {
+      cwd: buildshipRepo,
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    }).trim();
+  } catch {
+    return null;
+  }
+})();
+
+const expectedRevision = process.env.BUILDSHIP_REPO_REVISION?.trim();
+if (expectedRevision && buildshipRepoRevision !== expectedRevision) {
+  throw new Error(
+    [
+      `BUILDSHIP_REPO_REVISION pins these tests to ${expectedRevision} but`,
+      `${buildshipRepo} is at ${buildshipRepoRevision ?? "(not a git checkout)"}.`,
+      "Check out the pinned revision or update the pin — passing against the",
+      "wrong node sources is exactly what this guard exists to prevent.",
     ].join("\n"),
   );
 }

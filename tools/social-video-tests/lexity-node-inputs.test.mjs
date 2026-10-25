@@ -13,10 +13,10 @@
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 
-import { buildshipRepo, nodePath } from "./paths.mjs";
+import { buildshipRepo, buildshipRepoRevision, nodePath } from "./paths.mjs";
 
 const NODES = ["lexity-video-manifest", "lexity-video-enqueue", "lexity-video-job"];
 
@@ -59,14 +59,21 @@ for (const id of NODES) {
 }
 
 test("the node check is actually looking at the BuildShip checkout", () => {
-  // Guard against the suite passing because it resolved the wrong tree.
-  assert.ok(buildshipRepo.includes("buildship"), `unexpected repo: ${buildshipRepo}`);
+  // Guard against the suite passing because it resolved the wrong tree. The
+  // directory's NAME is not the check — a valid checkout needn't be called
+  // "buildship" — the expected files under it are.
   for (const id of NODES) {
+    const dir = path.dirname(nodePath(id));
+    for (const f of ["main.ts", "inputs.json", "output.json"]) {
+      assert.ok(existsSync(path.join(dir, f)), `${id} is missing ${f} under ${buildshipRepo}`);
+    }
     assert.ok(
       readFileSync(nodePath(id), "utf8").includes("export default async function"),
       `${id} unreadable`,
     );
   }
+  // The resolved revision is reported so a stale checkout is diagnosable.
+  console.log(`nodes resolved from ${buildshipRepo} @ ${buildshipRepoRevision ?? "unknown revision"}`);
 });
 
 test("every declared input carries the buildship wrapper BuildShip requires", () => {

@@ -1,5 +1,6 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/backend/push_notifications/push_notifications_util.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -7,6 +8,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/permissions_util.dart';
 import '/index.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -36,29 +38,38 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     _model = createModel(context, () => SettingsModel());
 
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'settings'});
+    // One settings document per account: prefer the record linked on the user
+    // document, otherwise a deterministic `settings/<uid>` — random ids let
+    // two devices create disagreeing documents.
+    final uid = currentUserReference?.id;
+    _model.settingsRef = currentUserDocument?.settings ??
+        (uid == null ? null : SettingsRecord.collection.doc(uid));
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       logFirebaseEvent('SETTINGS_PAGE_settings_ON_INIT_STATE');
-      if (!(currentUserDocument?.settings != null)) {
+      // Re-resolve now the first frame has had a chance to deliver the user
+      // document; the account's linked record always wins.
+      final settingsRef = currentUserDocument?.settings ??
+          (uid == null ? null : SettingsRecord.collection.doc(uid));
+      if (settingsRef == null) {
+        return;
+      }
+      if (settingsRef != _model.settingsRef) {
+        _model.settingsRef = settingsRef;
+        safeSetState(() {});
+      }
+      if (!(await settingsRef.get()).exists) {
         logFirebaseEvent('settings_backend_call');
-
-        var settingsRecordReference = SettingsRecord.collection.doc();
-        await settingsRecordReference.set(createSettingsRecordData(
-          uid: currentUserReference?.id,
-          soundOn: _model.switchValue1,
-          notificationsOn: _model.switchValue2,
+        await settingsRef.set(createSettingsRecordData(
+          uid: uid,
+          soundOn: FFAppState().isSoundOn,
+          notificationsOn: true,
         ));
-        _model.newSettings = SettingsRecord.getDocumentFromData(
-            createSettingsRecordData(
-              uid: currentUserReference?.id,
-              soundOn: _model.switchValue1,
-              notificationsOn: _model.switchValue2,
-            ),
-            settingsRecordReference);
+      }
+      if (currentUserDocument?.settings != settingsRef) {
         logFirebaseEvent('settings_backend_call');
-
         await currentUserReference!.update(createUsersRecordData(
-          settings: _model.newSettings?.reference,
+          settings: settingsRef,
         ));
       }
     });
@@ -134,40 +145,44 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     ),
                   ),
                   Flexible(
-                    child: FutureBuilder<List<SettingsRecord>>(
-                      future: querySettingsRecordOnce(
-                        queryBuilder: (settingsRecord) => settingsRecord.where(
-                          'uid',
-                          isEqualTo: currentUserReference?.id,
-                        ),
-                        singleRecord: true,
-                      ),
-                      builder: (context, snapshot) {
-                        // Customize what your widget looks like when it's loading.
-                        if (!snapshot.hasData) {
-                          return Center(
-                            child: SizedBox(
-                              width: 30.0,
-                              height: 30.0,
-                              child: SpinKitPulse(
-                                color: FlutterFlowTheme.of(context).accent4,
-                                size: 30.0,
-                              ),
-                            ),
-                          );
-                        }
-                        List<SettingsRecord> containerSettingsRecordList =
-                            snapshot.data!;
-                        // Return an empty Container when the item does not exist.
-                        if (snapshot.data!.isEmpty) {
-                          return Container();
-                        }
-                        final containerSettingsRecord =
-                            containerSettingsRecordList.isNotEmpty
-                                ? containerSettingsRecordList.first
-                                : null;
+                    child: _model.settingsRef == null
+                        ? Container()
+                        : StreamBuilder<DocumentSnapshot>(
+                            stream: _model.settingsRef!.snapshots(),
+                            builder: (context, snapshot) {
+                              // Customize what your widget looks like when it's loading.
+                              if (!snapshot.hasData) {
+                                return Center(
+                                  child: SizedBox(
+                                    width: 30.0,
+                                    height: 30.0,
+                                    child: SpinKitPulse(
+                                      color:
+                                          FlutterFlowTheme.of(context).accent4,
+                                      size: 30.0,
+                                    ),
+                                  ),
+                                );
+                              }
+                              // A first-time user's record may still be
+                              // writing — render the controls with defaults
+                              // instead of leaving an empty box.
+                              final containerSettingsRecord =
+                                  snapshot.data!.exists
+                                      ? SettingsRecord.fromSnapshot(
+                                          snapshot.data!)
+                                      : null;
+                              // The account record is the one shared source
+                              // for the sound preference — autoplay must read
+                              // the same value the switch shows.
+                              if (containerSettingsRecord != null &&
+                                  FFAppState().isSoundOn !=
+                                      containerSettingsRecord.soundOn) {
+                                FFAppState().isSoundOn =
+                                    containerSettingsRecord.soundOn;
+                              }
 
-                        return AnimatedContainer(
+                              return AnimatedContainer(
                           duration: Duration(milliseconds: 900),
                           curve: Curves.easeInOut,
                           width: MediaQuery.sizeOf(context).width * 1.0,
@@ -198,8 +213,9 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                             ),
                                       ),
                                       Switch.adaptive(
-                                        value: _model.switchValue1 ??=
-                                            containerSettingsRecord!.soundOn,
+                                        value: _model.switchValue1 ??
+                                            containerSettingsRecord?.soundOn ??
+                                            FFAppState().isSoundOn,
                                         onChanged: (newValue) async {
                                           safeSetState(() =>
                                               _model.switchValue1 = newValue);
@@ -209,11 +225,11 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                             logFirebaseEvent(
                                                 'Switch_backend_call');
 
-                                            await currentUserDocument!.settings!
-                                                .update(
-                                                    createSettingsRecordData(
-                                              soundOn: true,
-                                            ));
+                                            await _model.settingsRef!.set(
+                                                createSettingsRecordData(
+                                                  soundOn: true,
+                                                ),
+                                                SetOptions(merge: true));
                                             logFirebaseEvent(
                                                 'Switch_update_app_state');
                                             FFAppState().isSoundOn = true;
@@ -224,11 +240,11 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                             logFirebaseEvent(
                                                 'Switch_backend_call');
 
-                                            await currentUserDocument!.settings!
-                                                .update(
-                                                    createSettingsRecordData(
-                                              soundOn: false,
-                                            ));
+                                            await _model.settingsRef!.set(
+                                                createSettingsRecordData(
+                                                  soundOn: false,
+                                                ),
+                                                SetOptions(merge: true));
                                             logFirebaseEvent(
                                                 'Switch_update_app_state');
                                             FFAppState().isSoundOn = false;
@@ -266,9 +282,10 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                             ),
                                       ),
                                       Switch.adaptive(
-                                        value: _model.switchValue2 ??=
-                                            containerSettingsRecord!
-                                                .notificationsOn,
+                                        value: _model.switchValue2 ??
+                                            containerSettingsRecord
+                                                ?.notificationsOn ??
+                                            false,
                                         onChanged: (newValue) async {
                                           safeSetState(() =>
                                               _model.switchValue2 = newValue);
@@ -282,11 +299,15 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                             logFirebaseEvent(
                                                 'Switch_backend_call');
 
-                                            await currentUserDocument!.settings!
-                                                .update(
-                                                    createSettingsRecordData(
-                                              notificationsOn: true,
-                                            ));
+                                            await _model.settingsRef!.set(
+                                                createSettingsRecordData(
+                                                  notificationsOn: true,
+                                                ),
+                                                SetOptions(merge: true));
+                                            // Register this device's token
+                                            // now the preference allows it.
+                                            kNotificationsBehaviorSubject
+                                                .add(false);
                                             logFirebaseEvent(
                                                 'Switch_rebuild_page');
                                             safeSetState(() {});
@@ -294,17 +315,22 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                             logFirebaseEvent(
                                                 'SETTINGS_Switch_mnxwr64k_ON_TOGGLE_OFF');
                                             logFirebaseEvent(
-                                                'Switch_request_permissions');
-                                            await requestPermission(
-                                                notificationsPermission);
-                                            logFirebaseEvent(
                                                 'Switch_backend_call');
 
-                                            await currentUserDocument!.settings!
-                                                .update(
-                                                    createSettingsRecordData(
-                                              notificationsOn: false,
-                                            ));
+                                            await _model.settingsRef!.set(
+                                                createSettingsRecordData(
+                                                  notificationsOn: false,
+                                                ),
+                                                SetOptions(merge: true));
+                                            // Invalidate the device's token
+                                            // and stop the registration
+                                            // stream re-adding it — a
+                                            // permitted device must not keep
+                                            // receiving pushes.
+                                            await FirebaseMessaging.instance
+                                                .deleteToken();
+                                            kNotificationsBehaviorSubject
+                                                .add(false);
                                             logFirebaseEvent(
                                                 'Switch_rebuild_page');
                                             safeSetState(() {});

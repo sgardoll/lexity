@@ -324,10 +324,10 @@ class _StartWidgetState extends State<StartWidget>
                                       logFirebaseEvent(
                                           'START_PAGE_Container_qduthaoz_CALLBACK');
                                       logFirebaseEvent('CardBack_navigate_to');
-                                      if (Navigator.of(context).canPop()) {
-                                        context.pop();
-                                      }
-                                      context.pushNamed(
+                                      // Replace the current location — popping
+                                      // first left pushNamed with a defunct
+                                      // context when nothing was left to pop.
+                                      context.goNamed(
                                         StartWidget.routeName,
                                         extra: <String, dynamic>{
                                           '__transition_info__': TransitionInfo(

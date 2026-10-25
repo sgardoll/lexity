@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 class CreateAccountModel extends FlutterFlowModel<CreateAccountWidget> {
   ///  Local state fields for this page.
 
-  bool isCurrentUser = true;
+  // Whether the form asks the user to log in (true) or create an account
+  // (false). Defaults to create — the page's primary purpose; an existing
+  // account is detected by the sign-in error codes and flips this on.
+  bool isCurrentUser = false;
 
   ///  State fields for stateful widgets in this page.
 

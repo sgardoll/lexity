@@ -52,10 +52,19 @@ Future<void> syncPendingEmailChange(User? user) async {
     // Capture the verified account's reference, not a possibly stale global
     // user document. update() never recreates a deleted user document.
     try {
+      // The awaits above gave a newer request — or a newer Auth state — time
+      // to land. Recheck both right before the write, or this stale request
+      // could overwrite the email the user just changed to.
+      final latestUser = FirebaseAuth.instance.currentUser;
+      if (preferences.getString(key) != request ||
+          latestUser?.uid != uid ||
+          latestUser?.email?.toLowerCase() != target.toLowerCase()) {
+        return;
+      }
       await FirebaseFirestore.instance
           .collection('users')
           .doc(uid)
-          .update({'email': current.email});
+          .update({'email': latestUser!.email});
     } on FirebaseException catch (e) {
       if (e.code != 'not-found') rethrow;
     }

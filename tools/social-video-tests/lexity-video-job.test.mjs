@@ -26,7 +26,7 @@ const {
   DEFAULT_LEASE_MS,
   editionKeyFor,
 } = await import(nodePath("lexity-video-job"));
-const { normaliseTerm: manifestNormaliseTerm } = await import(nodePath("lexity-video-manifest"));
+const { normaliseTerm: manifestNormaliseTerm, termKey: manifestTermKey } = await import(nodePath("lexity-video-manifest"));
 
 const T0 = "2026-09-14T06:00:00.000Z";
 const later = (ms) => new Date(new Date(T0).getTime() + ms).toISOString();
@@ -47,6 +47,38 @@ test("CRITERION: concurrent duplicate cron delivery creates one logical job", ()
   assert.equal(second.created, false, "must not create a second job");
   assert.equal(second.job.key, first.job.key);
   assert.equal(jobKey(EK), first.job.key, "the key is deterministic, so duplicates collide");
+});
+
+test("CRITERION: racing duplicate cron deliveries converge on one job document", () => {
+  // The real interleaving the sequential test cannot express: both deliveries
+  // read `existing = null` BEFORE either commits, so both run the create path.
+  // The deterministic job key is what saves the day — they write the same
+  // document id, so the second write replaces rather than duplicates.
+  const store = new Map();
+  const deliver = () => {
+    const outcome = createOrDedupe(store.get(jobKey(EK)) ?? null, manifest, EK, T0);
+    if (outcome.created) store.set(outcome.job.key, outcome.job);
+    return outcome;
+  };
+
+  // Both read an empty store before either commits — the duplicate-cron race.
+  const a = createOrDedupe(null, manifest, EK, T0);
+  const b = createOrDedupe(null, manifest, EK, T0);
+  assert.equal(a.created, true);
+  assert.equal(b.created, true, "both took the create path — the race really happened");
+  assert.equal(a.job.key, b.job.key, "the deterministic key collides on one document");
+  assert.equal(a.job.editionKey, b.job.editionKey);
+  assert.deepEqual(a.job, b.job, "racing creations produce identical jobs");
+
+  // Delivering both through a create-on-key store commits a single document.
+  store.set(a.job.key, a.job);
+  store.set(b.job.key, b.job);
+  assert.equal(store.size, 1, "one job document, not two");
+
+  // A straggler delivery after the commit sees the job and dedupes.
+  const third = deliver();
+  assert.equal(third.created, false, "a late delivery dedupes onto the committed job");
+  assert.equal(store.size, 1);
 });
 
 test("CRITERION: an expired worker lease recovers", () => {
@@ -220,14 +252,29 @@ test("isLeaseExpired treats a missing lease as expired", () => {
   assert.ok(DEFAULT_LEASE_MS > 0);
 });
 
-test("the duplicated normaliseTerm has not diverged from the manifest node's", () => {
+test("the duplicated termKey has not diverged from the manifest node's", () => {
   // The job node inlines this helper because BuildShip bundles nodes
   // independently, so nothing but this test keeps the two copies honest.
+  // publicationKey goes through termKey — which falls back to a digest for
+  // terms with no Latin letters — not bare normaliseTerm.
   const samples = ["Acomiast", "Flâneur", "  Flâneur! ", "Café", "日本語", "", "Æther", "A-B_C"];
   for (const s of samples) {
     assert.equal(
       publicationKey({ sydneyDate: "2026-09-14", term: s }),
-      `pub::2026-09-14::${manifestNormaliseTerm(s)}`,
+      `pub::2026-09-14::${manifestTermKey(s)}`,
+      `term-key derivation diverged for ${JSON.stringify(s)}`,
+    );
+  }
+  // The folded form both copies share still must not drift either — checked
+  // against an independent reference implementation here in the suite.
+  for (const s of samples) {
+    assert.equal(
+      manifestNormaliseTerm(s),
+      String(s ?? "")
+        .normalize("NFD")
+        .replace(/[̀-ͯ]/g, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, ""),
       `normalisation diverged for ${JSON.stringify(s)}`,
     );
   }

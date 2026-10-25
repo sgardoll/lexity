@@ -149,24 +149,28 @@ class FirebaseAuthManager extends AuthManager
   Future<BaseAuthUser?> signInWithEmail(
     BuildContext context,
     String email,
-    String password,
-  ) =>
+    String password, {
+    AuthErrorHandler? onAuthError,
+  }) =>
       _signInOrCreateAccount(
         context,
         () => emailSignInFunc(email, password),
         'EMAIL',
+        onAuthError: onAuthError,
       );
 
   @override
   Future<BaseAuthUser?> createAccountWithEmail(
     BuildContext context,
     String email,
-    String password,
-  ) =>
+    String password, {
+    AuthErrorHandler? onAuthError,
+  }) =>
       _signInOrCreateAccount(
         context,
         () => emailCreateAccountFunc(email, password),
         'EMAIL',
+        onAuthError: onAuthError,
       );
 
   @override
@@ -323,8 +327,9 @@ class FirebaseAuthManager extends AuthManager
   Future<BaseAuthUser?> _signInOrCreateAccount(
     BuildContext context,
     Future<UserCredential?> Function() signInFunc,
-    String authProvider,
-  ) async {
+    String authProvider, {
+    AuthErrorHandler? onAuthError,
+  }) async {
     try {
       final userCredential = await signInFunc();
       logFirebaseAuthEvent(userCredential?.user, authProvider);
@@ -335,6 +340,9 @@ class FirebaseAuthManager extends AuthManager
           ? null
           : LexityFirebaseUser.fromUserCredential(userCredential);
     } on FirebaseAuthException catch (e) {
+      if (onAuthError?.call(e) == true) {
+        return null;
+      }
       final errorMsg = switch (e.code) {
         'email-already-in-use' =>
           'Error: The email is already in use by a different account',

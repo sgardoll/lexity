@@ -1,5 +1,4 @@
 import '/auth/firebase_auth/auth_util.dart';
-import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -37,29 +36,6 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
         parameters: {'screen_name': 'CreateAccount'});
     _model.emailTextController ??= TextEditingController();
     _model.textFieldFocusNode1 ??= FocusNode();
-    _model.textFieldFocusNode1!.addListener(
-      () async {
-        logFirebaseEvent('CREATE_ACCOUNT_TextField_e1p2fa09_ON_FOC');
-        logFirebaseEvent('TextField_firestore_query');
-        _model.queryUser = await queryUsersRecordCount(
-          queryBuilder: (usersRecord) => usersRecord.where(
-            'email',
-            isEqualTo: _model.emailTextController.text,
-          ),
-        );
-        if (_model.queryUser! >= 1) {
-          logFirebaseEvent('TextField_update_page_state');
-          _model.isCurrentUser = true;
-          safeSetState(() {});
-        } else {
-          logFirebaseEvent('TextField_update_page_state');
-          _model.isCurrentUser = false;
-          safeSetState(() {});
-        }
-
-        safeSetState(() {});
-      },
-    );
     _model.passwordTextController ??= TextEditingController();
     _model.textFieldFocusNode2 ??= FocusNode();
 
@@ -374,6 +350,26 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                                         context,
                                         _model.emailTextController.text,
                                         _model.passwordTextController.text,
+                                        onAuthError: (e) {
+                                          // The account no longer exists
+                                          // (deleted, or a typo'd email) —
+                                          // offer to create it instead.
+                                          if (e.code != 'user-not-found') {
+                                            return false;
+                                          }
+                                          _model.isCurrentUser = false;
+                                          safeSetState(() {});
+                                          ScaffoldMessenger.of(context)
+                                              .hideCurrentSnackBar();
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                  'No account found for this email — create one below.'),
+                                            ),
+                                          );
+                                          return true;
+                                        },
                                       );
                                       if (user == null) {
                                         return;
@@ -437,6 +433,26 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                                         context,
                                         _model.emailTextController.text,
                                         _model.passwordTextController.text,
+                                        onAuthError: (e) {
+                                          // The account exists after all
+                                          // (the email lookup missed it) —
+                                          // switch to Login.
+                                          if (e.code != 'email-already-in-use') {
+                                            return false;
+                                          }
+                                          _model.isCurrentUser = true;
+                                          safeSetState(() {});
+                                          ScaffoldMessenger.of(context)
+                                              .hideCurrentSnackBar();
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                  'That email already has an account — log in instead.'),
+                                            ),
+                                          );
+                                          return true;
+                                        },
                                       );
                                       if (user == null) {
                                         return;

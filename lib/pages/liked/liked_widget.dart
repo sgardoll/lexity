@@ -248,16 +248,19 @@ class _LikedWidgetState extends State<LikedWidget> {
                                               builder: (context) =>
                                                   FlutterFlowIconButton(
                                                 buttonSize: 60.0,
-                                                icon: Icon(
-                                                  Icons.bookmark_remove_sharp,
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .error,
-                                                  size: 24.0,
+                                                icon: Tooltip(
+                                                  message: 'Share',
+                                                  child: Icon(
+                                                    Icons.share,
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .accent4,
+                                                    size: 24.0,
+                                                  ),
                                                 ),
                                                 onPressed: () async {
                                                   logFirebaseEvent(
-                                                      'LIKED_bookmark_remove_sharp_ICN_ON_TAP');
+                                                      'LIKED_share_ICN_ON_TAP');
                                                   logFirebaseEvent(
                                                       'IconButton_backend_call');
                                                   unawaited(
