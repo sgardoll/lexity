@@ -38,6 +38,10 @@ class UserTokenInfo {
   final String fcmToken;
 }
 
+// Value doubles as the local enabled flag: the settings toggle adds true/false
+// to opt in or out; permission prompts re-emit the current value purely as a
+// re-evaluation trigger. Gating on it closes the window where deleteToken()'s
+// replacement arrives before the settings write is visible server-side.
 final kNotificationsBehaviorSubject = BehaviorSubject<bool>.seeded(true);
 
 Stream<UserTokenInfo> getFcmTokenStream(String userPath) =>
@@ -46,7 +50,10 @@ Stream<UserTokenInfo> getFcmTokenStream(String userPath) =>
             kIsWeb ||
             defaultTargetPlatform == TargetPlatform.iOS ||
             defaultTargetPlatform == TargetPlatform.android)
-        .asyncMap<String?>((_) async {
+        .asyncMap<String?>((enabled) async {
+          if (!enabled) {
+            return null;
+          }
           if (kIsWeb && !await FirebaseMessaging.instance.isSupported()) {
             return null;
           }
@@ -63,8 +70,11 @@ Stream<UserTokenInfo> getFcmTokenStream(String userPath) =>
         .switchMap((fcmToken) => Stream.value(fcmToken)
             .merge(FirebaseMessaging.instance.onTokenRefresh))
         .where((fcmToken) => fcmToken != null && fcmToken.isNotEmpty)
-        // The preference check runs after the merge so a token refresh
-        // emitted while notifications are off cannot re-register either.
+        // The local flag gates first — a token refresh emitted by deleteToken()
+        // must not re-register while notifications are off — then the saved
+        // preference is checked after the merge so a refresh emitted while off
+        // cannot re-register either.
+        .where((_) => kNotificationsBehaviorSubject.value)
         .asyncMap<String?>((token) async =>
             await _notificationsEnabled(userPath) ? token : null)
         .where((token) => token != null)

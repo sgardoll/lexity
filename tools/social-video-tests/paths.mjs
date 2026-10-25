@@ -66,16 +66,23 @@ export const buildshipRepoRevision = (() => {
   }
 })();
 
-const expectedRevision = process.env.BUILDSHIP_REPO_REVISION?.trim();
-if (expectedRevision && buildshipRepoRevision !== expectedRevision) {
-  throw new Error(
-    [
-      `BUILDSHIP_REPO_REVISION pins these tests to ${expectedRevision} but`,
-      `${buildshipRepo} is at ${buildshipRepoRevision ?? "(not a git checkout)"}.`,
-      "Check out the pinned revision or update the pin — passing against the",
-      "wrong node sources is exactly what this guard exists to prevent.",
-    ].join("\n"),
-  );
+const expectedRevision = process.env.BUILDSHIP_REPO_REVISION?.trim().toLowerCase();
+if (expectedRevision) {
+  // Full or short SHAs both pin — compare as a prefix against the resolved
+  // HEAD. Anything shorter than 4 chars can't pin meaningfully.
+  const validPin = /^[0-9a-f]{4,40}$/.test(expectedRevision);
+  const matches =
+    validPin && buildshipRepoRevision?.startsWith(expectedRevision) === true;
+  if (!matches) {
+    throw new Error(
+      [
+        `BUILDSHIP_REPO_REVISION pins these tests to ${expectedRevision} but`,
+        `${buildshipRepo} is at ${buildshipRepoRevision ?? "(not a git checkout)"}.`,
+        "Check out the pinned revision or update the pin — passing against the",
+        "wrong node sources is exactly what this guard exists to prevent.",
+      ].join("\n"),
+    );
+  }
 }
 
 /** Absolute path to a custom node's entry module. */

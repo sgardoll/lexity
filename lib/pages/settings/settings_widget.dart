@@ -174,8 +174,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                       : null;
                               // The account record is the one shared source
                               // for the sound preference — autoplay must read
-                              // the same value the switch shows.
+                              // the same value the switch shows. Older
+                              // documents may not carry soundOn at all —
+                              // don't overwrite the local preference with
+                              // the record's absent-field default.
                               if (containerSettingsRecord != null &&
+                                  containerSettingsRecord.hasSoundOn() &&
                                   FFAppState().isSoundOn !=
                                       containerSettingsRecord.soundOn) {
                                 FFAppState().isSoundOn =
@@ -214,8 +218,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                       ),
                                       Switch.adaptive(
                                         value: _model.switchValue1 ??
-                                            containerSettingsRecord?.soundOn ??
-                                            FFAppState().isSoundOn,
+                                            (containerSettingsRecord
+                                                        ?.hasSoundOn() ==
+                                                    true
+                                                ? containerSettingsRecord!
+                                                    .soundOn
+                                                : FFAppState().isSoundOn),
                                         onChanged: (newValue) async {
                                           safeSetState(() =>
                                               _model.switchValue1 = newValue);
@@ -283,9 +291,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                       ),
                                       Switch.adaptive(
                                         value: _model.switchValue2 ??
-                                            containerSettingsRecord
-                                                ?.notificationsOn ??
-                                            false,
+                                            (containerSettingsRecord
+                                                        ?.hasNotificationsOn() ==
+                                                    true
+                                                ? containerSettingsRecord!
+                                                    .notificationsOn
+                                                : false),
                                         onChanged: (newValue) async {
                                           safeSetState(() =>
                                               _model.switchValue2 = newValue);
@@ -307,7 +318,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                             // Register this device's token
                                             // now the preference allows it.
                                             kNotificationsBehaviorSubject
-                                                .add(false);
+                                                .add(true);
                                             logFirebaseEvent(
                                                 'Switch_rebuild_page');
                                             safeSetState(() {});
@@ -322,15 +333,14 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                                   notificationsOn: false,
                                                 ),
                                                 SetOptions(merge: true));
-                                            // Invalidate the device's token
-                                            // and stop the registration
-                                            // stream re-adding it — a
-                                            // permitted device must not keep
-                                            // receiving pushes.
-                                            await FirebaseMessaging.instance
-                                                .deleteToken();
+                                            // Flag off BEFORE invalidating
+                                            // the device token — a refresh
+                                            // emitted by deleteToken() must
+                                            // not re-register while off.
                                             kNotificationsBehaviorSubject
                                                 .add(false);
+                                            await FirebaseMessaging.instance
+                                                .deleteToken();
                                             logFirebaseEvent(
                                                 'Switch_rebuild_page');
                                             safeSetState(() {});
