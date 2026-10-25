@@ -1,19 +1,12 @@
-import '/components/tutorial_card_copy_widget.dart';
 import '/components/tutorial_card_widget.dart';
+import '/components/tutorial_cardw_logo_widget.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
-import 'dart:math';
-import 'dart:ui';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart'
     as smooth_page_indicator;
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'onboarding_tap_walkthrough_model.dart';
 export 'onboarding_tap_walkthrough_model.dart';
 
@@ -199,9 +192,9 @@ class _OnboardingTapWalkthroughWidgetState
                             child: Container(
                               decoration: BoxDecoration(),
                               child: wrapWithModel(
-                                model: _model.tutorialCardCopyModel,
+                                model: _model.tutorialCardwLogoModel,
                                 updateCallback: () => safeSetState(() {}),
-                                child: TutorialCardCopyWidget(
+                                child: TutorialCardwLogoWidget(
                                   cardBg: FlutterFlowTheme.of(context)
                                       .secondaryBackground,
                                   description:

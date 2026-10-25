@@ -4,14 +4,71 @@ service cloud.firestore {
     match /lexicon/{document} {
       allow create: if false;
       allow read: if request.auth != null;
-      allow write: if request.auth != null;
+      // Lexicon content is curated. Signed-in clients may only add or remove
+      // their own user reference in the likedBy/sharedBy arrays — every other
+      // field, and other users' entries, stay read-only. Per array a write may
+      // either leave it exactly as it is (order and contents identical) or add
+      // or remove exactly one entry — the caller's own user reference — so
+      // reordering or duplicating others' entries is also denied.
+      allow update: if request.auth != null
+        && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['likedBy', 'sharedBy'])
+        && (
+          request.resource.data.get('likedBy', []) == resource.data.get('likedBy', [])
+          || (
+            request.resource.data.get('likedBy', []).size()
+                == resource.data.get('likedBy', []).size() + 1
+            && request.resource.data.get('likedBy', []).toSet().size()
+                == request.resource.data.get('likedBy', []).size()
+            && request.resource.data.get('likedBy', []).toSet()
+                .difference(resource.data.get('likedBy', []).toSet())
+                .hasOnly([/databases/$(database)/documents/users/$(request.auth.uid)])
+          ) || (
+            resource.data.get('likedBy', []).size()
+                == request.resource.data.get('likedBy', []).size() + 1
+            && resource.data.get('likedBy', []).toSet()
+                .difference(request.resource.data.get('likedBy', []).toSet())
+                .hasOnly([/databases/$(database)/documents/users/$(request.auth.uid)])
+          )
+        )
+        && (
+          request.resource.data.get('sharedBy', []) == resource.data.get('sharedBy', [])
+          || (
+            request.resource.data.get('sharedBy', []).size()
+                == resource.data.get('sharedBy', []).size() + 1
+            && request.resource.data.get('sharedBy', []).toSet().size()
+                == request.resource.data.get('sharedBy', []).size()
+            && request.resource.data.get('sharedBy', []).toSet()
+                .difference(resource.data.get('sharedBy', []).toSet())
+                .hasOnly([/databases/$(database)/documents/users/$(request.auth.uid)])
+          ) || (
+            resource.data.get('sharedBy', []).size()
+                == request.resource.data.get('sharedBy', []).size() + 1
+            && resource.data.get('sharedBy', []).toSet()
+                .difference(request.resource.data.get('sharedBy', []).toSet())
+                .hasOnly([/databases/$(database)/documents/users/$(request.auth.uid)])
+          )
+        );
       allow delete: if false;
     }
 
     match /users/{document} {
       allow create: if request.auth.uid == document;
-      allow read: if true;
+      allow read: if request.auth.uid == document;
       allow write: if request.auth.uid == document;
+      allow delete: if request.auth.uid == resource.data.uid;
+    }
+
+    match /settings/{document} {
+      allow create: if request.auth.uid == request.resource.data.uid;
+      // Let an account check for its own settings before first-time creation.
+      allow get: if request.auth != null && request.auth.uid == document
+        && !exists(/databases/$(database)/documents/settings/$(document));
+      allow read: if request.auth.uid == resource.data.uid;
+      // The owner may update their settings but may not reassign the uid —
+      // ownership of a document must not be transferable.
+      allow update: if request.auth.uid == resource.data.uid
+        && request.resource.data.uid == resource.data.uid;
       allow delete: if request.auth.uid == resource.data.uid;
     }
   }

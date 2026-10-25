@@ -3,24 +3,16 @@ import '/cards/card_back/card_back_widget.dart';
 import '/cards/front/front_widget.dart';
 import '/components/blank/blank_widget.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
-import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_swipeable_stack.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
-import 'dart:math';
-import 'dart:ui';
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/flutter_flow/permissions_util.dart';
-import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'start_model.dart';
 export 'start_model.dart';
 
@@ -194,270 +186,80 @@ class _StartWidgetState extends State<StartWidget>
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).primaryText,
-            endDrawer: Container(
-              width: MediaQuery.sizeOf(context).width * 0.3,
-              child: Drawer(
-                elevation: 0.0,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Flexible(
-                      child: Container(
-                        width: MediaQuery.sizeOf(context).width * 0.3,
-                        height: MediaQuery.sizeOf(context).height * 1.0,
-                        decoration: BoxDecoration(
-                          color: Color(0x80000000),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 75.0, 0.0, 75.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Flexible(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Flexible(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          FlutterFlowIconButton(
-                                            borderRadius: 100.0,
-                                            buttonSize: 75.0,
-                                            fillColor:
-                                                FlutterFlowTheme.of(context)
-                                                    .primaryText,
-                                            icon: Icon(
-                                              Icons.favorite_sharp,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .info,
-                                              size: 35.0,
-                                            ),
-                                            onPressed: () async {
-                                              logFirebaseEvent(
-                                                  'START_PAGE_favorite_sharp_ICN_ON_TAP');
-                                              logFirebaseEvent(
-                                                  'IconButton_navigate_to');
+            body: Container(
+              width: double.infinity,
+              child: Stack(
+                children: [
+                  Builder(
+                    builder: (context) {
+                      final lexicon = functions
+                              .rotateLexiconToId(
+                                  startLexiconRecordList.toList(), widget.id)
+                              ?.toList() ??
+                          [];
+                      if (lexicon.isEmpty) {
+                        return Center(
+                          child: BlankWidget(),
+                        );
+                      }
 
-                                              context.pushNamed(
-                                                  LikedWidget.routeName);
-                                            },
-                                          ),
-                                          Text(
-                                            'Your Liked Words',
-                                            textAlign: TextAlign.center,
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'BlauerNue',
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .secondaryBackground,
-                                                  letterSpacing: 0.0,
-                                                ),
-                                          ),
-                                        ].divide(SizedBox(height: 4.0)),
-                                      ),
-                                    ),
-                                    Flexible(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          FlutterFlowIconButton(
-                                            borderColor: Colors.transparent,
-                                            borderRadius: 100.0,
-                                            buttonSize: 75.0,
-                                            fillColor:
-                                                FlutterFlowTheme.of(context)
-                                                    .primaryText,
-                                            icon: Icon(
-                                              Icons.settings,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .info,
-                                              size: 35.0,
-                                            ),
-                                            onPressed: () async {
-                                              logFirebaseEvent(
-                                                  'START_PAGE_settings_ICN_ON_TAP');
-                                              logFirebaseEvent(
-                                                  'IconButton_navigate_to');
-
-                                              context.pushNamed(
-                                                  SettingsWidget.routeName);
-                                            },
-                                          ),
-                                          Text(
-                                            'Settings',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'BlauerNue',
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .secondaryBackground,
-                                                  letterSpacing: 0.0,
-                                                ),
-                                          ),
-                                        ].divide(SizedBox(height: 4.0)),
-                                      ),
-                                    ),
-                                  ].divide(SizedBox(height: 40.0)),
-                                ),
-                              ),
-                              Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  FlutterFlowIconButton(
-                                    borderColor: Colors.transparent,
-                                    borderRadius: 100.0,
-                                    buttonSize: 75.0,
-                                    fillColor: FlutterFlowTheme.of(context)
-                                        .primaryText,
-                                    icon: Icon(
-                                      Icons.close_outlined,
-                                      color: FlutterFlowTheme.of(context).info,
-                                      size: 35.0,
-                                    ),
-                                    onPressed: () async {
-                                      logFirebaseEvent(
-                                          'START_PAGE_close_outlined_ICN_ON_TAP');
-                                      logFirebaseEvent(
-                                          'IconButton_widget_animation');
-                                      if (animationsMap[
-                                              'stackOnActionTriggerAnimation'] !=
-                                          null) {
-                                        await animationsMap[
-                                                'stackOnActionTriggerAnimation']!
-                                            .controller
-                                            .reverse();
-                                      }
-                                      logFirebaseEvent('IconButton_drawer');
-                                      if (scaffoldKey
-                                              .currentState!.isDrawerOpen ||
-                                          scaffoldKey
-                                              .currentState!.isEndDrawerOpen) {
-                                        Navigator.pop(context);
-                                      }
-                                    },
-                                  ),
-                                  Text(
-                                    'Close',
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          fontFamily: 'BlauerNue',
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                          letterSpacing: 0.0,
-                                        ),
-                                  ),
-                                ].divide(SizedBox(height: 4.0)),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            body: Stack(
-              children: [
-                Builder(
-                  builder: (context) {
-                    final lexicon = functions
-                            .rotateLexiconToId(
-                                startLexiconRecordList.toList(), widget!.id)
-                            ?.toList() ??
-                        [];
-                    if (lexicon.isEmpty) {
-                      return Center(
-                        child: BlankWidget(),
-                      );
-                    }
-
-                    return FlutterFlowSwipeableStack(
-                      onSwipeFn: (lexiconIndex) async {
-                        logFirebaseEvent(
-                            'START_SwipeableStack_btxgacya_ON_WIDGET_');
-                        final lexiconItem = lexicon[lexiconIndex];
-                        logFirebaseEvent('SwipeableStack_haptic_feedback');
-                        HapticFeedback.mediumImpact();
-                        if (_model.frontOfCardShowing) {
-                          logFirebaseEvent('SwipeableStack_update_page_state');
-                          _model.previousBgColor = colorFromCssString(
-                            lexicon[lexiconIndex]!.colours.lightMuted,
-                            defaultColor: Colors.black,
-                          );
-                          _model.bgColor = colorFromCssString(
-                            lexicon[lexiconIndex]!.colours.darkMuted,
-                            defaultColor: Colors.black,
-                          );
-                          safeSetState(() {});
-                        } else {
-                          logFirebaseEvent('SwipeableStack_update_page_state');
-                          _model.frontOfCardShowing =
-                              !_model.frontOfCardShowing;
-                          safeSetState(() {});
-                          logFirebaseEvent('SwipeableStack_update_page_state');
-                          _model.previousBgColor = colorFromCssString(
-                            lexicon[lexiconIndex]!.colours.lightMuted,
-                            defaultColor: Colors.black,
-                          );
-                          _model.bgColor = colorFromCssString(
-                            lexicon[lexiconIndex]!.colours.darkMuted,
-                            defaultColor: Colors.black,
-                          );
-                          _model.cardIndex = 0;
-                          safeSetState(() {});
-                          logFirebaseEvent('SwipeableStack_navigate_to');
-
-                          context.goNamed(
-                            StartWidget.routeName,
-                            extra: <String, dynamic>{
-                              '__transition_info__': TransitionInfo(
-                                hasTransition: true,
-                                transitionType: PageTransitionType.fade,
-                              ),
-                            },
-                          );
-                        }
-                      },
-                      onLeftSwipe: (lexiconIndex) {},
-                      onRightSwipe: (lexiconIndex) {},
-                      onUpSwipe: (lexiconIndex) {},
-                      onDownSwipe: (lexiconIndex) {},
-                      itemBuilder: (context, lexiconIndex) {
-                        final lexiconItem = lexicon[lexiconIndex];
-                        return InkWell(
-                          splashColor: Colors.transparent,
-                          focusColor: Colors.transparent,
-                          hoverColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onLongPress: () async {
+                      return FlutterFlowSwipeableStack(
+                        onSwipeFn: (lexiconIndex) async {
+                          logFirebaseEvent(
+                              'START_SwipeableStack_btxgacya_ON_WIDGET_');
+                          final lexiconItem = lexicon[lexiconIndex];
+                          logFirebaseEvent('SwipeableStack_haptic_feedback');
+                          HapticFeedback.mediumImpact();
+                          if (_model.frontOfCardShowing) {
                             logFirebaseEvent(
-                                'START_PAGE_StackTilt_ON_LONG_PRESS');
-                            logFirebaseEvent('StackTilt_haptic_feedback');
-                            HapticFeedback.heavyImpact();
-                            logFirebaseEvent('StackTilt_widget_animation');
-                            if (animationsMap[
-                                    'stackOnActionTriggerAnimation'] !=
-                                null) {
-                              animationsMap['stackOnActionTriggerAnimation']!
-                                  .controller
-                                  .forward(from: 0.0);
-                            }
-                            logFirebaseEvent('StackTilt_drawer');
-                            scaffoldKey.currentState!.openEndDrawer();
-                          },
-                          child: Stack(
+                                'SwipeableStack_update_page_state');
+                            _model.previousBgColor = colorFromCssString(
+                              lexicon[lexiconIndex].colours.lightMuted,
+                              defaultColor: Colors.black,
+                            );
+                            _model.bgColor = colorFromCssString(
+                              lexicon[lexiconIndex].colours.darkMuted,
+                              defaultColor: Colors.black,
+                            );
+                            safeSetState(() {});
+                          } else {
+                            logFirebaseEvent(
+                                'SwipeableStack_update_page_state');
+                            _model.frontOfCardShowing =
+                                !_model.frontOfCardShowing;
+                            safeSetState(() {});
+                            logFirebaseEvent(
+                                'SwipeableStack_update_page_state');
+                            _model.previousBgColor = colorFromCssString(
+                              lexicon[lexiconIndex].colours.lightMuted,
+                              defaultColor: Colors.black,
+                            );
+                            _model.bgColor = colorFromCssString(
+                              lexicon[lexiconIndex].colours.darkMuted,
+                              defaultColor: Colors.black,
+                            );
+                            _model.cardIndex = 0;
+                            safeSetState(() {});
+                            logFirebaseEvent('SwipeableStack_navigate_to');
+
+                            context.goNamed(
+                              StartWidget.routeName,
+                              extra: <String, dynamic>{
+                                '__transition_info__': TransitionInfo(
+                                  hasTransition: true,
+                                  transitionType: PageTransitionType.fade,
+                                ),
+                              },
+                            );
+                          }
+                        },
+                        onLeftSwipe: (lexiconIndex) {},
+                        onRightSwipe: (lexiconIndex) {},
+                        onUpSwipe: (lexiconIndex) {},
+                        onDownSwipe: (lexiconIndex) {},
+                        itemBuilder: (context, lexiconIndex) {
+                          final lexiconItem = lexicon[lexiconIndex];
+                          return Stack(
                             alignment: AlignmentDirectional(0.0, 1.0),
                             children: [
                               AnimatedContainer(
@@ -522,10 +324,10 @@ class _StartWidgetState extends State<StartWidget>
                                       logFirebaseEvent(
                                           'START_PAGE_Container_qduthaoz_CALLBACK');
                                       logFirebaseEvent('CardBack_navigate_to');
-                                      if (Navigator.of(context).canPop()) {
-                                        context.pop();
-                                      }
-                                      context.pushNamed(
+                                      // Replace the current location — popping
+                                      // first left pushNamed with a defunct
+                                      // context when nothing was left to pop.
+                                      context.goNamed(
                                         StartWidget.routeName,
                                         extra: <String, dynamic>{
                                           '__transition_info__': TransitionInfo(
@@ -595,23 +397,23 @@ class _StartWidgetState extends State<StartWidget>
                                   ),
                                 ),
                             ],
-                          ),
-                        ).animateOnActionTrigger(
-                          animationsMap['stackOnActionTriggerAnimation']!,
-                        );
-                      },
-                      itemCount: lexicon.length,
-                      controller: _model.swipeableStackController,
-                      loop: true,
-                      cardDisplayCount: 1,
-                      scale: 0.9,
-                      cardPadding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                    ).animateOnPageLoad(
-                        animationsMap['swipeableStackOnPageLoadAnimation']!);
-                  },
-                ),
-              ],
+                          ).animateOnActionTrigger(
+                            animationsMap['stackOnActionTriggerAnimation']!,
+                          );
+                        },
+                        itemCount: lexicon.length,
+                        controller: _model.swipeableStackController,
+                        loop: true,
+                        cardDisplayCount: 1,
+                        scale: 0.9,
+                        cardPadding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                      ).animateOnPageLoad(
+                          animationsMap['swipeableStackOnPageLoadAnimation']!);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         );

@@ -1,17 +1,10 @@
 import '/auth/firebase_auth/auth_util.dart';
-import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import 'dart:ui';
 import '/index.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'create_account_model.dart';
 export 'create_account_model.dart';
 
@@ -43,29 +36,6 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
         parameters: {'screen_name': 'CreateAccount'});
     _model.emailTextController ??= TextEditingController();
     _model.textFieldFocusNode1 ??= FocusNode();
-    _model.textFieldFocusNode1!.addListener(
-      () async {
-        logFirebaseEvent('CREATE_ACCOUNT_TextField_e1p2fa09_ON_FOC');
-        logFirebaseEvent('TextField_firestore_query');
-        _model.queryUser = await queryUsersRecordCount(
-          queryBuilder: (usersRecord) => usersRecord.where(
-            'email',
-            isEqualTo: _model.emailTextController.text,
-          ),
-        );
-        if (_model.queryUser! >= 1) {
-          logFirebaseEvent('TextField_update_page_state');
-          _model.isCurrentUser = true;
-          safeSetState(() {});
-        } else {
-          logFirebaseEvent('TextField_update_page_state');
-          _model.isCurrentUser = false;
-          safeSetState(() {});
-        }
-
-        safeSetState(() {});
-      },
-    );
     _model.passwordTextController ??= TextEditingController();
     _model.textFieldFocusNode2 ??= FocusNode();
 
@@ -259,7 +229,9 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                                         _model.passwordVisibility1 =
                                             !_model.passwordVisibility1);
                                   },
-                                  focusNode: FocusNode(skipTraversal: true),
+                                  focusNode: _model
+                                      .textFieldPasswordVisibilityFocusNode2
+                                    ..skipTraversal = !(false),
                                   child: Icon(
                                     _model.passwordVisibility1
                                         ? Icons.visibility_outlined
@@ -339,7 +311,9 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                                           _model.passwordVisibility2 =
                                               !_model.passwordVisibility2);
                                     },
-                                    focusNode: FocusNode(skipTraversal: true),
+                                    focusNode: _model
+                                        .textFieldPasswordVisibilityFocusNode3
+                                      ..skipTraversal = !(false),
                                     child: Icon(
                                       _model.passwordVisibility2
                                           ? Icons.visibility_outlined
@@ -376,6 +350,26 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                                         context,
                                         _model.emailTextController.text,
                                         _model.passwordTextController.text,
+                                        onAuthError: (e) {
+                                          // The account no longer exists
+                                          // (deleted, or a typo'd email) —
+                                          // offer to create it instead.
+                                          if (e.code != 'user-not-found') {
+                                            return false;
+                                          }
+                                          _model.isCurrentUser = false;
+                                          safeSetState(() {});
+                                          ScaffoldMessenger.of(context)
+                                              .hideCurrentSnackBar();
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                  'No account found for this email — create one below.'),
+                                            ),
+                                          );
+                                          return true;
+                                        },
                                       );
                                       if (user == null) {
                                         return;
@@ -439,6 +433,26 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                                         context,
                                         _model.emailTextController.text,
                                         _model.passwordTextController.text,
+                                        onAuthError: (e) {
+                                          // The account exists after all
+                                          // (the email lookup missed it) —
+                                          // switch to Login.
+                                          if (e.code != 'email-already-in-use') {
+                                            return false;
+                                          }
+                                          _model.isCurrentUser = true;
+                                          safeSetState(() {});
+                                          ScaffoldMessenger.of(context)
+                                              .hideCurrentSnackBar();
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                  'That email already has an account — log in instead.'),
+                                            ),
+                                          );
+                                          return true;
+                                        },
                                       );
                                       if (user == null) {
                                         return;
@@ -540,7 +554,10 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                                     },
                                     text: 'Sign in with Google',
                                     icon: FaIcon(
-                                      FontAwesomeIcons.google,
+                                      FaIconData(const IconData(
+                                          /* google */ 0xf1a0,
+                                          fontFamily: 'FontAwesomeBrands',
+                                          fontPackage: 'font_awesome_flutter')),
                                       size: 15.0,
                                     ),
                                     options: FFButtonOptions(
@@ -592,7 +609,11 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                                           },
                                           text: 'Sign in with Apple',
                                           icon: FaIcon(
-                                            FontAwesomeIcons.apple,
+                                            FaIconData(const IconData(
+                                                /* apple */ 0xf179,
+                                                fontFamily: 'FontAwesomeBrands',
+                                                fontPackage:
+                                                    'font_awesome_flutter')),
                                             size: 15.0,
                                           ),
                                           options: FFButtonOptions(

@@ -4,12 +4,9 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../auth_manager.dart';
-import '../base_auth_user_provider.dart';
 import '../../flutter_flow/flutter_flow_util.dart';
 
 import '/backend/backend.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:stream_transform/stream_transform.dart';
 import 'anonymous_auth.dart';
 import 'apple_auth.dart';
 import 'email_auth.dart';
@@ -96,7 +93,6 @@ class FirebaseAuthManager extends AuthManager
         return;
       }
       await currentUser?.updateEmail(email);
-      await updateUserDocument(email: email);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'requires-recent-login') {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -153,24 +149,28 @@ class FirebaseAuthManager extends AuthManager
   Future<BaseAuthUser?> signInWithEmail(
     BuildContext context,
     String email,
-    String password,
-  ) =>
+    String password, {
+    AuthErrorHandler? onAuthError,
+  }) =>
       _signInOrCreateAccount(
         context,
         () => emailSignInFunc(email, password),
         'EMAIL',
+        onAuthError: onAuthError,
       );
 
   @override
   Future<BaseAuthUser?> createAccountWithEmail(
     BuildContext context,
     String email,
-    String password,
-  ) =>
+    String password, {
+    AuthErrorHandler? onAuthError,
+  }) =>
       _signInOrCreateAccount(
         context,
         () => emailCreateAccountFunc(email, password),
         'EMAIL',
+        onAuthError: onAuthError,
       );
 
   @override
@@ -327,8 +327,9 @@ class FirebaseAuthManager extends AuthManager
   Future<BaseAuthUser?> _signInOrCreateAccount(
     BuildContext context,
     Future<UserCredential?> Function() signInFunc,
-    String authProvider,
-  ) async {
+    String authProvider, {
+    AuthErrorHandler? onAuthError,
+  }) async {
     try {
       final userCredential = await signInFunc();
       logFirebaseAuthEvent(userCredential?.user, authProvider);
@@ -339,10 +340,15 @@ class FirebaseAuthManager extends AuthManager
           ? null
           : LexityFirebaseUser.fromUserCredential(userCredential);
     } on FirebaseAuthException catch (e) {
+      if (onAuthError?.call(e) == true) {
+        return null;
+      }
       final errorMsg = switch (e.code) {
         'email-already-in-use' =>
           'Error: The email is already in use by a different account',
-        'INVALID_LOGIN_CREDENTIALS' =>
+        'INVALID_LOGIN_CREDENTIALS' ||
+        'invalid-login-credentials' ||
+        'invalid-credential' =>
           'Error: The supplied auth credential is incorrect, malformed or has expired',
         _ => 'Error: ${e.message!}',
       };

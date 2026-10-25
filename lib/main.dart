@@ -1,10 +1,10 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'auth/firebase_auth/firebase_user_provider.dart';
 import 'auth/firebase_auth/auth_util.dart';
 
@@ -12,14 +12,19 @@ import 'backend/push_notifications/push_notifications_util.dart';
 import 'backend/firebase/firebase_config.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'flutter_flow/nav/nav.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'index.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (isAndroid) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent),
+    );
+  }
   GoRouter.optionURLReflectsImperativeAPIs = true;
   usePathUrlStrategy();
 
@@ -132,6 +137,113 @@ class _MyAppState extends State<MyApp> {
       ),
       themeMode: _themeMode,
       routerConfig: _router,
+    );
+  }
+}
+
+class NavBarPage extends StatefulWidget {
+  NavBarPage({
+    Key? key,
+    this.initialPage,
+    this.page,
+    this.disableResizeToAvoidBottomInset = false,
+  }) : super(key: key);
+
+  final String? initialPage;
+  final Widget? page;
+  final bool disableResizeToAvoidBottomInset;
+
+  @override
+  _NavBarPageState createState() => _NavBarPageState();
+}
+
+/// This is the private State class that goes with NavBarPage.
+class _NavBarPageState extends State<NavBarPage> {
+  String _currentPageName = 'start';
+  late Widget? _currentPage;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentPageName = widget.initialPage ?? _currentPageName;
+    _currentPage = widget.page;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final tabs = {
+      'settings': SettingsWidget(),
+      'start': StartWidget(),
+      'liked': LikedWidget(),
+    };
+    final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
+
+    return Scaffold(
+      resizeToAvoidBottomInset: !widget.disableResizeToAvoidBottomInset,
+      body: _currentPage ?? tabs[_currentPageName],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
+        onTap: (i) => safeSetState(() {
+          _currentPage = null;
+          _currentPageName = tabs.keys.toList()[i];
+        }),
+        backgroundColor: FlutterFlowTheme.of(context).primaryText,
+        selectedItemColor: FlutterFlowTheme.of(context).alternate,
+        unselectedItemColor: Color(0x83928163),
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        type: BottomNavigationBarType.fixed,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: FaIcon(
+              FaIconData(const IconData(/* starOfLife */ 0xf621,
+                  fontFamily: 'FontAwesomeSolid',
+                  fontPackage: 'font_awesome_flutter')),
+              size: 18.0,
+            ),
+            activeIcon: FaIcon(
+              FaIconData(const IconData(/* starOfLife */ 0xf621,
+                  fontFamily: 'FontAwesomeSolid',
+                  fontPackage: 'font_awesome_flutter')),
+              size: 24.0,
+            ),
+            label: 'Settings',
+            tooltip: '',
+          ),
+          BottomNavigationBarItem(
+            icon: FaIcon(
+              FaIconData(const IconData(/* home */ 0xf015,
+                  fontFamily: 'FontAwesomeRegular',
+                  fontPackage: 'font_awesome_flutter')),
+              size: 18.0,
+            ),
+            activeIcon: FaIcon(
+              FaIconData(const IconData(/* home */ 0xf015,
+                  fontFamily: 'FontAwesomeRegular',
+                  fontPackage: 'font_awesome_flutter')),
+              size: 24.0,
+            ),
+            label: 'Home',
+            tooltip: '',
+          ),
+          BottomNavigationBarItem(
+            icon: FaIcon(
+              FaIconData(const IconData(/* userAlt */ 0xf007,
+                  fontFamily: 'FontAwesomeRegular',
+                  fontPackage: 'font_awesome_flutter')),
+              size: 18.0,
+            ),
+            activeIcon: FaIcon(
+              FaIconData(const IconData(/* userAlt */ 0xf007,
+                  fontFamily: 'FontAwesomeRegular',
+                  fontPackage: 'font_awesome_flutter')),
+              size: 24.0,
+            ),
+            label: 'Me',
+            tooltip: '',
+          )
+        ],
+      ),
     );
   }
 }

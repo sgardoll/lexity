@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
-import '/backend/backend.dart';
-import '/backend/schema/structs/index.dart';
+import 'package:flutter/material.dart'
+    show ChangeNotifier, Color, Colors, VoidCallback;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'flutter_flow/flutter_flow_util.dart';
 
 class FFAppState extends ChangeNotifier {
   static FFAppState _instance = FFAppState._internal();
@@ -20,6 +18,9 @@ class FFAppState extends ChangeNotifier {
   Future initializePersistedState() async {
     prefs = await SharedPreferences.getInstance();
     _safeInit(() {
+      _isSoundOn = prefs.getBool('ff_isSoundOn') ?? _isSoundOn;
+    });
+    _safeInit(() {
       _showHowToNavigate =
           prefs.getBool('ff_showHowToNavigate') ?? _showHowToNavigate;
     });
@@ -32,10 +33,11 @@ class FFAppState extends ChangeNotifier {
 
   late SharedPreferences prefs;
 
-  bool _isSoundEnabled = false;
-  bool get isSoundEnabled => _isSoundEnabled;
-  set isSoundEnabled(bool value) {
-    _isSoundEnabled = value;
+  bool _isSoundOn = true;
+  bool get isSoundOn => _isSoundOn;
+  set isSoundOn(bool value) {
+    _isSoundOn = value;
+    prefs.setBool('ff_isSoundOn', value);
   }
 
   bool _showHowToNavigate = true;

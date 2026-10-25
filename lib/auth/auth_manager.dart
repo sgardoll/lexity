@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'base_auth_user_provider.dart';
@@ -11,18 +12,24 @@ abstract class AuthManager {
   Future refreshUser() async => currentUser?.refreshUser();
 }
 
+/// Called with the [FirebaseAuthException] a sign-in attempt failed with.
+/// Returning true marks the error as handled: no default SnackBar is shown.
+typedef AuthErrorHandler = bool Function(FirebaseAuthException error);
+
 mixin EmailSignInManager on AuthManager {
   Future<BaseAuthUser?> signInWithEmail(
     BuildContext context,
     String email,
-    String password,
-  );
+    String password, {
+    AuthErrorHandler? onAuthError,
+  });
 
   Future<BaseAuthUser?> createAccountWithEmail(
     BuildContext context,
     String email,
-    String password,
-  );
+    String password, {
+    AuthErrorHandler? onAuthError,
+  });
 }
 
 mixin AnonymousSignInManager on AuthManager {
