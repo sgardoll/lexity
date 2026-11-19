@@ -2,18 +2,13 @@ import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:async';
-import 'dart:math';
-import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:provider/provider.dart';
@@ -101,7 +96,8 @@ class _FrontWidgetState extends State<FrontWidget>
             .controller
             .forward(from: 0.0);
       }
-      if (widget!.doc!.hasTermSpoken()) {
+      // Has audio & app state soundOn=true
+      if (widget.doc!.hasTermSpoken() && FFAppState().isSoundOn) {
         logFirebaseEvent('Front_wait__delay');
         await Future.delayed(
           Duration(
@@ -118,7 +114,7 @@ class _FrontWidgetState extends State<FrontWidget>
         }
         _model.soundPlayer!.setVolume(1.0);
         await _model.soundPlayer!
-            .setUrl(widget!.doc!.termSpoken)
+            .setUrl(widget.doc!.termSpoken)
             .then((_) => _model.soundPlayer!.play());
 
         logFirebaseEvent('Front_update_component_state');
@@ -387,6 +383,8 @@ class _FrontWidgetState extends State<FrontWidget>
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Stack(
       children: [
         Container(
@@ -394,7 +392,7 @@ class _FrontWidgetState extends State<FrontWidget>
           height: MediaQuery.sizeOf(context).height * 1.0,
           decoration: BoxDecoration(
             color: colorFromCssString(
-              widget!.mainTextColour!,
+              widget.mainTextColour!,
               defaultColor: FlutterFlowTheme.of(context).accent1,
             ),
             border: Border.all(
@@ -440,7 +438,7 @@ class _FrontWidgetState extends State<FrontWidget>
               children: [
                 Padding(
                   padding:
-                      EdgeInsetsDirectional.fromSTEB(16.0, 53.0, 16.0, 48.0),
+                      EdgeInsetsDirectional.fromSTEB(16.0, 53.0, 16.0, 24.0),
                   child: Container(
                     width: MediaQuery.sizeOf(context).width * 1.0,
                     height: MediaQuery.sizeOf(context).height * 1.0,
@@ -449,7 +447,7 @@ class _FrontWidgetState extends State<FrontWidget>
                         BoxShadow(
                           blurRadius: 8.0,
                           color: colorFromCssString(
-                            widget!.mainTextColour!,
+                            widget.mainTextColour!,
                             defaultColor: Color(0x31000000),
                           ),
                           offset: Offset(
@@ -462,12 +460,12 @@ class _FrontWidgetState extends State<FrontWidget>
                       gradient: LinearGradient(
                         colors: [
                           colorFromCssString(
-                            widget!.originTextColour!,
+                            widget.originTextColour!,
                             defaultColor:
                                 FlutterFlowTheme.of(context).alternate,
                           ),
                           colorFromCssString(
-                            widget!.mainTextColour!,
+                            widget.mainTextColour!,
                             defaultColor: Color(0x31000000),
                           )
                         ],
@@ -486,13 +484,13 @@ class _FrontWidgetState extends State<FrontWidget>
                       padding:
                           EdgeInsetsDirectional.fromSTEB(24.0, 36.0, 24.0, 0.0),
                       child: AutoSizeText(
-                        widget!.mainShadow!,
+                        widget.mainShadow!,
                         maxLines: 1,
                         style:
                             FlutterFlowTheme.of(context).headlineLarge.override(
                                   fontFamily: 'Gendy',
                                   color: colorFromCssString(
-                                    widget!.mainShadow!,
+                                    widget.mainShadow!,
                                     defaultColor:
                                         FlutterFlowTheme.of(context).accent1,
                                   ),
@@ -529,7 +527,7 @@ class _FrontWidgetState extends State<FrontWidget>
                         child: OctoImage(
                           placeholderBuilder: (_) {
                             final blurHash = valueOrDefault<String>(
-                              widget!.doc?.blurhash,
+                              widget.doc?.blurhash,
                               'U7KnrG.79Fj[k?%3%fof00Rjt7j[_4IUIUWB',
                             );
 
@@ -545,7 +543,7 @@ class _FrontWidgetState extends State<FrontWidget>
                           },
                           image: CachedNetworkImageProvider(
                             getCORSProxyUrl(
-                              widget!.parameter6!,
+                              widget.parameter6!,
                             ),
                           ),
                           width: MediaQuery.sizeOf(context).width * 1.0,
@@ -564,7 +562,7 @@ class _FrontWidgetState extends State<FrontWidget>
                 ),
                 Padding(
                   padding:
-                      EdgeInsetsDirectional.fromSTEB(16.0, 50.0, 16.0, 48.0),
+                      EdgeInsetsDirectional.fromSTEB(16.0, 50.0, 16.0, 24.0),
                   child: Container(
                     width: MediaQuery.sizeOf(context).width * 1.0,
                     height: MediaQuery.sizeOf(context).height * 1.0,
@@ -582,13 +580,13 @@ class _FrontWidgetState extends State<FrontWidget>
                           EdgeInsetsDirectional.fromSTEB(24.0, 39.0, 24.0, 0.0),
                       child: SelectionArea(
                               child: AutoSizeText(
-                        widget!.mainShadow!,
+                        widget.mainShadow!,
                         maxLines: 1,
                         style:
                             FlutterFlowTheme.of(context).headlineLarge.override(
                           fontFamily: 'Gendy',
                           color: colorFromCssString(
-                            widget!.vibrantColour!,
+                            widget.vibrantColour!,
                             defaultColor:
                                 FlutterFlowTheme.of(context).alternate,
                           ),
@@ -597,7 +595,7 @@ class _FrontWidgetState extends State<FrontWidget>
                           shadows: [
                             Shadow(
                               color: colorFromCssString(
-                                widget!.originTextColour!,
+                                widget.originTextColour!,
                                 defaultColor:
                                     FlutterFlowTheme.of(context).primaryText,
                               ),
@@ -606,7 +604,7 @@ class _FrontWidgetState extends State<FrontWidget>
                             ),
                             Shadow(
                               color: colorFromCssString(
-                                widget!.originTextColour!,
+                                widget.originTextColour!,
                                 defaultColor:
                                     FlutterFlowTheme.of(context).primaryText,
                               ),
@@ -635,7 +633,7 @@ class _FrontWidgetState extends State<FrontWidget>
                   ),
                   child: Padding(
                     padding:
-                        EdgeInsetsDirectional.fromSTEB(36.0, 200.0, 36.0, 66.0),
+                        EdgeInsetsDirectional.fromSTEB(36.0, 200.0, 36.0, 42.0),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -644,13 +642,13 @@ class _FrontWidgetState extends State<FrontWidget>
                         Flexible(
                           flex: 1,
                           child: AutoSizeText(
-                            widget!.parameter7!,
+                            widget.parameter7!,
                             style: FlutterFlowTheme.of(context)
                                 .labelMedium
                                 .override(
                               fontFamily: 'BlauerNue',
                               color: colorFromCssString(
-                                widget!.mainTextColour!,
+                                widget.mainTextColour!,
                                 defaultColor:
                                     FlutterFlowTheme.of(context).alternate,
                               ),
@@ -660,16 +658,16 @@ class _FrontWidgetState extends State<FrontWidget>
                               shadows: [
                                 Shadow(
                                   color: colorFromCssString(
-                                    widget!.originTextColour!,
+                                    widget.originTextColour!,
                                     defaultColor: FlutterFlowTheme.of(context)
                                         .primaryText,
                                   ),
-                                  offset: Offset(1.0, 1.0),
-                                  blurRadius: 2.0,
+                                  offset: Offset(0.0, 0.0),
+                                  blurRadius: 4.0,
                                 ),
                                 Shadow(
                                   color: colorFromCssString(
-                                    widget!.originTextColour!,
+                                    widget.originTextColour!,
                                     defaultColor: FlutterFlowTheme.of(context)
                                         .primaryText,
                                   ),
@@ -688,14 +686,14 @@ class _FrontWidgetState extends State<FrontWidget>
                               Padding(
                                 padding: EdgeInsets.all(4.0),
                                 child: AutoSizeText(
-                                  widget!.parameter10!,
+                                  widget.parameter10!,
                                   maxLines: 8,
                                   style: FlutterFlowTheme.of(context)
                                       .titleSmall
                                       .override(
                                         fontFamily: 'BlauerNue',
                                         color: colorFromCssString(
-                                          widget!.mainTextColour!,
+                                          widget.mainTextColour!,
                                           defaultColor:
                                               FlutterFlowTheme.of(context)
                                                   .alternate,
@@ -706,23 +704,23 @@ class _FrontWidgetState extends State<FrontWidget>
                                         shadows: [
                                           Shadow(
                                             color: colorFromCssString(
-                                              widget!.originTextColour!,
-                                              defaultColor:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryText,
-                                            ),
-                                            offset: Offset(1.0, 1.0),
-                                            blurRadius: 4.0,
-                                          ),
-                                          Shadow(
-                                            color: colorFromCssString(
-                                              widget!.originTextColour!,
+                                              widget.originTextColour!,
                                               defaultColor:
                                                   FlutterFlowTheme.of(context)
                                                       .primaryText,
                                             ),
                                             offset: Offset(0.0, 0.0),
-                                            blurRadius: 26.0,
+                                            blurRadius: 6.0,
+                                          ),
+                                          Shadow(
+                                            color: colorFromCssString(
+                                              widget.originTextColour!,
+                                              defaultColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                            ),
+                                            offset: Offset(0.0, 0.0),
+                                            blurRadius: 12.0,
                                           )
                                         ],
                                         lineHeight: 0.9,
@@ -736,7 +734,7 @@ class _FrontWidgetState extends State<FrontWidget>
                           flex: 1,
                           child: AutoSizeText(
                             valueOrDefault<String>(
-                              '(${widget!.parameter11})',
+                              '(${widget.parameter11})',
                               '(ENGLISH)',
                             ),
                             style: FlutterFlowTheme.of(context)
@@ -744,7 +742,7 @@ class _FrontWidgetState extends State<FrontWidget>
                                 .override(
                               fontFamily: 'BlauerNue',
                               color: colorFromCssString(
-                                widget!.mainTextColour!,
+                                widget.mainTextColour!,
                                 defaultColor:
                                     FlutterFlowTheme.of(context).alternate,
                               ),
@@ -754,12 +752,12 @@ class _FrontWidgetState extends State<FrontWidget>
                               shadows: [
                                 Shadow(
                                   color: colorFromCssString(
-                                    widget!.originTextColour!,
+                                    widget.originTextColour!,
                                     defaultColor: FlutterFlowTheme.of(context)
                                         .primaryText,
                                   ),
-                                  offset: Offset(1.0, 1.0),
-                                  blurRadius: 2.0,
+                                  offset: Offset(0.0, 0.0),
+                                  blurRadius: 4.0,
                                 )
                               ],
                             ),

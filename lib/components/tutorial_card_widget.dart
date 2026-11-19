@@ -1,12 +1,8 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import 'dart:ui';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'tutorial_card_model.dart';
 export 'tutorial_card_model.dart';
 
@@ -68,7 +64,7 @@ class _TutorialCardWidgetState extends State<TutorialCardWidget> {
   Widget build(BuildContext context) {
     return Transform.rotate(
       angle: valueOrDefault<double>(
-            widget!.rotation,
+            widget.rotation,
             6.0,
           ) *
           (math.pi / 180),
@@ -78,7 +74,7 @@ class _TutorialCardWidgetState extends State<TutorialCardWidget> {
         height: 400.0,
         decoration: BoxDecoration(
           color: valueOrDefault<Color>(
-            widget!.cardBg,
+            widget.cardBg,
             Color(0xFFF2F2F7),
           ),
           borderRadius: BorderRadius.circular(24.0),
@@ -94,20 +90,20 @@ class _TutorialCardWidgetState extends State<TutorialCardWidget> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  widget!.icon!,
+                  widget.icon!,
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        widget!.title,
+                        widget.title,
                         style: FlutterFlowTheme.of(context)
                             .headlineMedium
                             .override(
                               fontFamily: 'Gendy',
                               color: valueOrDefault<Color>(
-                                widget!.textColor,
+                                widget.textColor,
                                 FlutterFlowTheme.of(context).secondaryText,
                               ),
                               letterSpacing: 0.0,
@@ -117,7 +113,7 @@ class _TutorialCardWidgetState extends State<TutorialCardWidget> {
                       ),
                       Text(
                         valueOrDefault<String>(
-                          widget!.description,
+                          widget.description,
                           'Swipe left or right to scroll through different words',
                         ),
                         textAlign: TextAlign.center,
@@ -125,7 +121,7 @@ class _TutorialCardWidgetState extends State<TutorialCardWidget> {
                         style: FlutterFlowTheme.of(context).bodyLarge.override(
                               fontFamily: 'BlauerNue',
                               color: valueOrDefault<Color>(
-                                widget!.textColor,
+                                widget.textColor,
                                 FlutterFlowTheme.of(context).secondaryText,
                               ),
                               letterSpacing: 0.0,
@@ -134,7 +130,7 @@ class _TutorialCardWidgetState extends State<TutorialCardWidget> {
                       ),
                     ].divide(SizedBox(height: 16.0)),
                   ),
-                  if (!widget!.buttonHidden)
+                  if (!widget.buttonHidden)
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(
                           0.0,

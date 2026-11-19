@@ -30,7 +30,9 @@ Future<void> requestPermission(Permission setting) async {
   if (setting == Permission.notification && kIsWeb) {
     final settings = await FirebaseMessaging.instance.requestPermission();
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      kNotificationsBehaviorSubject.add(false);
+      // Re-emit the current value purely as a re-evaluation trigger — the
+      // subject's value is the notification-enabled flag.
+      kNotificationsBehaviorSubject.add(kNotificationsBehaviorSubject.value);
     }
     return;
   }
@@ -45,6 +47,6 @@ Future<void> requestPermission(Permission setting) async {
   }
   await setting.request();
   if (setting == Permission.notification) {
-    kNotificationsBehaviorSubject.add(false);
+    kNotificationsBehaviorSubject.add(kNotificationsBehaviorSubject.value);
   }
 }

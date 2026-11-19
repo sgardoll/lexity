@@ -4,14 +4,12 @@ import '/components/blank/blank_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
-import 'dart:ui';
+import 'dart:async';
+import '/index.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'liked_model.dart';
 export 'liked_model.dart';
 
@@ -57,217 +55,298 @@ class _LikedWidgetState extends State<LikedWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryText,
-        body: Container(
-          width: MediaQuery.sizeOf(context).width * 1.0,
-          height: MediaQuery.sizeOf(context).height * 1.0,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF1A1F24), Color(0xFF2B2E3B), Color(0xFF1F1F2B)],
-              stops: [0.0, 0.5, 1.0],
-              begin: AlignmentDirectional(0.0, 1.0),
-              end: AlignmentDirectional(0, -1.0),
+        body: SafeArea(
+          top: true,
+          child: Container(
+            width: MediaQuery.sizeOf(context).width * 1.0,
+            height: MediaQuery.sizeOf(context).height * 1.0,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFF1A1F24),
+                  Color(0xFF2B2E3B),
+                  Color(0xFF1F1F2B)
+                ],
+                stops: [0.0, 0.5, 1.0],
+                begin: AlignmentDirectional(0.0, 1.0),
+                end: AlignmentDirectional(0, -1.0),
+              ),
             ),
-          ),
-          child: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(24.0, 24.0, 24.0, 0.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: MediaQuery.sizeOf(context).width * 1.0,
-                  height: 100.0,
-                  decoration: BoxDecoration(),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      FlutterFlowIconButton(
-                        borderRadius: 8.0,
-                        buttonSize: 75.0,
-                        icon: Icon(
-                          Icons.arrow_back,
-                          color: FlutterFlowTheme.of(context).info,
-                          size: 35.0,
-                        ),
-                        onPressed: () async {
-                          logFirebaseEvent('LIKED_PAGE_arrow_back_ICN_ON_TAP');
-                          logFirebaseEvent('IconButton_navigate_back');
-                          context.safePop();
-                        },
-                      ),
-                      Expanded(
-                        child: AutoSizeText(
-                          'Likes',
-                          textAlign: TextAlign.start,
-                          style: FlutterFlowTheme.of(context)
-                              .displaySmall
-                              .override(
-                                fontFamily: 'Gendy',
-                                color: Colors.white,
-                                letterSpacing: 0.0,
-                                fontWeight: FontWeight.w600,
-                              ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Text(
-                  'Words you\'ve liked will appear here',
-                  textAlign: TextAlign.center,
-                  style: FlutterFlowTheme.of(context).bodyMedium.override(
-                        fontFamily: 'BlauerNue',
-                        color: FlutterFlowTheme.of(context).alternate,
-                        letterSpacing: 0.0,
-                      ),
-                ),
-                Flexible(
-                  child: Container(
+            child: Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(24.0, 24.0, 24.0, 0.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
                     width: MediaQuery.sizeOf(context).width * 1.0,
-                    decoration: BoxDecoration(
-                      color: Color(0x7F57636C),
-                      borderRadius: BorderRadius.circular(12.0),
+                    height: 100.0,
+                    decoration: BoxDecoration(),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: AutoSizeText(
+                            'Likes',
+                            textAlign: TextAlign.center,
+                            style: FlutterFlowTheme.of(context)
+                                .displaySmall
+                                .override(
+                                  fontFamily: 'Gendy',
+                                  color: Colors.white,
+                                  letterSpacing: 0.0,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                          ),
+                        ),
+                      ],
                     ),
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(
-                          16.0, 16.0, 16.0, 16.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          StreamBuilder<List<LexiconRecord>>(
-                            stream: queryLexiconRecord(
-                              queryBuilder: (lexiconRecord) =>
-                                  lexiconRecord.where(
-                                'likedBy',
-                                arrayContains: currentUserReference,
+                  ),
+                  Text(
+                    'Words you\'ve liked will appear here',
+                    textAlign: TextAlign.center,
+                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                          fontFamily: 'BlauerNue',
+                          color: FlutterFlowTheme.of(context).alternate,
+                          letterSpacing: 0.0,
+                        ),
+                  ),
+                  Flexible(
+                    child: Container(
+                      width: MediaQuery.sizeOf(context).width * 1.0,
+                      decoration: BoxDecoration(
+                        color: Color(0x7F57636C),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            16.0, 16.0, 16.0, 16.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            StreamBuilder<List<LexiconRecord>>(
+                              stream: queryLexiconRecord(
+                                queryBuilder: (lexiconRecord) =>
+                                    lexiconRecord.where(
+                                  'likedBy',
+                                  arrayContains: currentUserReference,
+                                ),
                               ),
-                            ),
-                            builder: (context, snapshot) {
-                              // Customize what your widget looks like when it's loading.
-                              if (!snapshot.hasData) {
-                                return Center(
-                                  child: SizedBox(
-                                    width: 30.0,
-                                    height: 30.0,
-                                    child: SpinKitPulse(
-                                      color:
-                                          FlutterFlowTheme.of(context).accent4,
-                                      size: 30.0,
-                                    ),
-                                  ),
-                                );
-                              }
-                              List<LexiconRecord> listViewLexiconRecordList =
-                                  snapshot.data!;
-                              if (listViewLexiconRecordList.isEmpty) {
-                                return BlankWidget();
-                              }
-
-                              return ListView.builder(
-                                padding: EdgeInsets.zero,
-                                shrinkWrap: true,
-                                scrollDirection: Axis.vertical,
-                                itemCount: listViewLexiconRecordList.length,
-                                itemBuilder: (context, listViewIndex) {
-                                  final listViewLexiconRecord =
-                                      listViewLexiconRecordList[listViewIndex];
-                                  return Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        8.0, 8.0, 8.0, 8.0),
-                                    child: Container(
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Flexible(
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  listViewLexiconRecord.term,
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .titleMedium
-                                                      .override(
-                                                        fontFamily: 'BlauerNue',
-                                                        color: Colors.white,
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                                ),
-                                                Text(
-                                                  listViewLexiconRecord
-                                                      .definition,
-                                                  maxLines: 5,
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodySmall
-                                                      .override(
-                                                        fontFamily: 'BlauerNue',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .info,
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          FlutterFlowIconButton(
-                                            buttonSize: 60.0,
-                                            icon: Icon(
-                                              Icons.bookmark_remove_sharp,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .error,
-                                              size: 24.0,
-                                            ),
-                                            onPressed: () async {
-                                              logFirebaseEvent(
-                                                  'LIKED_bookmark_remove_sharp_ICN_ON_TAP');
-                                              logFirebaseEvent(
-                                                  'IconButton_backend_call');
-
-                                              await listViewLexiconRecord
-                                                  .reference
-                                                  .update({
-                                                ...mapToFirestore(
-                                                  {
-                                                    'likedBy':
-                                                        FieldValue.arrayRemove([
-                                                      currentUserReference
-                                                    ]),
-                                                  },
-                                                ),
-                                              });
-                                            },
-                                          ),
-                                        ],
+                              builder: (context, snapshot) {
+                                // Customize what your widget looks like when it's loading.
+                                if (!snapshot.hasData) {
+                                  return Center(
+                                    child: SizedBox(
+                                      width: 30.0,
+                                      height: 30.0,
+                                      child: SpinKitPulse(
+                                        color: FlutterFlowTheme.of(context)
+                                            .accent4,
+                                        size: 30.0,
                                       ),
                                     ),
                                   );
-                                },
-                              );
-                            },
-                          ),
-                        ].divide(SizedBox(height: 12.0)),
+                                }
+                                List<LexiconRecord> listViewLexiconRecordList =
+                                    snapshot.data!;
+                                if (listViewLexiconRecordList.isEmpty) {
+                                  return BlankWidget();
+                                }
+
+                                return ListView.builder(
+                                  padding: EdgeInsets.zero,
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: listViewLexiconRecordList.length,
+                                  itemBuilder: (context, listViewIndex) {
+                                    final listViewLexiconRecord =
+                                        listViewLexiconRecordList[
+                                            listViewIndex];
+                                    return Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          8.0, 8.0, 8.0, 8.0),
+                                      child: Container(
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onTap: () async {
+                                                  logFirebaseEvent(
+                                                      'LIKED_PAGE_Column_e9c2vtg8_ON_TAP');
+                                                  logFirebaseEvent(
+                                                      'Column_navigate_to');
+
+                                                  context.pushNamed(
+                                                    StartWidget.routeName,
+                                                    queryParameters: {
+                                                      'id': serializeParam(
+                                                        listViewLexiconRecord
+                                                            .reference.id,
+                                                        ParamType.String,
+                                                      ),
+                                                    }.withoutNulls,
+                                                  );
+                                                },
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      listViewLexiconRecord
+                                                          .term,
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .titleMedium
+                                                          .override(
+                                                            fontFamily:
+                                                                'BlauerNue',
+                                                            color: Colors.white,
+                                                            letterSpacing: 0.0,
+                                                          ),
+                                                    ),
+                                                    Text(
+                                                      listViewLexiconRecord
+                                                          .definition,
+                                                      maxLines: 5,
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .bodySmall
+                                                          .override(
+                                                            fontFamily: 'Gendy',
+                                                            color: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .info,
+                                                            letterSpacing: 0.0,
+                                                            fontWeight:
+                                                                FontWeight.w300,
+                                                          ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            Builder(
+                                              builder: (context) => Tooltip(
+                                                message: 'Share',
+                                                child: FlutterFlowIconButton(
+                                                  buttonSize: 60.0,
+                                                  icon: Icon(
+                                                    Icons.share,
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .accent4,
+                                                    size: 24.0,
+                                                  ),
+                                                  onPressed: () async {
+                                                    logFirebaseEvent(
+                                                        'LIKED_share_ICN_ON_TAP');
+                                                    logFirebaseEvent(
+                                                        'IconButton_backend_call');
+                                                    unawaited(
+                                                      () async {
+                                                        await listViewLexiconRecord
+                                                            .reference
+                                                            .update({
+                                                          ...mapToFirestore(
+                                                            {
+                                                              'sharedBy':
+                                                                  FieldValue
+                                                                      .arrayUnion([
+                                                                currentUserReference
+                                                              ]),
+                                                            },
+                                                          ),
+                                                        });
+                                                      }(),
+                                                    );
+                                                    logFirebaseEvent(
+                                                        'IconButton_google_analytics_event');
+                                                    logFirebaseEvent(
+                                                      'shareLinkLikesScreen',
+                                                      parameters: {
+                                                        'docRef':
+                                                            listViewLexiconRecord
+                                                                .reference,
+                                                      },
+                                                    );
+                                                    logFirebaseEvent(
+                                                        'IconButton_share');
+                                                    await Share.share(
+                                                      valueOrDefault<String>(
+                                                        'https://lexity.connectio.com.au/start?id=${listViewLexiconRecord.reference.id}',
+                                                        'https://lexity.connectio.com.au/start',
+                                                      ),
+                                                      sharePositionOrigin:
+                                                          getWidgetBoundingBox(
+                                                              context),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                            FlutterFlowIconButton(
+                                              buttonSize: 60.0,
+                                              icon: Icon(
+                                                Icons.bookmark_remove_sharp,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .error,
+                                                size: 24.0,
+                                              ),
+                                              onPressed: () async {
+                                                logFirebaseEvent(
+                                                    'LIKED_bookmark_remove_sharp_ICN_ON_TAP');
+                                                logFirebaseEvent(
+                                                    'IconButton_backend_call');
+
+                                                await listViewLexiconRecord
+                                                    .reference
+                                                    .update({
+                                                  ...mapToFirestore(
+                                                    {
+                                                      'likedBy': FieldValue
+                                                          .arrayRemove([
+                                                        currentUserReference
+                                                      ]),
+                                                    },
+                                                  ),
+                                                });
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ].divide(SizedBox(height: 12.0)),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ].divide(SizedBox(height: 24.0)),
+                ].divide(SizedBox(height: 24.0)),
+              ),
             ),
           ),
         ),

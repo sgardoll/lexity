@@ -4,17 +4,11 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import 'dart:math';
 import 'dart:ui';
 import '/index.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'login_popup_model.dart';
 export 'login_popup_model.dart';
 
@@ -258,7 +252,9 @@ class _LoginPopupWidgetState extends State<LoginPopupWidget>
                               safeSetState(() => _model.passwordVisibility =
                                   !_model.passwordVisibility);
                             },
-                            focusNode: FocusNode(skipTraversal: true),
+                            focusNode:
+                                _model.passwordPasswordVisibilityFocusNode
+                                  ..skipTraversal = !(false),
                             child: Icon(
                               _model.passwordVisibility
                                   ? Icons.visibility_outlined
@@ -343,7 +339,9 @@ class _LoginPopupWidgetState extends State<LoginPopupWidget>
                         buttonSize: 40.0,
                         fillColor: FlutterFlowTheme.of(context).primary,
                         icon: FaIcon(
-                          FontAwesomeIcons.google,
+                          FaIconData(const IconData(/* google */ 0xf1a0,
+                              fontFamily: 'FontAwesomeBrands',
+                              fontPackage: 'font_awesome_flutter')),
                           color: FlutterFlowTheme.of(context).info,
                           size: 24.0,
                         ),
@@ -369,7 +367,9 @@ class _LoginPopupWidgetState extends State<LoginPopupWidget>
                         buttonSize: 40.0,
                         fillColor: FlutterFlowTheme.of(context).primary,
                         icon: FaIcon(
-                          FontAwesomeIcons.apple,
+                          FaIconData(const IconData(/* apple */ 0xf179,
+                              fontFamily: 'FontAwesomeBrands',
+                              fontPackage: 'font_awesome_flutter')),
                           color: FlutterFlowTheme.of(context).info,
                           size: 24.0,
                         ),
