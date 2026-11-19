@@ -39,6 +39,29 @@ class _StartWidgetState extends State<StartWidget>
 
   final animationsMap = <String, AnimationInfo>{};
 
+  // Return to the first card face up. Navigating to the Start location the
+  // page already shows keeps its route key, so this State, the swiper's index
+  // and the flipped card's finished hide animation would all survive — reset
+  // them here instead of relying on the route being rebuilt.
+  void _resetDeck() {
+    _model.frontOfCardShowing = true;
+    _model.cardIndex = 0;
+    _model.deckGeneration++;
+    safeSetState(() {});
+    if (widget.id != null) {
+      // A liked-word deep link starts the deck at that word; drop it.
+      context.goNamed(
+        StartWidget.routeName,
+        extra: <String, dynamic>{
+          '__transition_info__': TransitionInfo(
+            hasTransition: true,
+            transitionType: PageTransitionType.fade,
+          ),
+        },
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -204,6 +227,7 @@ class _StartWidgetState extends State<StartWidget>
                       }
 
                       return FlutterFlowSwipeableStack(
+                        key: ValueKey(_model.deckGeneration),
                         onSwipeFn: (lexiconIndex) async {
                           logFirebaseEvent(
                               'START_SwipeableStack_btxgacya_ON_WIDGET_');
@@ -324,19 +348,7 @@ class _StartWidgetState extends State<StartWidget>
                                       logFirebaseEvent(
                                           'START_PAGE_Container_qduthaoz_CALLBACK');
                                       logFirebaseEvent('CardBack_navigate_to');
-                                      // Replace the current location — popping
-                                      // first left pushNamed with a defunct
-                                      // context when nothing was left to pop.
-                                      context.goNamed(
-                                        StartWidget.routeName,
-                                        extra: <String, dynamic>{
-                                          '__transition_info__': TransitionInfo(
-                                            hasTransition: true,
-                                            transitionType:
-                                                PageTransitionType.fade,
-                                          ),
-                                        },
-                                      );
+                                      _resetDeck();
                                     },
                                   ),
                                 ),

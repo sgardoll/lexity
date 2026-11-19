@@ -8,6 +8,7 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'auth/firebase_auth/firebase_user_provider.dart';
 import 'auth/firebase_auth/auth_util.dart';
 
+import 'backend/backend.dart';
 import 'backend/push_notifications/push_notifications_util.dart';
 import 'backend/firebase/firebase_config.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -16,6 +17,38 @@ import 'package:flutter/foundation.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'index.dart';
+
+String? _syncedSettingsPath;
+
+// Autoplay reads FFAppState().isSoundOn, so load the signed-in account's
+// saved preference as soon as its user document arrives — not only once
+// Settings has been opened.
+Future<void> _syncAccountSoundPref(UsersRecord? user) async {
+  if (user == null) {
+    _syncedSettingsPath = null;
+    return;
+  }
+  final settingsRef =
+      user.settings ?? SettingsRecord.collection.doc(user.reference.id);
+  if (settingsRef.path == _syncedSettingsPath) {
+    return;
+  }
+  _syncedSettingsPath = settingsRef.path;
+  try {
+    final snapshot = await settingsRef.get();
+    if (!snapshot.exists || _syncedSettingsPath != settingsRef.path) {
+      return;
+    }
+    final settings = SettingsRecord.fromSnapshot(snapshot);
+    if (settings.hasSoundOn() && FFAppState().isSoundOn != settings.soundOn) {
+      FFAppState().isSoundOn = settings.soundOn;
+    }
+  } catch (_) {
+    if (_syncedSettingsPath == settingsRef.path) {
+      _syncedSettingsPath = null;
+    }
+  }
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -81,7 +114,7 @@ class _MyAppState extends State<MyApp> {
           .toList();
   late Stream<BaseAuthUser> userStream;
 
-  final authUserSub = authenticatedUserStream.listen((_) {});
+  final authUserSub = authenticatedUserStream.listen(_syncAccountSoundPref);
   final fcmTokenSub = fcmTokenUserStream.listen(
     (_) {},
     // Registering a token can fail for reasons outside the app's control (a

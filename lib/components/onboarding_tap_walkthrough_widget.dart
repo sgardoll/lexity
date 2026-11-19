@@ -298,7 +298,7 @@ class _OnboardingTapWalkthroughWidgetState
                                   cardBg: FlutterFlowTheme.of(context)
                                       .secondaryBackground,
                                   description:
-                                      'Long press to access settings and view your saved words',
+                                      'Use Settings and Me in the bottom bar to change settings and view your saved words',
                                   icon: Icon(
                                     Icons.touch_app_rounded,
                                     color: FlutterFlowTheme.of(context).primary,
@@ -307,7 +307,7 @@ class _OnboardingTapWalkthroughWidgetState
                                   rotation: -4.0,
                                   textColor:
                                       FlutterFlowTheme.of(context).primaryText,
-                                  title: 'Long Press',
+                                  title: 'Navigate',
                                   buttonHidden: false,
                                 ),
                               ),

@@ -17,6 +17,9 @@ class StartModel extends FlutterFlowModel<StartWidget> {
 
   Color previousBgColor = Color(4279244056);
 
+  // Bumped to rebuild the swipeable stack from its first card.
+  int deckGeneration = 0;
+
   ///  State fields for stateful widgets in this page.
 
   // State field(s) for SwipeableStack widget.
