@@ -1,3 +1,4 @@
+import '/auth/base_auth_user_provider.dart';
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/backend/push_notifications/push_notifications_util.dart';
@@ -5,13 +6,22 @@ import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+
+import 'dart:ui';
+
 import '/flutter_flow/permissions_util.dart';
 import '/index.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart' hide Type;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+
 import 'settings_model.dart';
 export 'settings_model.dart';
 
@@ -42,14 +52,16 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     // document, otherwise a deterministic `settings/<uid>` — random ids let
     // two devices create disagreeing documents.
     final uid = currentUserReference?.id;
-    _model.settingsRef = currentUserDocument?.settings ??
+    _model.settingsRef =
+        currentUserDocument?.settings ??
         (uid == null ? null : SettingsRecord.collection.doc(uid));
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       logFirebaseEvent('SETTINGS_PAGE_settings_ON_INIT_STATE');
       // Re-resolve now the first frame has had a chance to deliver the user
       // document; the account's linked record always wins.
-      final settingsRef = currentUserDocument?.settings ??
+      final settingsRef =
+          currentUserDocument?.settings ??
           (uid == null ? null : SettingsRecord.collection.doc(uid));
       if (settingsRef == null) {
         return;
@@ -60,17 +72,19 @@ class _SettingsWidgetState extends State<SettingsWidget> {
       }
       if (!(await settingsRef.get()).exists) {
         logFirebaseEvent('settings_backend_call');
-        await settingsRef.set(createSettingsRecordData(
-          uid: uid,
-          soundOn: FFAppState().isSoundOn,
-          notificationsOn: true,
-        ));
+        await settingsRef.set(
+          createSettingsRecordData(
+            uid: uid,
+            soundOn: FFAppState().isSoundOn,
+            notificationsOn: true,
+          ),
+        );
       }
       if (currentUserDocument?.settings != settingsRef) {
         logFirebaseEvent('settings_backend_call');
-        await currentUserReference!.update(createUsersRecordData(
-          settings: settingsRef,
-        ));
+        await currentUserReference!.update(
+          createUsersRecordData(settings: settingsRef),
+        );
       }
     });
 
@@ -104,7 +118,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 colors: [
                   Color(0xFF1A1F24),
                   Color(0xFF2B2E3B),
-                  Color(0xFF1F1F2B)
+                  Color(0xFF1F1F2B),
                 ],
                 stops: [0.0, 0.5, 1.0],
                 begin: AlignmentDirectional(0.0, 1.0),
@@ -115,7 +129,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               padding: EdgeInsetsDirectional.fromSTEB(24.0, 24.0, 24.0, 0.0),
               child: Column(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: (FFMainAxisAlignment.start).flutterValue,
+                mainAxisAlignment:
+                    (FFMainAxisAlignment.spaceBetween).flutterValue,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
@@ -131,8 +146,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                           child: AutoSizeText(
                             'Settings',
                             textAlign: TextAlign.center,
-                            style: FlutterFlowTheme.of(context)
-                                .displaySmall
+                            style: FlutterFlowTheme.of(context).displaySmall
                                 .override(
                                   fontFamily: 'Gendy',
                                   color: Colors.white,
@@ -157,8 +171,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                     width: 30.0,
                                     height: 30.0,
                                     child: SpinKitPulse(
-                                      color:
-                                          FlutterFlowTheme.of(context).accent4,
+                                      color: FlutterFlowTheme.of(context)
+                                          .accent4,
                                       size: 30.0,
                                     ),
                                   ),
@@ -169,9 +183,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                               // instead of leaving an empty box.
                               final containerSettingsRecord =
                                   snapshot.data!.exists
-                                      ? SettingsRecord.fromSnapshot(
-                                          snapshot.data!)
-                                      : null;
+                                  ? SettingsRecord.fromSnapshot(snapshot.data!)
+                                  : null;
                               // The account record is the one shared source
                               // for the sound preference — autoplay must read
                               // the same value the switch shows. Older
@@ -187,188 +200,257 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                               }
 
                               return AnimatedContainer(
-                          duration: Duration(milliseconds: 900),
-                          curve: Curves.easeInOut,
-                          width: MediaQuery.sizeOf(context).width * 1.0,
-                          decoration: BoxDecoration(
-                            color: Color(0x7F57636C),
-                            borderRadius: BorderRadius.circular(16.0),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                20.0, 20.0, 20.0, 20.0),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Sound',
-                                        style: FlutterFlowTheme.of(context)
-                                            .titleLarge
-                                            .override(
-                                              fontFamily: 'BlauerNue',
-                                              color: Colors.white,
-                                              letterSpacing: 0.0,
-                                            ),
-                                      ),
-                                      Switch.adaptive(
-                                        value: _model.switchValue1 ??
-                                            (containerSettingsRecord
-                                                        ?.hasSoundOn() ==
-                                                    true
-                                                ? containerSettingsRecord!
-                                                    .soundOn
-                                                : FFAppState().isSoundOn),
-                                        onChanged: (newValue) async {
-                                          safeSetState(() =>
-                                              _model.switchValue1 = newValue);
-                                          if (newValue) {
-                                            logFirebaseEvent(
-                                                'SETTINGS_Switch_w8ooa2c1_ON_TOGGLE_ON');
-                                            logFirebaseEvent(
-                                                'Switch_backend_call');
-
-                                            await _model.settingsRef!.set(
-                                                createSettingsRecordData(
-                                                  soundOn: true,
-                                                ),
-                                                SetOptions(merge: true));
-                                            logFirebaseEvent(
-                                                'Switch_update_app_state');
-                                            FFAppState().isSoundOn = true;
-                                            FFAppState().update(() {});
-                                          } else {
-                                            logFirebaseEvent(
-                                                'SETTINGS_Switch_w8ooa2c1_ON_TOGGLE_OFF');
-                                            logFirebaseEvent(
-                                                'Switch_backend_call');
-
-                                            await _model.settingsRef!.set(
-                                                createSettingsRecordData(
-                                                  soundOn: false,
-                                                ),
-                                                SetOptions(merge: true));
-                                            logFirebaseEvent(
-                                                'Switch_update_app_state');
-                                            FFAppState().isSoundOn = false;
-                                            FFAppState().update(() {});
-                                          }
-                                        },
-                                        activeColor:
-                                            FlutterFlowTheme.of(context)
-                                                .accent4,
-                                        activeTrackColor:
-                                            FlutterFlowTheme.of(context)
-                                                .tertiary,
-                                        inactiveTrackColor:
-                                            FlutterFlowTheme.of(context)
-                                                .secondaryText,
-                                        inactiveThumbColor:
-                                            FlutterFlowTheme.of(context)
-                                                .alternate,
-                                      ),
-                                    ],
+                                duration: Duration(milliseconds: 900),
+                                curve: Curves.easeInOut,
+                                width: MediaQuery.sizeOf(context).width * 1.0,
+                                decoration: BoxDecoration(
+                                  color: Color(0x7F57636C),
+                                  borderRadius: BorderRadius.circular(16.0),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                    20.0,
+                                    20.0,
+                                    20.0,
+                                    20.0,
                                   ),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Notifications',
-                                        style: FlutterFlowTheme.of(context)
-                                            .titleLarge
-                                            .override(
-                                              fontFamily: 'BlauerNue',
-                                              color: Colors.white,
-                                              letterSpacing: 0.0,
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              'Sound',
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleLarge
+                                                      .override(
+                                                        fontFamily: 'BlauerNue',
+                                                        color: Colors.white,
+                                                        letterSpacing: 0.0,
+                                                      ),
                                             ),
-                                      ),
-                                      Switch.adaptive(
-                                        value: _model.switchValue2 ??
-                                            (containerSettingsRecord
-                                                        ?.hasNotificationsOn() ==
-                                                    true
-                                                ? containerSettingsRecord!
-                                                    .notificationsOn
-                                                : false),
-                                        onChanged: (newValue) async {
-                                          safeSetState(() =>
-                                              _model.switchValue2 = newValue);
-                                          if (newValue) {
-                                            logFirebaseEvent(
-                                                'SETTINGS_Switch_mnxwr64k_ON_TOGGLE_ON');
-                                            logFirebaseEvent(
-                                                'Switch_request_permissions');
-                                            await requestPermission(
-                                                notificationsPermission);
-                                            logFirebaseEvent(
-                                                'Switch_backend_call');
+                                            Switch.adaptive(
+                                              value:
+                                                  _model.switchValue1 ??
+                                                  (containerSettingsRecord
+                                                              ?.hasSoundOn() ==
+                                                          true
+                                                      ? containerSettingsRecord!
+                                                            .soundOn
+                                                      : FFAppState().isSoundOn),
+                                              onChanged: (newValue) async {
+                                                safeSetState(
+                                                  () => _model.switchValue1 =
+                                                      newValue!,
+                                                );
+                                                if (newValue!) {
+                                                  logFirebaseEvent(
+                                                    'SETTINGS_Switch_w8ooa2c1_ON_TOGGLE_ON',
+                                                  );
+                                                  logFirebaseEvent(
+                                                    'Switch_backend_call',
+                                                  );
 
-                                            await _model.settingsRef!.set(
-                                                createSettingsRecordData(
-                                                  notificationsOn: true,
-                                                ),
-                                                SetOptions(merge: true));
-                                            // Register this device's token
-                                            // now the preference allows it.
-                                            kNotificationsBehaviorSubject
-                                                .add(true);
-                                            logFirebaseEvent(
-                                                'Switch_rebuild_page');
-                                            safeSetState(() {});
-                                          } else {
-                                            logFirebaseEvent(
-                                                'SETTINGS_Switch_mnxwr64k_ON_TOGGLE_OFF');
-                                            logFirebaseEvent(
-                                                'Switch_backend_call');
+                                                  await _model.settingsRef!.set(
+                                                    createSettingsRecordData(
+                                                      soundOn: true,
+                                                    ),
+                                                    SetOptions(merge: true),
+                                                  );
+                                                  logFirebaseEvent(
+                                                    'Switch_update_app_state',
+                                                  );
+                                                  FFAppState().isSoundOn = true;
+                                                  FFAppState().update(() {});
+                                                } else {
+                                                  logFirebaseEvent(
+                                                    'SETTINGS_Switch_w8ooa2c1_ON_TOGGLE_OFF',
+                                                  );
+                                                  logFirebaseEvent(
+                                                    'Switch_backend_call',
+                                                  );
 
-                                            await _model.settingsRef!.set(
-                                                createSettingsRecordData(
-                                                  notificationsOn: false,
-                                                ),
-                                                SetOptions(merge: true));
-                                            // Flag off BEFORE invalidating
-                                            // the device token — a refresh
-                                            // emitted by deleteToken() must
-                                            // not re-register while off.
-                                            kNotificationsBehaviorSubject
-                                                .add(false);
-                                            await FirebaseMessaging.instance
-                                                .deleteToken();
-                                            logFirebaseEvent(
-                                                'Switch_rebuild_page');
-                                            safeSetState(() {});
-                                          }
-                                        },
-                                        activeColor:
-                                            FlutterFlowTheme.of(context)
-                                                .accent4,
-                                        activeTrackColor:
-                                            FlutterFlowTheme.of(context)
-                                                .tertiary,
-                                        inactiveTrackColor:
-                                            FlutterFlowTheme.of(context)
-                                                .secondaryText,
-                                        inactiveThumbColor:
-                                            FlutterFlowTheme.of(context)
-                                                .alternate,
-                                      ),
-                                    ],
+                                                  await _model.settingsRef!.set(
+                                                    createSettingsRecordData(
+                                                      soundOn: false,
+                                                    ),
+                                                    SetOptions(merge: true),
+                                                  );
+                                                  logFirebaseEvent(
+                                                    'Switch_update_app_state',
+                                                  );
+                                                  FFAppState().isSoundOn =
+                                                      false;
+                                                  FFAppState().update(() {});
+                                                }
+                                              },
+                                              activeColor: FlutterFlowTheme.of(
+                                                context,
+                                              ).accent4,
+                                              activeTrackColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .tertiary,
+                                              inactiveTrackColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondaryText,
+                                              inactiveThumbColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .alternate,
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              'Notifications',
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleLarge
+                                                      .override(
+                                                        fontFamily: 'BlauerNue',
+                                                        color: Colors.white,
+                                                        letterSpacing: 0.0,
+                                                      ),
+                                            ),
+                                            Switch.adaptive(
+                                              value:
+                                                  _model.switchValue2 ??
+                                                  (containerSettingsRecord
+                                                              ?.hasNotificationsOn() ==
+                                                          true
+                                                      ? containerSettingsRecord!
+                                                            .notificationsOn
+                                                      : false),
+                                              onChanged: (newValue) async {
+                                                safeSetState(
+                                                  () => _model.switchValue2 =
+                                                      newValue!,
+                                                );
+                                                if (newValue!) {
+                                                  logFirebaseEvent(
+                                                    'SETTINGS_Switch_mnxwr64k_ON_TOGGLE_ON',
+                                                  );
+                                                  logFirebaseEvent(
+                                                    'Switch_request_permissions',
+                                                  );
+                                                  await requestPermission(
+                                                    notificationsPermission,
+                                                  );
+                                                  if (await getPermissionStatus(
+                                                    notificationsPermission,
+                                                  )) {
+                                                    logFirebaseEvent(
+                                                      'Switch_backend_call',
+                                                    );
+
+                                                    await _model.settingsRef!.set(
+                                                      createSettingsRecordData(
+                                                        notificationsOn: true,
+                                                      ),
+                                                      SetOptions(merge: true),
+                                                    );
+                                                    // Register this device's token
+                                                    // now the preference allows it.
+                                                    kNotificationsBehaviorSubject
+                                                        .add(true);
+                                                  }
+                                                  logFirebaseEvent(
+                                                    'Switch_rebuild_page',
+                                                  );
+                                                  safeSetState(() {});
+                                                } else {
+                                                  logFirebaseEvent(
+                                                    'SETTINGS_Switch_mnxwr64k_ON_TOGGLE_OFF',
+                                                  );
+                                                  logFirebaseEvent(
+                                                    'Switch_backend_call',
+                                                  );
+
+                                                  await _model.settingsRef!.set(
+                                                    createSettingsRecordData(
+                                                      notificationsOn: false,
+                                                    ),
+                                                    SetOptions(merge: true),
+                                                  );
+                                                  // Flag off BEFORE invalidating
+                                                  // the device token — a refresh
+                                                  // emitted by deleteToken() must
+                                                  // not re-register while off.
+                                                  kNotificationsBehaviorSubject
+                                                      .add(false);
+                                                  await FirebaseMessaging
+                                                      .instance
+                                                      .deleteToken();
+                                                  logFirebaseEvent(
+                                                    'Switch_rebuild_page',
+                                                  );
+                                                  safeSetState(() {});
+                                                }
+                                              },
+                                              activeColor: FlutterFlowTheme.of(
+                                                context,
+                                              ).accent4,
+                                              activeTrackColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .tertiary,
+                                              inactiveTrackColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondaryText,
+                                              inactiveThumbColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .alternate,
+                                            ),
+                                          ],
+                                        ),
+                                      ].divide(SizedBox(height: 24.0)),
+                                    ),
                                   ),
-                                ].divide(SizedBox(height: 24.0)),
-                              ),
-                            ),
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
                   ),
+                  if (false)
+                    FFButtonWidget(
+                      onPressed: () async {
+                        logFirebaseEvent(
+                          'SETTINGS_PAGE_ImageryStyleButton_ON_TAP',
+                        );
+                        logFirebaseEvent('ImageryStyleButton_navigate_to');
+
+                        context.pushNamed(ImageStylesWidget.routeName);
+                      },
+                      text: 'Imagery style',
+                      options: FFButtonOptions(
+                        width: double.infinity,
+                        height: 56.0,
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                          0.0,
+                          0.0,
+                          0.0,
+                          0.0,
+                        ),
+                        iconPadding: EdgeInsetsDirectional.fromSTEB(
+                          0.0,
+                          0.0,
+                          0.0,
+                          0.0,
+                        ),
+                        color: FlutterFlowTheme.of(context).tertiary,
+                        textStyle: TextStyle(
+                          color: FlutterFlowTheme.of(context).info,
+                        ),
+                        borderRadius: BorderRadius.circular(28.0),
+                      ),
+                    ),
                   FFButtonWidget(
                     onPressed: () async {
                       logFirebaseEvent('SETTINGS_PAGE_Button_fdg72m6k_ON_TAP');
@@ -378,63 +460,85 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       GoRouter.of(context).clearRedirectLocation();
 
                       context.goNamedAuth(
-                          AnonLoginWidget.routeName, context.mounted);
+                        AnonLoginWidget.routeName,
+                        context.mounted,
+                      );
                     },
                     text: loggedIn ? 'Logout' : 'Login',
                     options: FFButtonOptions(
                       width: MediaQuery.sizeOf(context).width * 1.0,
                       height: 56.0,
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                      iconPadding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                      ),
+                      iconPadding: EdgeInsetsDirectional.fromSTEB(
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                      ),
                       color: Color(0xFFFF5963),
-                      textStyle:
-                          FlutterFlowTheme.of(context).titleLarge.override(
-                                fontFamily: 'BlauerNue',
-                                color: Colors.white,
-                                letterSpacing: 0.0,
-                              ),
+                      textStyle: FlutterFlowTheme.of(context).titleLarge
+                          .override(
+                            fontFamily: 'BlauerNue',
+                            color: Colors.white,
+                            letterSpacing: 0.0,
+                          ),
                       elevation: 3.0,
                       borderRadius: BorderRadius.circular(28.0),
                     ),
                   ),
                   if (loggedIn)
-                    Align(
-                      alignment: AlignmentDirectional(0.0, 1.0),
-                      child: Builder(
-                        builder: (context) => FFButtonWidget(
-                          onPressed: () async {
-                            logFirebaseEvent(
-                                'SETTINGS_PAGE_DELETE_ACCOUNT_BTN_ON_TAP');
-                            logFirebaseEvent('Button_auth');
-                            await authManager.deleteUser(context);
+                    Flexible(
+                      child: Align(
+                        alignment: AlignmentDirectional(0.0, 1.0),
+                        child: Builder(
+                          builder: (context) => FFButtonWidget(
+                            onPressed: () async {
+                              logFirebaseEvent(
+                                'SETTINGS_PAGE_DELETE_ACCOUNT_BTN_ON_TAP',
+                              );
+                              logFirebaseEvent('Button_auth');
+                              await authManager.deleteUser(context);
 
-                            context.goNamedAuth(
-                                StartWidget.routeName, context.mounted);
-                          },
-                          text: 'Delete Account',
-                          options: FFButtonOptions(
-                            width: MediaQuery.sizeOf(context).width * 1.0,
-                            height: 56.0,
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
-                            iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
-                            color: Colors.transparent,
-                            textStyle: FlutterFlowTheme.of(context)
-                                .titleLarge
-                                .override(
-                                  fontFamily: 'BlauerNue',
-                                  color: FlutterFlowTheme.of(context).info,
-                                  letterSpacing: 0.0,
-                                ),
-                            elevation: 3.0,
-                            borderSide: BorderSide(
-                              color: FlutterFlowTheme.of(context).error,
-                              width: 3.0,
+                              context.goNamedAuth(
+                                StartWidget.routeName,
+                                context.mounted,
+                              );
+                            },
+                            text: 'Delete Account',
+                            options: FFButtonOptions(
+                              width: MediaQuery.sizeOf(context).width * 1.0,
+                              height: 56.0,
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0,
+                                0.0,
+                                0.0,
+                                0.0,
+                              ),
+                              iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                0.0,
+                                0.0,
+                                0.0,
+                                0.0,
+                              ),
+                              color: Colors.transparent,
+                              textStyle: FlutterFlowTheme.of(context).titleLarge
+                                  .override(
+                                    fontFamily: 'BlauerNue',
+                                    color: FlutterFlowTheme.of(context).info,
+                                    letterSpacing: 0.0,
+                                  ),
+                              elevation: 3.0,
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).error,
+                                width: 3.0,
+                              ),
+                              borderRadius: BorderRadius.circular(28.0),
                             ),
-                            borderRadius: BorderRadius.circular(28.0),
                           ),
                         ),
                       ),

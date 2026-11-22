@@ -4,12 +4,16 @@ import 'dart:convert';
 import 'serialization_util.dart';
 import 'web_push_url_util_stub.dart'
     if (dart.library.js_interop) 'web_push_url_util_web.dart';
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '../../flutter_flow/flutter_flow_util.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
+import '../../index.dart';
+import '../../main.dart';
 
 final _handledMessageIds = <String?>{};
 
@@ -111,14 +115,10 @@ class _PushNotificationsHandlerState extends State<PushNotificationsHandler> {
   @override
   Widget build(BuildContext context) => _loading
       ? Container(
-          color: FlutterFlowTheme.of(context).primaryText,
-          child: Center(
-            child: Image.asset(
-              'assets/images/2nobg.png',
-              width: MediaQuery.sizeOf(context).width * 0.2,
-              height: MediaQuery.sizeOf(context).height * 0.2,
-              fit: BoxFit.contain,
-            ),
+          color: Color(0xFF16151B),
+          child: Image.asset(
+            'assets/images/Lexity_splash.gif',
+            fit: BoxFit.cover,
           ),
         )
       : widget.child;
@@ -154,6 +154,7 @@ final parametersBuilderMap =
   'settings': ParameterData.none(),
   'CreateAccount': ParameterData.none(),
   'liked': ParameterData.none(),
+  'imageStyles': ParameterData.none(),
 };
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {

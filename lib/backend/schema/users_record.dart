@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 
 import '/backend/schema/util/firestore_util.dart';
+import '/backend/schema/util/schema_util.dart';
 
 import 'index.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -50,6 +51,21 @@ class UsersRecord extends FirestoreRecord {
   DocumentReference? get settings => _settings;
   bool hasSettings() => _settings != null;
 
+  // "imageStylePlan" field.
+  String? _imageStylePlan;
+  String get imageStylePlan => _imageStylePlan ?? '';
+  bool hasImageStylePlan() => _imageStylePlan != null;
+
+  // "imageStyle" field.
+  String? _imageStyle;
+  String get imageStyle => _imageStyle ?? '';
+  bool hasImageStyle() => _imageStyle != null;
+
+  // "customImageStyle" field.
+  String? _customImageStyle;
+  String get customImageStyle => _customImageStyle ?? '';
+  bool hasCustomImageStyle() => _customImageStyle != null;
+
   void _initializeFields() {
     _email = snapshotData['email'] as String?;
     _displayName = snapshotData['display_name'] as String?;
@@ -58,6 +74,9 @@ class UsersRecord extends FirestoreRecord {
     _createdTime = snapshotData['created_time'] as DateTime?;
     _phoneNumber = snapshotData['phone_number'] as String?;
     _settings = snapshotData['settings'] as DocumentReference?;
+    _imageStylePlan = snapshotData['imageStylePlan'] as String?;
+    _imageStyle = snapshotData['imageStyle'] as String?;
+    _customImageStyle = snapshotData['customImageStyle'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -100,6 +119,9 @@ Map<String, dynamic> createUsersRecordData({
   DateTime? createdTime,
   String? phoneNumber,
   DocumentReference? settings,
+  String? imageStylePlan,
+  String? imageStyle,
+  String? customImageStyle,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -110,6 +132,9 @@ Map<String, dynamic> createUsersRecordData({
       'created_time': createdTime,
       'phone_number': phoneNumber,
       'settings': settings,
+      'imageStylePlan': imageStylePlan,
+      'imageStyle': imageStyle,
+      'customImageStyle': customImageStyle,
     }.withoutNulls,
   );
 
@@ -127,7 +152,10 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e1?.uid == e2?.uid &&
         e1?.createdTime == e2?.createdTime &&
         e1?.phoneNumber == e2?.phoneNumber &&
-        e1?.settings == e2?.settings;
+        e1?.settings == e2?.settings &&
+        e1?.imageStylePlan == e2?.imageStylePlan &&
+        e1?.imageStyle == e2?.imageStyle &&
+        e1?.customImageStyle == e2?.customImageStyle;
   }
 
   @override
@@ -138,7 +166,10 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e?.uid,
         e?.createdTime,
         e?.phoneNumber,
-        e?.settings
+        e?.settings,
+        e?.imageStylePlan,
+        e?.imageStyle,
+        e?.customImageStyle
       ]);
 
   @override

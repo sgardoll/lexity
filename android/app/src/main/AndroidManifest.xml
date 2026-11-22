@@ -2,7 +2,7 @@
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
   <application
-    android:label="Lexity: Word of the Day"
+    android:label="Lexity: Daily Rare Words"
     tools:replace="android:label"
     android:icon="@mipmap/ic_launcher"
     android:requestLegacyExternalStorage="true"
