@@ -50,20 +50,20 @@ class _OnboardingTapWalkthroughWidgetState
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(28.0),
-      child: Container(
-        width: 368.0,
-        decoration: BoxDecoration(
-          color: FlutterFlowTheme.of(context).imageryNight,
-          borderRadius: BorderRadius.circular(28.0),
-          border: Border.all(
-            color: FlutterFlowTheme.of(context).imageryLine,
-            width: 1.0,
+    return Padding(
+      padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(28.0),
+        child: Container(
+          width: 368.0,
+          decoration: BoxDecoration(
+            color: FlutterFlowTheme.of(context).imageryNight,
+            borderRadius: BorderRadius.circular(28.0),
+            border: Border.all(
+              color: FlutterFlowTheme.of(context).imageryLine,
+              width: 1.0,
+            ),
           ),
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(32.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,

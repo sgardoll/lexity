@@ -84,81 +84,85 @@ class _TutorialCardWidgetState extends State<TutorialCardWidget> {
           borderRadius: BorderRadius.circular(24.0),
           shape: BoxShape.rectangle,
         ),
-        child: Container(
+        child: Padding(
+          padding: EdgeInsetsDirectional.fromSTEB(16.0, 10.0, 16.0, 10.0),
           child: Container(
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                widget!.icon!,
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      widget!.title,
-                      textAlign: TextAlign.center,
-                      style:
-                          FlutterFlowTheme.of(context).headlineMedium.override(
-                                fontFamily: 'Gendy',
-                                color: valueOrDefault<Color>(
-                                  widget!.textColor,
-                                  FlutterFlowTheme.of(context).secondaryText,
-                                ),
-                                letterSpacing: 0.0,
-                                fontWeight: FontWeight.normal,
-                                lineHeight: 1.3,
+            child: Container(
+              alignment: AlignmentDirectional(0.0, 0.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  widget!.icon!,
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        widget!.title,
+                        textAlign: TextAlign.center,
+                        style: FlutterFlowTheme.of(context)
+                            .headlineMedium
+                            .override(
+                              fontFamily: 'Gendy',
+                              color: valueOrDefault<Color>(
+                                widget!.textColor,
+                                FlutterFlowTheme.of(context).secondaryText,
                               ),
-                    ),
-                    Text(
-                      valueOrDefault<String>(
-                        widget!.description,
-                        'Swipe left or right to scroll through different words',
-                      ),
-                      textAlign: TextAlign.center,
-                      maxLines: 4,
-                      style: FlutterFlowTheme.of(context).bodyLarge.override(
-                            fontFamily: 'BlauerNue',
-                            color: valueOrDefault<Color>(
-                              widget!.textColor,
-                              FlutterFlowTheme.of(context).secondaryText,
+                              letterSpacing: 0.0,
+                              fontWeight: FontWeight.normal,
+                              lineHeight: 1.3,
                             ),
-                            letterSpacing: 0.0,
-                            lineHeight: 1.2,
-                          ),
-                    ),
-                  ].divide(SizedBox(height: 8.0)),
-                ),
-                if (!widget!.buttonHidden)
-                  FFButtonWidget(
-                    onPressed: () async {
-                      logFirebaseEvent(
-                          'TUTORIAL_CARD_COMP_LETS_BEGIN_BTN_ON_TAP');
-                      logFirebaseEvent('Button_dismiss_dialog');
-                      Navigator.pop(context);
-                    },
-                    text: 'Let\'s Begin',
-                    options: FFButtonOptions(
-                      height: 44.0,
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
-                      iconPadding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                      color: FlutterFlowTheme.of(context).primary,
-                      textStyle:
-                          FlutterFlowTheme.of(context).titleSmall.override(
-                                fontFamily: 'BlauerNue',
-                                color: Colors.white,
-                                letterSpacing: 0.0,
+                      ),
+                      Text(
+                        valueOrDefault<String>(
+                          widget!.description,
+                          'Swipe left or right to scroll through different words',
+                        ),
+                        textAlign: TextAlign.center,
+                        maxLines: 4,
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'BlauerNue',
+                              color: valueOrDefault<Color>(
+                                widget!.textColor,
+                                FlutterFlowTheme.of(context).secondaryText,
                               ),
-                      elevation: 0.0,
-                      borderRadius: BorderRadius.circular(24.0),
-                    ),
+                              letterSpacing: 0.0,
+                              lineHeight: 1.2,
+                            ),
+                      ),
+                    ].divide(SizedBox(height: 8.0)),
                   ),
-              ].divide(SizedBox(height: 10.0)),
+                  if (!widget!.buttonHidden)
+                    FFButtonWidget(
+                      onPressed: () async {
+                        logFirebaseEvent(
+                            'TUTORIAL_CARD_COMP_LETS_BEGIN_BTN_ON_TAP');
+                        logFirebaseEvent('Button_dismiss_dialog');
+                        Navigator.pop(context);
+                      },
+                      text: 'Let\'s Begin',
+                      options: FFButtonOptions(
+                        height: 44.0,
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            16.0, 0.0, 16.0, 0.0),
+                        iconPadding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        color: FlutterFlowTheme.of(context).primary,
+                        textStyle:
+                            FlutterFlowTheme.of(context).titleSmall.override(
+                                  fontFamily: 'BlauerNue',
+                                  color: Colors.white,
+                                  letterSpacing: 0.0,
+                                ),
+                        elevation: 0.0,
+                        borderRadius: BorderRadius.circular(24.0),
+                      ),
+                    ),
+                ].divide(SizedBox(height: 10.0)),
+              ),
             ),
           ),
         ),

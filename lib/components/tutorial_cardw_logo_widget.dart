@@ -104,7 +104,7 @@ class _TutorialCardwLogoWidgetState extends State<TutorialCardwLogoWidget> {
                       textAlign: TextAlign.center,
                       maxLines: 2,
                       style:
-                          FlutterFlowTheme.of(context).headlineMedium.override(
+                          FlutterFlowTheme.of(context).headlineSmall.override(
                                 fontFamily: 'Gendy',
                                 color: valueOrDefault<Color>(
                                   widget!.textColor,
@@ -125,7 +125,7 @@ class _TutorialCardwLogoWidgetState extends State<TutorialCardwLogoWidget> {
                         ),
                         textAlign: TextAlign.center,
                         maxLines: 4,
-                        style: FlutterFlowTheme.of(context).bodyLarge.override(
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
                               fontFamily: 'BlauerNue',
                               color: valueOrDefault<Color>(
                                 widget!.textColor,
