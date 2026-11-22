@@ -38,6 +38,7 @@ class _AnonLoginWidgetState extends State<AnonLoginWidget> {
       logFirebaseEvent('ANON_LOGIN_PAGE_anonLogin_ON_INIT_STATE');
       logFirebaseEvent('anonLogin_alert_dialog');
       await showDialog(
+        barrierColor: FlutterFlowTheme.of(context).imageryOverlay,
         barrierDismissible: false,
         context: context,
         builder: (dialogContext) {
@@ -89,7 +90,7 @@ class _AnonLoginWidgetState extends State<AnonLoginWidget> {
         },
         child: Scaffold(
           key: scaffoldKey,
-          backgroundColor: Color(0xFF16151B),
+          backgroundColor: FlutterFlowTheme.of(context).imageryNight,
         ),
       ),
     );

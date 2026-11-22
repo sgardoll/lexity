@@ -64,11 +64,11 @@ class _TutorialCardwLogoWidgetState extends State<TutorialCardwLogoWidget> {
   @override
   Widget build(BuildContext context) {
     return Transform.rotate(
-      angle: 2.0 * (math.pi / 180),
+      angle: 0.0 * (math.pi / 180),
       alignment: AlignmentDirectional(0.0, 0.0),
       child: Container(
-        width: 320.0,
-        height: 400.0,
+        width: double.infinity,
+        height: 224.0,
         decoration: BoxDecoration(
           color: valueOrDefault<Color>(
             widget!.cardBg,
@@ -89,8 +89,8 @@ class _TutorialCardwLogoWidgetState extends State<TutorialCardwLogoWidget> {
                   borderRadius: BorderRadius.circular(8.0),
                   child: Image.asset(
                     'assets/images/5c-transbg.png',
-                    width: 75.0,
-                    height: 75.0,
+                    width: 48.0,
+                    height: 48.0,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -112,7 +112,7 @@ class _TutorialCardwLogoWidgetState extends State<TutorialCardwLogoWidget> {
                                 ),
                                 letterSpacing: 0.0,
                                 fontWeight: FontWeight.normal,
-                                lineHeight: 0.9,
+                                lineHeight: 1.2,
                               ),
                     ),
                     Padding(
@@ -132,11 +132,11 @@ class _TutorialCardwLogoWidgetState extends State<TutorialCardwLogoWidget> {
                                 FlutterFlowTheme.of(context).secondaryText,
                               ),
                               letterSpacing: 0.0,
-                              lineHeight: 0.9,
+                              lineHeight: 1.2,
                             ),
                       ),
                     ),
-                  ].divide(SizedBox(height: 16.0)),
+                  ].divide(SizedBox(height: 8.0)),
                 ),
                 if (!widget!.buttonHidden)
                   FFButtonWidget(
@@ -154,7 +154,7 @@ class _TutorialCardwLogoWidgetState extends State<TutorialCardwLogoWidget> {
                       size: 24.0,
                     ),
                     options: FFButtonOptions(
-                      height: 40.0,
+                      height: 44.0,
                       padding:
                           EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
                       iconAlignment: IconAlignment.start,
@@ -179,7 +179,7 @@ class _TutorialCardwLogoWidgetState extends State<TutorialCardwLogoWidget> {
                     ),
                     showLoadingIndicator: false,
                   ),
-              ].divide(SizedBox(height: 24.0)),
+              ].divide(SizedBox(height: 10.0)),
             ),
           ),
         ),
