@@ -1,9 +1,13 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:ui';
 import 'dart:math' as math;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'tutorial_cardw_logo_model.dart';
 export 'tutorial_cardw_logo_model.dart';
 
@@ -60,14 +64,14 @@ class _TutorialCardwLogoWidgetState extends State<TutorialCardwLogoWidget> {
   @override
   Widget build(BuildContext context) {
     return Transform.rotate(
-      angle: 2.0 * (math.pi / 180),
+      angle: 0.0 * (math.pi / 180),
       alignment: AlignmentDirectional(0.0, 0.0),
       child: Container(
-        width: 320.0,
-        height: 400.0,
+        width: double.infinity,
+        height: 224.0,
         decoration: BoxDecoration(
           color: valueOrDefault<Color>(
-            widget.cardBg,
+            widget!.cardBg,
             Color(0xFFF2F2F7),
           ),
           borderRadius: BorderRadius.circular(24.0),
@@ -84,9 +88,9 @@ class _TutorialCardwLogoWidgetState extends State<TutorialCardwLogoWidget> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: Image.asset(
-                    'assets/images/vnimc_1.png',
-                    width: 75.0,
-                    height: 75.0,
+                    'assets/images/5c-transbg.png',
+                    width: 48.0,
+                    height: 48.0,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -96,19 +100,19 @@ class _TutorialCardwLogoWidgetState extends State<TutorialCardwLogoWidget> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     AutoSizeText(
-                      widget.title,
+                      widget!.title,
                       textAlign: TextAlign.center,
                       maxLines: 2,
                       style:
-                          FlutterFlowTheme.of(context).headlineMedium.override(
+                          FlutterFlowTheme.of(context).headlineSmall.override(
                                 fontFamily: 'Gendy',
                                 color: valueOrDefault<Color>(
-                                  widget.textColor,
+                                  widget!.textColor,
                                   FlutterFlowTheme.of(context).secondaryText,
                                 ),
                                 letterSpacing: 0.0,
                                 fontWeight: FontWeight.normal,
-                                lineHeight: 0.9,
+                                lineHeight: 1.2,
                               ),
                     ),
                     Padding(
@@ -116,25 +120,25 @@ class _TutorialCardwLogoWidgetState extends State<TutorialCardwLogoWidget> {
                           EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 0.0),
                       child: Text(
                         valueOrDefault<String>(
-                          widget.description,
+                          widget!.description,
                           'Swipe left or right to scroll through different words',
                         ),
                         textAlign: TextAlign.center,
                         maxLines: 4,
-                        style: FlutterFlowTheme.of(context).bodyLarge.override(
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
                               fontFamily: 'BlauerNue',
                               color: valueOrDefault<Color>(
-                                widget.textColor,
+                                widget!.textColor,
                                 FlutterFlowTheme.of(context).secondaryText,
                               ),
                               letterSpacing: 0.0,
-                              lineHeight: 0.9,
+                              lineHeight: 1.2,
                             ),
                       ),
                     ),
-                  ].divide(SizedBox(height: 16.0)),
+                  ].divide(SizedBox(height: 8.0)),
                 ),
-                if (!widget.buttonHidden)
+                if (!widget!.buttonHidden)
                   FFButtonWidget(
                     onPressed: true
                         ? null
@@ -146,14 +150,14 @@ class _TutorialCardwLogoWidgetState extends State<TutorialCardwLogoWidget> {
                           },
                     text: 'Swipe to Begin',
                     icon: Icon(
-                      Icons.keyboard_arrow_right,
+                      Icons.keyboard_arrow_left,
                       size: 24.0,
                     ),
                     options: FFButtonOptions(
-                      height: 40.0,
+                      height: 44.0,
                       padding:
                           EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
-                      iconAlignment: IconAlignment.end,
+                      iconAlignment: IconAlignment.start,
                       iconPadding:
                           EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                       iconColor: FlutterFlowTheme.of(context).primary,
@@ -175,7 +179,7 @@ class _TutorialCardwLogoWidgetState extends State<TutorialCardwLogoWidget> {
                     ),
                     showLoadingIndicator: false,
                   ),
-              ].divide(SizedBox(height: 24.0)),
+              ].divide(SizedBox(height: 10.0)),
             ),
           ),
         ),

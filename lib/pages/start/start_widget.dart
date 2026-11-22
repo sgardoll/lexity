@@ -6,13 +6,21 @@ import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_swipeable_stack.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:math';
+import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/flutter_flow/permissions_util.dart';
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'start_model.dart';
 export 'start_model.dart';
 
@@ -217,7 +225,7 @@ class _StartWidgetState extends State<StartWidget>
                     builder: (context) {
                       final lexicon = functions
                               .rotateLexiconToId(
-                                  startLexiconRecordList.toList(), widget.id)
+                                  startLexiconRecordList.toList(), widget!.id)
                               ?.toList() ??
                           [];
                       if (lexicon.isEmpty) {
@@ -238,14 +246,19 @@ class _StartWidgetState extends State<StartWidget>
                             logFirebaseEvent(
                                 'SwipeableStack_update_page_state');
                             _model.previousBgColor = colorFromCssString(
-                              lexicon[lexiconIndex].colours.lightMuted,
+                              lexicon[lexiconIndex]!.colours.lightMuted,
                               defaultColor: Colors.black,
                             );
                             _model.bgColor = colorFromCssString(
-                              lexicon[lexiconIndex].colours.darkMuted,
+                              lexicon[lexiconIndex]!.colours.darkMuted,
                               defaultColor: Colors.black,
                             );
                             safeSetState(() {});
+                            logFirebaseEvent('SwipeableStack_custom_action');
+                            await actions.precacheLexiconImage(
+                              startLexiconRecordList.toList(),
+                              lexicon[lexiconIndex],
+                            );
                           } else {
                             logFirebaseEvent(
                                 'SwipeableStack_update_page_state');
@@ -255,26 +268,15 @@ class _StartWidgetState extends State<StartWidget>
                             logFirebaseEvent(
                                 'SwipeableStack_update_page_state');
                             _model.previousBgColor = colorFromCssString(
-                              lexicon[lexiconIndex].colours.lightMuted,
+                              lexicon[lexiconIndex]!.colours.lightMuted,
                               defaultColor: Colors.black,
                             );
                             _model.bgColor = colorFromCssString(
-                              lexicon[lexiconIndex].colours.darkMuted,
+                              lexicon[lexiconIndex]!.colours.darkMuted,
                               defaultColor: Colors.black,
                             );
                             _model.cardIndex = 0;
                             safeSetState(() {});
-                            logFirebaseEvent('SwipeableStack_navigate_to');
-
-                            context.goNamed(
-                              StartWidget.routeName,
-                              extra: <String, dynamic>{
-                                '__transition_info__': TransitionInfo(
-                                  hasTransition: true,
-                                  transitionType: PageTransitionType.fade,
-                                ),
-                              },
-                            );
                           }
                         },
                         onLeftSwipe: (lexiconIndex) {},
@@ -369,7 +371,7 @@ class _StartWidgetState extends State<StartWidget>
                                       key: Key(
                                         'Keyv5h_${lexiconItem.reference.id}',
                                       ),
-                                      mainShadow: valueOrDefault<String>(
+                                      term: valueOrDefault<String>(
                                         lexiconItem.term,
                                         'Acomiast',
                                       ),

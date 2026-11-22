@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:go_router/go_router.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
@@ -11,7 +14,10 @@ import '/backend/push_notifications/push_notifications_handler.dart'
     show PushNotificationsHandler;
 import '/main.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/lat_lng.dart';
+import '/flutter_flow/place.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'serialization_util.dart';
 
 import '/index.dart';
 
@@ -129,6 +135,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => params.isEmpty
                   ? NavBarPage(initialPage: 'liked')
                   : LikedWidget(),
+            ),
+            FFRoute(
+              name: ImageStylesWidget.routeName,
+              path: ImageStylesWidget.routePath,
+              builder: (context, params) => ImageStylesWidget(),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ),
@@ -318,14 +329,10 @@ class FFRoute {
               : builder(context, ffParams);
           final child = appStateNotifier.loading
               ? Container(
-                  color: FlutterFlowTheme.of(context).primaryText,
-                  child: Center(
-                    child: Image.asset(
-                      'assets/images/2nobg.png',
-                      width: MediaQuery.sizeOf(context).width * 0.2,
-                      height: MediaQuery.sizeOf(context).height * 0.2,
-                      fit: BoxFit.contain,
-                    ),
+                  color: Color(0xFF16151B),
+                  child: Image.asset(
+                    'assets/images/Lexity_splash.gif',
+                    fit: BoxFit.cover,
                   ),
                 )
               : PushNotificationsHandler(child: page);

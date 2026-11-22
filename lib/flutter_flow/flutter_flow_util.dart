@@ -14,6 +14,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../main.dart';
 
+import 'lat_lng.dart';
 
 export 'keep_alive_wrapper.dart';
 export 'lat_lng.dart';
@@ -299,7 +300,8 @@ void showSnackbar(
                 ),
               ),
             ),
-          Text(message),
+          // A message longer than one line wraps instead of overflowing.
+          Flexible(child: Text(message)),
         ],
       ),
       duration: Duration(seconds: duration),

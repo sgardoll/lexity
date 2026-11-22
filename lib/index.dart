@@ -5,3 +5,4 @@ export '/pages/settings/settings_widget.dart' show SettingsWidget;
 export '/pages/create_account/create_account_widget.dart'
     show CreateAccountWidget;
 export '/pages/liked/liked_widget.dart' show LikedWidget;
+export '/image_styles/image_styles_widget.dart' show ImageStylesWidget;

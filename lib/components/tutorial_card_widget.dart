@@ -1,8 +1,12 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:ui';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'tutorial_card_model.dart';
 export 'tutorial_card_model.dart';
 
@@ -64,24 +68,24 @@ class _TutorialCardWidgetState extends State<TutorialCardWidget> {
   Widget build(BuildContext context) {
     return Transform.rotate(
       angle: valueOrDefault<double>(
-            widget.rotation,
-            6.0,
+            widget!.rotation,
+            0.0,
           ) *
           (math.pi / 180),
       alignment: AlignmentDirectional(0.0, 0.0),
       child: Container(
-        width: 320.0,
-        height: 400.0,
+        width: double.infinity,
+        height: 224.0,
         decoration: BoxDecoration(
           color: valueOrDefault<Color>(
-            widget.cardBg,
+            widget!.cardBg,
             Color(0xFFF2F2F7),
           ),
           borderRadius: BorderRadius.circular(24.0),
           shape: BoxShape.rectangle,
         ),
         child: Padding(
-          padding: EdgeInsets.all(32.0),
+          padding: EdgeInsetsDirectional.fromSTEB(16.0, 10.0, 16.0, 10.0),
           child: Container(
             child: Container(
               alignment: AlignmentDirectional(0.0, 0.0),
@@ -90,20 +94,21 @@ class _TutorialCardWidgetState extends State<TutorialCardWidget> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  widget.icon!,
+                  widget!.icon!,
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        widget.title,
+                        widget!.title,
+                        textAlign: TextAlign.center,
                         style: FlutterFlowTheme.of(context)
                             .headlineMedium
                             .override(
                               fontFamily: 'Gendy',
                               color: valueOrDefault<Color>(
-                                widget.textColor,
+                                widget!.textColor,
                                 FlutterFlowTheme.of(context).secondaryText,
                               ),
                               letterSpacing: 0.0,
@@ -113,57 +118,50 @@ class _TutorialCardWidgetState extends State<TutorialCardWidget> {
                       ),
                       Text(
                         valueOrDefault<String>(
-                          widget.description,
+                          widget!.description,
                           'Swipe left or right to scroll through different words',
                         ),
                         textAlign: TextAlign.center,
                         maxLines: 4,
-                        style: FlutterFlowTheme.of(context).bodyLarge.override(
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
                               fontFamily: 'BlauerNue',
                               color: valueOrDefault<Color>(
-                                widget.textColor,
+                                widget!.textColor,
                                 FlutterFlowTheme.of(context).secondaryText,
                               ),
                               letterSpacing: 0.0,
-                              lineHeight: 0.9,
+                              lineHeight: 1.2,
                             ),
                       ),
-                    ].divide(SizedBox(height: 16.0)),
+                    ].divide(SizedBox(height: 8.0)),
                   ),
-                  if (!widget.buttonHidden)
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(
-                          0.0,
-                          FlutterFlowTheme.of(context).designToken.spacing.lg,
-                          0.0,
-                          0.0),
-                      child: FFButtonWidget(
-                        onPressed: () async {
-                          logFirebaseEvent(
-                              'TUTORIAL_CARD_COMP_LETS_BEGIN_BTN_ON_TAP');
-                          logFirebaseEvent('Button_dismiss_dialog');
-                          Navigator.pop(context);
-                        },
-                        text: 'Let\'s Begin',
-                        options: FFButtonOptions(
-                          height: 40.0,
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              16.0, 0.0, 16.0, 0.0),
-                          iconPadding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 0.0),
-                          color: FlutterFlowTheme.of(context).primary,
-                          textStyle:
-                              FlutterFlowTheme.of(context).titleSmall.override(
-                                    fontFamily: 'BlauerNue',
-                                    color: Colors.white,
-                                    letterSpacing: 0.0,
-                                  ),
-                          elevation: 0.0,
-                          borderRadius: BorderRadius.circular(24.0),
-                        ),
+                  if (!widget!.buttonHidden)
+                    FFButtonWidget(
+                      onPressed: () async {
+                        logFirebaseEvent(
+                            'TUTORIAL_CARD_COMP_LETS_BEGIN_BTN_ON_TAP');
+                        logFirebaseEvent('Button_dismiss_dialog');
+                        Navigator.pop(context);
+                      },
+                      text: 'Let\'s Begin',
+                      options: FFButtonOptions(
+                        height: 44.0,
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            16.0, 0.0, 16.0, 0.0),
+                        iconPadding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        color: FlutterFlowTheme.of(context).primary,
+                        textStyle:
+                            FlutterFlowTheme.of(context).titleSmall.override(
+                                  fontFamily: 'BlauerNue',
+                                  color: Colors.white,
+                                  letterSpacing: 0.0,
+                                ),
+                        elevation: 0.0,
+                        borderRadius: BorderRadius.circular(24.0),
                       ),
                     ),
-                ].divide(SizedBox(height: 24.0)),
+                ].divide(SizedBox(height: 10.0)),
               ),
             ),
           ),

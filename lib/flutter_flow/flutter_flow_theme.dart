@@ -39,6 +39,15 @@ abstract class FlutterFlowTheme {
   late Color customColor5;
   late Color customColor6;
   late Color customColor7;
+  late Color imageryNight;
+  late Color imagerySurface;
+  late Color imageryTile;
+  late Color imageryLine;
+  late Color imageryMint;
+  late Color imageryCream;
+  late Color imageryMuted;
+  late Color imageryOverlay;
+  late Color imageryClear;
 
   FFDesignTokens get designToken => FFDesignTokens(this);
 
@@ -152,6 +161,15 @@ class LightModeTheme extends FlutterFlowTheme {
   late Color customColor5 = const Color(0xFFB43482);
   late Color customColor6 = const Color(0xFFA70A38);
   late Color customColor7 = const Color(0xFF6084D3);
+  late Color imageryNight = const Color(0xFF101714);
+  late Color imagerySurface = const Color(0xFF192621);
+  late Color imageryTile = const Color(0xFF24342D);
+  late Color imageryLine = const Color(0xFF43554C);
+  late Color imageryMint = const Color(0xFFC8F3B4);
+  late Color imageryCream = const Color(0xFFFFF5DF);
+  late Color imageryMuted = const Color(0xFFB8CABF);
+  late Color imageryOverlay = const Color(0xEC091410);
+  late Color imageryClear = const Color(0x00091410);
 }
 
 abstract class Typography {

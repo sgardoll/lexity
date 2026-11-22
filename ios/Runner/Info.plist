@@ -7,7 +7,7 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleDisplayName</key>
-    <string>Lexity: Word of the Day</string>
+    <string>Lexity: Daily Rare Words</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>
@@ -49,6 +49,27 @@
     <string>$(FLUTTER_BUILD_NUMBER)</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
+    <key>UIApplicationSceneManifest</key>
+    <dict>
+      <key>UIApplicationSupportsMultipleScenes</key>
+      <false/>
+      <key>UISceneConfigurations</key>
+      <dict>
+        <key>UIWindowSceneSessionRoleApplication</key>
+        <array>
+          <dict>
+            <key>UISceneClassName</key>
+            <string>UIWindowScene</string>
+            <key>UISceneConfigurationName</key>
+            <string>flutter</string>
+            <key>UISceneDelegateClassName</key>
+            <string>FlutterSceneDelegate</string>
+            <key>UISceneStoryboardFile</key>
+            <string>Main</string>
+          </dict>
+        </array>
+      </dict>
+    </dict>
     <key>UIApplicationSupportsIndirectInputEvents</key>
     <true/>
     <key>PermissionGroupNotification</key>
@@ -64,6 +85,10 @@
     <key>ITSAppUsesNonExemptEncryption</key>
     <false/>
     <!-- End of ITSAppUsesNonExemptEncryption -->
+    <!-- Start of GIDClientID -->
+    <key>GIDClientID</key>
+    <string>663294504699-1qqqq7fp2f6otdsqga2aifqfjcb23th7.apps.googleusercontent.com</string>
+    <!-- End of GIDClientID -->
     <key>UILaunchStoryboardName</key>
     <string>LaunchScreen</string>
     <key>UIMainStoryboardFile</key>

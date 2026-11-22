@@ -4,12 +4,17 @@ import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:async';
+import 'dart:math';
 import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart' hide Type;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -52,13 +57,16 @@ class _CardBackWidgetState extends State<CardBackWidget>
     // On component load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       logFirebaseEvent('CARD_BACK_COMP_CardBack_ON_INIT_STATE');
+      logFirebaseEvent('CardBack_execute_custom_code');
+      if (!mounted) return;
+
       logFirebaseEvent('CardBack_update_component_state');
       _model.isLiked = valueOrDefault<bool>(
-        widget.doc!.likedBy.contains(currentUserReference) ? true : false,
+        widget!.doc!.likedBy.contains(currentUserReference) ? true : false,
         false,
       );
       safeSetState(() {});
-      if (widget.doc!.hasUsageSpoken() && FFAppState().isSoundOn) {
+      if (widget!.doc!.hasUsageSpoken() && FFAppState().isSoundOn) {
         logFirebaseEvent('CardBack_update_component_state');
         _model.soundPlaying = true;
         safeSetState(() {});
@@ -69,8 +77,11 @@ class _CardBackWidgetState extends State<CardBackWidget>
         }
         _model.soundPlayer1!.setVolume(1.0);
         await _model.soundPlayer1!
-            .setUrl(widget.doc!.usageSpoken)
+            .setUrl(widget!.doc!.usageSpoken)
             .then((_) => _model.soundPlayer1!.play());
+
+        logFirebaseEvent('CardBack_execute_custom_code');
+        if (!mounted) return;
 
         logFirebaseEvent('CardBack_update_component_state');
         _model.soundPlaying = false;
@@ -227,14 +238,14 @@ class _CardBackWidgetState extends State<CardBackWidget>
                       height: MediaQuery.sizeOf(context).height * 1.0,
                       decoration: BoxDecoration(
                         color: colorFromCssString(
-                          widget.doc!.colours.lightVibrant,
+                          widget!.doc!.colours.lightVibrant,
                           defaultColor: FlutterFlowTheme.of(context).accent4,
                         ),
                         boxShadow: [
                           BoxShadow(
                             blurRadius: 8.0,
                             color: colorFromCssString(
-                              widget.doc!.colours.darkVibrant,
+                              widget!.doc!.colours.darkVibrant,
                               defaultColor: Color(0x31000000),
                             ),
                             offset: Offset(
@@ -300,7 +311,7 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                     24.0, 0.0, 24.0, 0.0),
                                             child: AutoSizeText(
                                               valueOrDefault<String>(
-                                                widget.doc?.term,
+                                                widget!.doc?.term,
                                                 '-',
                                               ),
                                               textAlign: TextAlign.center,
@@ -315,74 +326,66 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                       ),
                                             ),
                                           ),
-                                          Text(
-                                            '${widget.doc?.pronunciation}  |  ${widget.doc?.language}',
-                                            textAlign: TextAlign.center,
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'BlauerNue',
-                                                  letterSpacing: 0.0,
-                                                ),
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    24.0, 0.0, 24.0, 0.0),
+                                            child: Text(
+                                              '${widget!.doc?.pronunciation}  |  ${widget!.doc?.language}',
+                                              textAlign: TextAlign.center,
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'BlauerNue',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondaryText,
+                                                        letterSpacing: 0.0,
+                                                      ),
+                                            ),
                                           ),
                                         ],
                                       ),
                                     ),
                                     Flexible(
-                                      flex: 1,
-                                      child: Container(
-                                        width:
-                                            MediaQuery.sizeOf(context).width *
-                                                1.0,
-                                        child: Stack(
-                                          alignment:
-                                              AlignmentDirectional(0.0, -1.0),
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      24.0, 24.0, 24.0, 0.0),
-                                              child: AutoSizeText(
-                                                valueOrDefault<String>(
-                                                  widget.doc?.usage,
-                                                  '-',
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            24.0, 0.0, 24.0, 0.0),
+                                        child: AutoSizeText(
+                                          valueOrDefault<String>(
+                                            widget!.doc?.usage,
+                                            '-',
+                                          ),
+                                          textAlign: TextAlign.center,
+                                          minFontSize: 18.0,
+                                          style: FlutterFlowTheme.of(context)
+                                              .headlineMedium
+                                              .override(
+                                                fontFamily: 'BlauerNue',
+                                                color: colorFromCssString(
+                                                  widget!.doc!.colours.vibrant,
+                                                  defaultColor: Colors.black,
                                                 ),
-                                                textAlign: TextAlign.center,
-                                                maxLines: 6,
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .headlineMedium
-                                                    .override(
-                                                      fontFamily: 'Gendy',
-                                                      color: colorFromCssString(
-                                                        widget.doc!.colours
-                                                            .vibrant,
-                                                        defaultColor:
-                                                            Colors.black,
-                                                      ),
-                                                      fontSize: 50.0,
-                                                      letterSpacing: 0.0,
-                                                      shadows: [
-                                                        Shadow(
-                                                          color:
-                                                              colorFromCssString(
-                                                            widget.doc!.colours
-                                                                .lightVibrant,
-                                                            defaultColor:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .accent4,
-                                                          ),
-                                                          offset:
-                                                              Offset(2.0, 2.0),
-                                                          blurRadius: 2.0,
-                                                        )
-                                                      ],
-                                                      lineHeight: 0.0,
+                                                fontSize: 50.0,
+                                                letterSpacing: 0.0,
+                                                shadows: [
+                                                  Shadow(
+                                                    color: colorFromCssString(
+                                                      widget!.doc!.colours
+                                                          .lightVibrant,
+                                                      defaultColor:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .accent4,
                                                     ),
+                                                    offset: Offset(2.0, 2.0),
+                                                    blurRadius: 2.0,
+                                                  )
+                                                ],
+                                                lineHeight: 0.0,
                                               ),
-                                            ),
-                                          ],
                                         ),
                                       ),
                                     ),
@@ -423,7 +426,7 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                                 .primaryText,
                                                         unselectedLabelColor:
                                                             colorFromCssString(
-                                                          widget.doc!.colours
+                                                          widget!.doc!.colours
                                                               .lightMuted,
                                                           defaultColor:
                                                               Colors.black,
@@ -464,7 +467,7 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                                 ),
                                                         indicatorColor:
                                                             colorFromCssString(
-                                                          widget.doc!.colours
+                                                          widget!.doc!.colours
                                                               .vibrant,
                                                           defaultColor:
                                                               FlutterFlowTheme.of(
@@ -514,10 +517,10 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                             child: Builder(
                                                               builder:
                                                                   (context) {
-                                                                final related = widget
+                                                                final related = widget!
                                                                         .doc
                                                                         ?.relatedWords
-                                                                        .toList() ??
+                                                                        ?.toList() ??
                                                                     [];
 
                                                                 return Wrap(
@@ -564,7 +567,7 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                                             BoxDecoration(
                                                                           color:
                                                                               colorFromCssString(
-                                                                            widget.doc!.colours.vibrant,
+                                                                            widget!.doc!.colours.vibrant,
                                                                             defaultColor:
                                                                                 FlutterFlowTheme.of(context).info,
                                                                           ),
@@ -583,7 +586,7 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                                             maxLines:
                                                                                 4,
                                                                             style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                  fontFamily: 'Gendy',
+                                                                                  fontFamily: 'BlauerNue',
                                                                                   fontSize: 16.0,
                                                                                   letterSpacing: 0.0,
                                                                                   fontWeight: FontWeight.normal,
@@ -608,10 +611,10 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                             child: Builder(
                                                               builder:
                                                                   (context) {
-                                                                final syn = widget
+                                                                final syn = widget!
                                                                         .doc
                                                                         ?.synonyms
-                                                                        .toList() ??
+                                                                        ?.toList() ??
                                                                     [];
 
                                                                 return Wrap(
@@ -656,7 +659,7 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                                             BoxDecoration(
                                                                           color:
                                                                               colorFromCssString(
-                                                                            widget.doc!.colours.vibrant,
+                                                                            widget!.doc!.colours.vibrant,
                                                                             defaultColor:
                                                                                 FlutterFlowTheme.of(context).info,
                                                                           ),
@@ -675,7 +678,7 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                                             maxLines:
                                                                                 4,
                                                                             style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                  fontFamily: 'Gendy',
+                                                                                  fontFamily: 'BlauerNue',
                                                                                   fontSize: 16.0,
                                                                                   letterSpacing: 0.0,
                                                                                   fontWeight: FontWeight.normal,
@@ -700,10 +703,10 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                             child: Builder(
                                                               builder:
                                                                   (context) {
-                                                                final ant = widget
+                                                                final ant = widget!
                                                                         .doc
                                                                         ?.antonyms
-                                                                        .toList() ??
+                                                                        ?.toList() ??
                                                                     [];
 
                                                                 return Wrap(
@@ -748,7 +751,7 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                                             BoxDecoration(
                                                                           color:
                                                                               colorFromCssString(
-                                                                            widget.doc!.colours.vibrant,
+                                                                            widget!.doc!.colours.vibrant,
                                                                             defaultColor:
                                                                                 FlutterFlowTheme.of(context).info,
                                                                           ),
@@ -767,7 +770,7 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                                             maxLines:
                                                                                 4,
                                                                             style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                  fontFamily: 'Gendy',
+                                                                                  fontFamily: 'BlauerNue',
                                                                                   fontSize: 16.0,
                                                                                   letterSpacing: 0.0,
                                                                                   fontWeight: FontWeight.normal,
@@ -799,7 +802,7 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                                         child: Text(
                                                                       valueOrDefault<
                                                                           String>(
-                                                                        widget
+                                                                        widget!
                                                                             .doc
                                                                             ?.etymology,
                                                                         '-',
@@ -812,9 +815,9 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                                           .bodyMedium
                                                                           .override(
                                                                             fontFamily:
-                                                                                'Gendy',
+                                                                                'BlauerNue',
                                                                             fontSize:
-                                                                                20.0,
+                                                                                14.0,
                                                                             letterSpacing:
                                                                                 0.0,
                                                                             fontWeight:
@@ -866,7 +869,7 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                   child: Slider(
                                                     activeColor:
                                                         colorFromCssString(
-                                                      widget.doc!.colours
+                                                      widget!.doc!.colours
                                                           .darkVibrant,
                                                       defaultColor:
                                                           FlutterFlowTheme.of(
@@ -875,7 +878,7 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                     ),
                                                     inactiveColor:
                                                         colorFromCssString(
-                                                      widget
+                                                      widget!
                                                           .doc!.colours.vibrant,
                                                       defaultColor:
                                                           FlutterFlowTheme.of(
@@ -887,7 +890,7 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                     value: _model
                                                             .sliderValue ??=
                                                         valueOrDefault<double>(
-                                                      widget.doc?.rarityScore,
+                                                      widget!.doc?.rarityScore,
                                                       0.0,
                                                     ),
                                                     label: _model.sliderValue
@@ -909,8 +912,8 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                         0.0, 0.0, 24.0, 0.0),
                                                 child: AutoSizeText(
                                                   valueOrDefault<String>(
-                                                    widget.doc?.rarityScore
-                                                        .toString(),
+                                                    widget!.doc?.rarityScore
+                                                        ?.toString(),
                                                     '0',
                                                   ),
                                                   maxLines: 1,
@@ -921,7 +924,7 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                         fontFamily: 'Gendy',
                                                         color:
                                                             colorFromCssString(
-                                                          widget.doc!.colours
+                                                          widget!.doc!.colours
                                                               .vibrant,
                                                           defaultColor:
                                                               Colors.black,
@@ -959,7 +962,7 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                   height: 50.0,
                                   decoration: BoxDecoration(
                                     color: colorFromCssString(
-                                      widget.doc!.colours.vibrant,
+                                      widget!.doc!.colours.vibrant,
                                       defaultColor: FlutterFlowTheme.of(context)
                                           .secondaryText,
                                     ),
@@ -998,7 +1001,7 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                     'IconButton_backend_call');
                                                 unawaited(
                                                   () async {
-                                                    await widget.doc!.reference
+                                                    await widget!.doc!.reference
                                                         .update({
                                                       ...mapToFirestore(
                                                         {
@@ -1016,7 +1019,7 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                 logFirebaseEvent(
                                                   'shareLink',
                                                   parameters: {
-                                                    'docRef': widget
+                                                    'docRef': widget!
                                                         .doc?.reference.id,
                                                   },
                                                 );
@@ -1024,7 +1027,7 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                     'IconButton_share');
                                                 await Share.share(
                                                   valueOrDefault<String>(
-                                                    'https://lexity.connectio.com.au/start?id=${widget.doc?.reference.id}',
+                                                    'https://lexity.connectio.com.au/start?id=${widget!.doc?.reference.id}',
                                                     'https://lexity.connectio.com.au/start',
                                                   ),
                                                   sharePositionOrigin:
@@ -1070,7 +1073,7 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                       'Like_backend_call');
                                                   unawaited(
                                                     () async {
-                                                      await widget
+                                                      await widget!
                                                           .doc!.reference
                                                           .update({
                                                         ...mapToFirestore(
@@ -1137,7 +1140,7 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                       'Remove_backend_call');
                                                   unawaited(
                                                     () async {
-                                                      await widget
+                                                      await widget!
                                                           .doc!.reference
                                                           .update({
                                                         ...mapToFirestore(
@@ -1215,11 +1218,15 @@ class _CardBackWidgetState extends State<CardBackWidget>
                                                   _model.soundPlayer2!
                                                       .setVolume(1.0);
                                                   await _model.soundPlayer2!
-                                                      .setUrl(widget
+                                                      .setUrl(widget!
                                                           .doc!.usageSpoken)
                                                       .then((_) => _model
                                                           .soundPlayer2!
                                                           .play());
+
+                                                  logFirebaseEvent(
+                                                      'Play_execute_custom_code');
+                                                  if (!mounted) return;
 
                                                   logFirebaseEvent(
                                                       'Play_update_component_state');
@@ -1292,7 +1299,7 @@ class _CardBackWidgetState extends State<CardBackWidget>
                   child: Container(
                     decoration: BoxDecoration(
                       color: colorFromCssString(
-                        widget.doc!.colours.vibrant,
+                        widget!.doc!.colours.vibrant,
                         defaultColor:
                             FlutterFlowTheme.of(context).secondaryText,
                       ),
